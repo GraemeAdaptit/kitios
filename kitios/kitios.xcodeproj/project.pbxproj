@@ -7,9 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C89FF4F6245FF26B00A85339 /* kdb.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = C8AA661B245FF16400B456AE /* kdb.sqlite */; };
 		C8AA65DF245FCE0E00B456AE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8AA65DE245FCE0E00B456AE /* AppDelegate.swift */; };
-		C8AA65E1245FCE0E00B456AE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8AA65E0245FCE0E00B456AE /* SceneDelegate.swift */; };
-		C8AA65E3245FCE0E00B456AE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8AA65E2245FCE0E00B456AE /* ViewController.swift */; };
 		C8AA65E6245FCE0E00B456AE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C8AA65E4245FCE0E00B456AE /* Main.storyboard */; };
 		C8AA65E8245FCE2F00B456AE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C8AA65E7245FCE2F00B456AE /* Assets.xcassets */; };
 		C8AA65EB245FCE2F00B456AE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C8AA65E9245FCE2F00B456AE /* LaunchScreen.storyboard */; };
@@ -31,8 +30,6 @@
 /* Begin PBXFileReference section */
 		C8AA65DB245FCE0E00B456AE /* kitios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = kitios.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8AA65DE245FCE0E00B456AE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		C8AA65E0245FCE0E00B456AE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		C8AA65E2245FCE0E00B456AE /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		C8AA65E5245FCE0E00B456AE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C8AA65E7245FCE2F00B456AE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C8AA65EA245FCE2F00B456AE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -52,6 +49,7 @@
 		C8AA6611245FEBAD00B456AE /* VersesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VersesTableViewController.swift; sourceTree = "<group>"; };
 		C8AA6612245FEBAD00B456AE /* UIVerseItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIVerseItemCell.swift; sourceTree = "<group>"; };
 		C8AA6613245FEBAE00B456AE /* BooksTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BooksTableViewController.swift; sourceTree = "<group>"; };
+		C8AA661B245FF16400B456AE /* kdb.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; name = kdb.sqlite; path = /Users/graemecostin/kitios/kitios/models/kdb.sqlite; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,8 +92,6 @@
 				C8AA6612245FEBAD00B456AE /* UIVerseItemCell.swift */,
 				C8AA6611245FEBAD00B456AE /* VersesTableViewController.swift */,
 				C8AA65DE245FCE0E00B456AE /* AppDelegate.swift */,
-				C8AA65E0245FCE0E00B456AE /* SceneDelegate.swift */,
-				C8AA65E2245FCE0E00B456AE /* ViewController.swift */,
 				C8AA65E4245FCE0E00B456AE /* Main.storyboard */,
 				C8AA65E7245FCE2F00B456AE /* Assets.xcassets */,
 				C8AA65E9245FCE2F00B456AE /* LaunchScreen.storyboard */,
@@ -123,6 +119,7 @@
 		C8AA65FF245FE71C00B456AE /* models */ = {
 			isa = PBXGroup;
 			children = (
+				C8AA661B245FF16400B456AE /* kdb.sqlite */,
 				C8AA6609245FE7DD00B456AE /* KIT_BooksNames.txt */,
 				C8AA660A245FE7DE00B456AE /* KIT_BooksSpec.txt */,
 				C8AA6608245FE7DD00B456AE /* KITDAO.swift */,
@@ -192,6 +189,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C89FF4F6245FF26B00A85339 /* kdb.sqlite in Resources */,
 				C8AA660D245FE7DE00B456AE /* KIT_BooksSpec.txt in Resources */,
 				C8AA65EB245FCE2F00B456AE /* LaunchScreen.storyboard in Resources */,
 				C8AA660C245FE7DE00B456AE /* KIT_BooksNames.txt in Resources */,
@@ -216,10 +214,8 @@
 				C8AA6606245FE78300B456AE /* Bible.swift in Sources */,
 				C8AA6617245FEBAE00B456AE /* VersesTableViewController.swift in Sources */,
 				C8AA660B245FE7DE00B456AE /* KITDAO.swift in Sources */,
-				C8AA65E3245FCE0E00B456AE /* ViewController.swift in Sources */,
 				C8AA6615245FEBAE00B456AE /* ExportChapterViewController.swift in Sources */,
 				C8AA65DF245FCE0E00B456AE /* AppDelegate.swift in Sources */,
-				C8AA65E1245FCE0E00B456AE /* SceneDelegate.swift in Sources */,
 				C8AA6607245FE78300B456AE /* Chapter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -371,6 +367,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = YMY6HM7S6S;
 				INFOPLIST_FILE = kitios/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -389,6 +386,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = YMY6HM7S6S;
 				INFOPLIST_FILE = kitios/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

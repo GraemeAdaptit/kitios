@@ -111,6 +111,11 @@ class BooksTableViewController: UITableViewController {
 		print("BooksTableViewController:tableView:didSelectRowAt Tap selected \(selectedBook.bkName)")
 		// Set up the selected Book as the current Book (this updates kdb.sqlite with the currBook)
 		bInst!.setupCurrentBook(selectedBook)
+		// Update the TableView row for this Book
+		let cell = tableView.cellForRow(at: indexPath)
+		let nChap = bInst!.BibBooks[indexPath.row].numCh
+		let numChText = (nChap > 0 ? String(nChap) + " ch " : "" )
+		cell!.detailTextLabel?.text = numChText
 		// Current Book is selected so segue to Select Chapter scene
 		// The user is going forwards to the next scene
 		goingForwards = true

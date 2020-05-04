@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:kitios.xcodeproj">
+      location = "group:/Users/graemecostin/kitios/kitios/models/kdb.sqlite">
+   </FileRef>
+   <FileRef
+      location = "self:">
    </FileRef>
 </Workspace>
