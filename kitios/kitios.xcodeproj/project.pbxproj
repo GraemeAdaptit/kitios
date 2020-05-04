@@ -13,6 +13,19 @@
 		C8AA65E6245FCE0E00B456AE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C8AA65E4245FCE0E00B456AE /* Main.storyboard */; };
 		C8AA65E8245FCE2F00B456AE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C8AA65E7245FCE2F00B456AE /* Assets.xcassets */; };
 		C8AA65EB245FCE2F00B456AE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C8AA65E9245FCE2F00B456AE /* LaunchScreen.storyboard */; };
+		C8AA6604245FE78300B456AE /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8AA6600245FE78200B456AE /* Book.swift */; };
+		C8AA6605245FE78300B456AE /* VItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8AA6601245FE78200B456AE /* VItem.swift */; };
+		C8AA6606245FE78300B456AE /* Bible.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8AA6602245FE78200B456AE /* Bible.swift */; };
+		C8AA6607245FE78300B456AE /* Chapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8AA6603245FE78300B456AE /* Chapter.swift */; };
+		C8AA660B245FE7DE00B456AE /* KITDAO.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8AA6608245FE7DD00B456AE /* KITDAO.swift */; };
+		C8AA660C245FE7DE00B456AE /* KIT_BooksNames.txt in Resources */ = {isa = PBXBuildFile; fileRef = C8AA6609245FE7DD00B456AE /* KIT_BooksNames.txt */; };
+		C8AA660D245FE7DE00B456AE /* KIT_BooksSpec.txt in Resources */ = {isa = PBXBuildFile; fileRef = C8AA660A245FE7DE00B456AE /* KIT_BooksSpec.txt */; };
+		C8AA6614245FEBAE00B456AE /* KeyItSetupController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8AA660E245FEBAD00B456AE /* KeyItSetupController.swift */; };
+		C8AA6615245FEBAE00B456AE /* ExportChapterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8AA660F245FEBAD00B456AE /* ExportChapterViewController.swift */; };
+		C8AA6616245FEBAE00B456AE /* ChaptersTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8AA6610245FEBAD00B456AE /* ChaptersTableViewController.swift */; };
+		C8AA6617245FEBAE00B456AE /* VersesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8AA6611245FEBAD00B456AE /* VersesTableViewController.swift */; };
+		C8AA6618245FEBAE00B456AE /* UIVerseItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8AA6612245FEBAD00B456AE /* UIVerseItemCell.swift */; };
+		C8AA6619245FEBAE00B456AE /* BooksTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8AA6613245FEBAE00B456AE /* BooksTableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +39,19 @@
 		C8AA65EC245FCE2F00B456AE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C8AA65F8245FE36000B456AE /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		C8AA65FE245FE52B00B456AE /* SQLite3Bridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQLite3Bridge.h; sourceTree = "<group>"; };
+		C8AA6600245FE78200B456AE /* Book.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Book.swift; sourceTree = "<group>"; };
+		C8AA6601245FE78200B456AE /* VItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VItem.swift; sourceTree = "<group>"; };
+		C8AA6602245FE78200B456AE /* Bible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bible.swift; sourceTree = "<group>"; };
+		C8AA6603245FE78300B456AE /* Chapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Chapter.swift; sourceTree = "<group>"; };
+		C8AA6608245FE7DD00B456AE /* KITDAO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KITDAO.swift; sourceTree = "<group>"; };
+		C8AA6609245FE7DD00B456AE /* KIT_BooksNames.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = KIT_BooksNames.txt; sourceTree = "<group>"; };
+		C8AA660A245FE7DE00B456AE /* KIT_BooksSpec.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = KIT_BooksSpec.txt; sourceTree = "<group>"; };
+		C8AA660E245FEBAD00B456AE /* KeyItSetupController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyItSetupController.swift; sourceTree = "<group>"; };
+		C8AA660F245FEBAD00B456AE /* ExportChapterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExportChapterViewController.swift; sourceTree = "<group>"; };
+		C8AA6610245FEBAD00B456AE /* ChaptersTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChaptersTableViewController.swift; sourceTree = "<group>"; };
+		C8AA6611245FEBAD00B456AE /* VersesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VersesTableViewController.swift; sourceTree = "<group>"; };
+		C8AA6612245FEBAD00B456AE /* UIVerseItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIVerseItemCell.swift; sourceTree = "<group>"; };
+		C8AA6613245FEBAE00B456AE /* BooksTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BooksTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,6 +70,7 @@
 			children = (
 				C8AA65FD245FE4E800B456AE /* bridge */,
 				C8AA65DD245FCE0E00B456AE /* kitios */,
+				C8AA65FF245FE71C00B456AE /* models */,
 				C8AA65DC245FCE0E00B456AE /* Products */,
 				C8AA65F7245FE36000B456AE /* Frameworks */,
 			);
@@ -60,6 +87,12 @@
 		C8AA65DD245FCE0E00B456AE /* kitios */ = {
 			isa = PBXGroup;
 			children = (
+				C8AA6613245FEBAE00B456AE /* BooksTableViewController.swift */,
+				C8AA6610245FEBAD00B456AE /* ChaptersTableViewController.swift */,
+				C8AA660F245FEBAD00B456AE /* ExportChapterViewController.swift */,
+				C8AA660E245FEBAD00B456AE /* KeyItSetupController.swift */,
+				C8AA6612245FEBAD00B456AE /* UIVerseItemCell.swift */,
+				C8AA6611245FEBAD00B456AE /* VersesTableViewController.swift */,
 				C8AA65DE245FCE0E00B456AE /* AppDelegate.swift */,
 				C8AA65E0245FCE0E00B456AE /* SceneDelegate.swift */,
 				C8AA65E2245FCE0E00B456AE /* ViewController.swift */,
@@ -85,6 +118,20 @@
 				C8AA65FE245FE52B00B456AE /* SQLite3Bridge.h */,
 			);
 			path = bridge;
+			sourceTree = "<group>";
+		};
+		C8AA65FF245FE71C00B456AE /* models */ = {
+			isa = PBXGroup;
+			children = (
+				C8AA6609245FE7DD00B456AE /* KIT_BooksNames.txt */,
+				C8AA660A245FE7DE00B456AE /* KIT_BooksSpec.txt */,
+				C8AA6608245FE7DD00B456AE /* KITDAO.swift */,
+				C8AA6602245FE78200B456AE /* Bible.swift */,
+				C8AA6600245FE78200B456AE /* Book.swift */,
+				C8AA6603245FE78300B456AE /* Chapter.swift */,
+				C8AA6601245FE78200B456AE /* VItem.swift */,
+			);
+			path = models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -145,7 +192,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C8AA660D245FE7DE00B456AE /* KIT_BooksSpec.txt in Resources */,
 				C8AA65EB245FCE2F00B456AE /* LaunchScreen.storyboard in Resources */,
+				C8AA660C245FE7DE00B456AE /* KIT_BooksNames.txt in Resources */,
 				C8AA65E8245FCE2F00B456AE /* Assets.xcassets in Resources */,
 				C8AA65E6245FCE0E00B456AE /* Main.storyboard in Resources */,
 			);
@@ -158,9 +207,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C8AA6605245FE78300B456AE /* VItem.swift in Sources */,
+				C8AA6618245FEBAE00B456AE /* UIVerseItemCell.swift in Sources */,
+				C8AA6619245FEBAE00B456AE /* BooksTableViewController.swift in Sources */,
+				C8AA6614245FEBAE00B456AE /* KeyItSetupController.swift in Sources */,
+				C8AA6604245FE78300B456AE /* Book.swift in Sources */,
+				C8AA6616245FEBAE00B456AE /* ChaptersTableViewController.swift in Sources */,
+				C8AA6606245FE78300B456AE /* Bible.swift in Sources */,
+				C8AA6617245FEBAE00B456AE /* VersesTableViewController.swift in Sources */,
+				C8AA660B245FE7DE00B456AE /* KITDAO.swift in Sources */,
 				C8AA65E3245FCE0E00B456AE /* ViewController.swift in Sources */,
+				C8AA6615245FEBAE00B456AE /* ExportChapterViewController.swift in Sources */,
 				C8AA65DF245FCE0E00B456AE /* AppDelegate.swift in Sources */,
 				C8AA65E1245FCE0E00B456AE /* SceneDelegate.swift in Sources */,
+				C8AA6607245FE78300B456AE /* Chapter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
