@@ -109,9 +109,11 @@ class ChaptersTableViewController: UITableViewController {
 		cell.textLabel?.text = "Chapter " + String(chapter.chNum)
 		let numVsItText = (chapter.numVs > 0 ? String(chapter.numVs) + " verses (" + String(chapter.numIt) + " items)" : "" )
 		cell.detailTextLabel?.text = numVsItText
-//		if chDirty {
-//			cell.detailTextLabel?.textColor = UIColor.blue
-//		}
+		if chapter.itRCr {
+			cell.textLabel!.textColor = UIColor.blue
+		} else {
+			cell.textLabel!.textColor = UIColor.black
+		}
         return cell
     }
 	
@@ -119,7 +121,8 @@ class ChaptersTableViewController: UITableViewController {
 		// Set up the selected Chapter as the current Chapter
 		chRow = indexPath.row
 		bkInst!.setupCurrentChapter(withOffset: chRow)
-//		let cell = tableView.cellForRow(at: indexPath)
+		let cell = tableView.cellForRow(at: indexPath)
+		cell!.textLabel!.textColor = UIColor.blue
 		// Current Chapter is selected so segue to Edit Chapter scene
 		// The user is going forwards to the next scene
 		goingForwards = true

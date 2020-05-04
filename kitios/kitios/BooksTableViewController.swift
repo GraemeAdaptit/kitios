@@ -103,6 +103,8 @@ class BooksTableViewController: UITableViewController {
 		cell.textLabel?.text = book.bkName
 		if book.chapRCr {
 			cell.textLabel!.textColor = UIColor.blue
+		} else {
+			cell.textLabel!.textColor = UIColor.black
 		}
 		let numChText = (book.numCh > 0 ? String(book.numCh) + " ch " : "" )
 		cell.detailTextLabel?.text = numChText
