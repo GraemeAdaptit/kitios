@@ -101,6 +101,9 @@ class BooksTableViewController: UITableViewController {
 		let cell = tableView.dequeueReusableCell(withIdentifier: "BookCell", for: indexPath)
 		let book = bInst!.BibBooks[indexPath.row]
 		cell.textLabel?.text = book.bkName
+		if book.chapRCr {
+			cell.textLabel!.textColor = UIColor.blue
+		}
 		let numChText = (book.numCh > 0 ? String(book.numCh) + " ch " : "" )
 		cell.detailTextLabel?.text = numChText
 		return cell
@@ -116,6 +119,7 @@ class BooksTableViewController: UITableViewController {
 		let nChap = bInst!.BibBooks[indexPath.row].numCh
 		let numChText = (nChap > 0 ? String(nChap) + " ch " : "" )
 		cell!.detailTextLabel?.text = numChText
+		cell!.textLabel!.textColor = UIColor.blue
 		// Current Book is selected so segue to Select Chapter scene
 		// The user is going forwards to the next scene
 		goingForwards = true

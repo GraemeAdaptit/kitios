@@ -119,7 +119,7 @@ class ChaptersTableViewController: UITableViewController {
 		// Set up the selected Chapter as the current Chapter
 		chRow = indexPath.row
 		bkInst!.setupCurrentChapter(withOffset: chRow)
-//		let cell = tableView(tableView, cellForRowAt: indexPath)
+//		let cell = tableView.cellForRow(at: indexPath)
 		// Current Chapter is selected so segue to Edit Chapter scene
 		// The user is going forwards to the next scene
 		goingForwards = true
