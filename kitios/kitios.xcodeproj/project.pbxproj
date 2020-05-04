@@ -24,6 +24,8 @@
 		C8AA65E7245FCE2F00B456AE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C8AA65EA245FCE2F00B456AE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C8AA65EC245FCE2F00B456AE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C8AA65F8245FE36000B456AE /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		C8AA65FE245FE52B00B456AE /* SQLite3Bridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQLite3Bridge.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -40,8 +42,10 @@
 		C8AA65D2245FCE0E00B456AE = {
 			isa = PBXGroup;
 			children = (
+				C8AA65FD245FE4E800B456AE /* bridge */,
 				C8AA65DD245FCE0E00B456AE /* kitios */,
 				C8AA65DC245FCE0E00B456AE /* Products */,
+				C8AA65F7245FE36000B456AE /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -65,6 +69,22 @@
 				C8AA65EC245FCE2F00B456AE /* Info.plist */,
 			);
 			path = kitios;
+			sourceTree = "<group>";
+		};
+		C8AA65F7245FE36000B456AE /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C8AA65F8245FE36000B456AE /* libsqlite3.tbd */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C8AA65FD245FE4E800B456AE /* bridge */ = {
+			isa = PBXGroup;
+			children = (
+				C8AA65FE245FE52B00B456AE /* SQLite3Bridge.h */,
+			);
+			path = bridge;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -222,7 +242,9 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = bridge/SQLite3Bridge.h;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
 		};
@@ -275,8 +297,10 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OBJC_BRIDGING_HEADER = bridge/SQLite3Bridge.h;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
 		};
