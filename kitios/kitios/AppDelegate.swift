@@ -25,7 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		// Override point for customization after application launch.
 
 		do {
-			let srcPath:URL = Bundle.main.url (forResource: "kdb", withExtension: "sqlite")!
+			let srcPath:URL = Bundle.main.url (forResource: "kdb2", withExtension: "sqlite")!
 			let docsDir:URL = FileManager.default.urls (for: .documentDirectory, in: .userDomainMask).first!
 			let destPath:URL = docsDir.appendingPathComponent ("kdb.sqlite")
 			if !FileManager.default.fileExists(atPath: destPath.path) {

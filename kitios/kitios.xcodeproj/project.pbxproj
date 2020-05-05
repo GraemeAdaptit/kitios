@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C81AC2892460F49000239969 /* kdb2.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = C81AC2882460F49000239969 /* kdb2.sqlite */; };
 		C89FF4F6245FF26B00A85339 /* kdb.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = C8AA661B245FF16400B456AE /* kdb.sqlite */; };
 		C8AA65DF245FCE0E00B456AE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8AA65DE245FCE0E00B456AE /* AppDelegate.swift */; };
 		C8AA65E6245FCE0E00B456AE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C8AA65E4245FCE0E00B456AE /* Main.storyboard */; };
@@ -28,6 +29,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C81AC2882460F49000239969 /* kdb2.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = kdb2.sqlite; sourceTree = "<group>"; };
 		C8AA65DB245FCE0E00B456AE /* kitios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = kitios.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8AA65DE245FCE0E00B456AE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C8AA65E5245FCE0E00B456AE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -119,6 +121,7 @@
 		C8AA65FF245FE71C00B456AE /* models */ = {
 			isa = PBXGroup;
 			children = (
+				C81AC2882460F49000239969 /* kdb2.sqlite */,
 				C8AA661B245FF16400B456AE /* kdb.sqlite */,
 				C8AA6609245FE7DD00B456AE /* KIT_BooksNames.txt */,
 				C8AA660A245FE7DE00B456AE /* KIT_BooksSpec.txt */,
@@ -195,6 +198,7 @@
 				C8AA660C245FE7DE00B456AE /* KIT_BooksNames.txt in Resources */,
 				C8AA65E8245FCE2F00B456AE /* Assets.xcassets in Resources */,
 				C8AA65E6245FCE0E00B456AE /* Main.storyboard in Resources */,
+				C81AC2892460F49000239969 /* kdb2.sqlite in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

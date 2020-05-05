@@ -114,8 +114,6 @@ public class KITDAO:NSObject {
 		let nByte:Int32 = Int32(sql.utf8.count)
 		
 		sqlite3_prepare_v2(db, sql, nByte, &sqlite3_stmt, nil)
-//		let bkRCr = 1	// This function is called after the Books records have been created
-//		sqlite3_bind_int(sqlite3_stmt, 3, Int32(bkRCr))
 		sqlite3_step(sqlite3_stmt)
 		let result = sqlite3_finalize(sqlite3_stmt)
 		return (result == 0 ? true : false)
@@ -240,6 +238,7 @@ public class KITDAO:NSObject {
 		sqlite3_bind_int(sqlite3_stmt, 5, Int32(numVs))
 		sqlite3_bind_int(sqlite3_stmt, 6, Int32(numIt))
 		sqlite3_bind_int(sqlite3_stmt, 7, Int32(currIt))
+
 		sqlite3_step(sqlite3_stmt)
 		let result = sqlite3_finalize(sqlite3_stmt)
 		return (result == 0 ? true : false)
@@ -300,6 +299,9 @@ public class KITDAO:NSObject {
 		let result = sqlite3_finalize(sqlite3_stmt)
 		return (result == 0 ? true : false)
 	}
+
+	// TODO: Implement a functions to set the value of the field USFMText when the Export scene is used
+	// TODO: Implement a function to retrieve the value of the USFMText field when needed
 
 	//--------------------------------------------------------------------------------------------
 	//	VerseItems data table
