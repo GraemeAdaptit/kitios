@@ -36,6 +36,11 @@ class KeyItSetupController: UIViewController, UITextFieldDelegate {
 	@IBOutlet weak var saveButton: UIButton!
 	@IBOutlet weak var goButton: UIButton!
 
+	required init?(coder aDecoder: NSCoder) {
+		super.init(coder: aDecoder)
+		print("KeyItSetupController:init")
+	}
+
     override func viewDidLoad() {
         super.viewDidLoad()
 

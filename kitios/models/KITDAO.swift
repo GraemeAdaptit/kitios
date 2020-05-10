@@ -300,7 +300,20 @@ public class KITDAO:NSObject {
 		return (result == 0 ? true : false)
 	}
 
-	// TODO: Implement a functions to set the value of the field USFMText when the Export scene is used
+	// Set the value of the field USFMText when the Export scene is used
+	func updateUSFMText (_ chID:Int, _ text:String) -> Bool {
+		var sqlite3_stmt:OpaquePointer?=nil
+		let sql:String = "UPDATE Chapters SET USFMText = ?2 WHERE chapterID = ?1;"
+		let nByte:Int32 = Int32(sql.utf8.count)
+
+		sqlite3_prepare_v2(db, sql, nByte, &sqlite3_stmt, nil)
+		sqlite3_bind_int(sqlite3_stmt, 1, Int32(chID))
+		sqlite3_bind_text(sqlite3_stmt, 2, text.cString(using:String.Encoding.utf8)!, -1, SQLITE_TRANSIENT)
+		sqlite3_step(sqlite3_stmt)
+		let result = sqlite3_finalize(sqlite3_stmt)
+		return (result == 0 ? true : false)
+	}
+
 	// TODO: Implement a function to retrieve the value of the USFMText field when needed
 
 	//--------------------------------------------------------------------------------------------

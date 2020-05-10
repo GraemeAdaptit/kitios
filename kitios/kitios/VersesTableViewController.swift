@@ -99,7 +99,11 @@ class VersesTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UIVerseItemCell {
 		let cell = tableView.dequeueReusableCell(withIdentifier: "ItemCell", for: indexPath) as! UIVerseItemCell
 		let vsItem = chInst!.BibItems[indexPath.row]
-		cell.itType.text = vsItem.itTyp + " " + String(vsItem.vsNum)
+		if vsItem.itTyp == "Ascription" {
+			cell.itType.text = vsItem.itTyp
+		} else {
+			cell.itType.text = vsItem.itTyp + " " + String(vsItem.vsNum)
+		}
 		cell.itText.text = vsItem.itTxt
 		cell.tableRow = indexPath.row
 		cell.VTVCtrl = self

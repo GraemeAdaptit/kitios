@@ -36,6 +36,8 @@ public class Chapter: NSObject {
 	var bibInst: Bible? 	// access to the instance of Bible for updating BibBooks[]
 	var bkInst: Book?		// access to the instance for the current Book
 
+//	var USFMText:String = ""
+
 // This struct and the BibItems array are used for letting the user select the
 // VerseItem to edit in the current Chapter of the current Book.
 
@@ -112,8 +114,24 @@ public class Chapter: NSObject {
 	}
 	
 // Create a VerseItem record in kdb.sqlite for each VerseItem in this Chapter
-	
+// If this is a Psalm and it has an ascription then numIt will be 1 greater than numVs.
+// For all other VerseItems numIt will equal numVs at this early stage of building the app's data
+
 	func createItemRecords() {
+		// If there is a Psalm ascription then create it first.
+		if numIt > numVs {
+			let vsNum = 1
+			let itTyp = "Ascription"
+			let itOrd = 99
+			let itText = ""
+			let intSeq = 0
+			let isBrid = false
+			if dao!.verseItemsInsertRec (chID, vsNum, itTyp, itOrd, itText, intSeq, isBrid) {
+//				print("Chapter:createItemRecords Created Verse record for chap \(chNum) vs \(vsNum)")
+			} else {
+				print("ERROR: Book:createItemRecords: Creating Verse record failed for chap \(chNum) vs \(vsNum)")
+			}
+		}
 		for vsNum in 1...numVs {
 			let itTyp = "Verse"
 			let itOrd = 100*vsNum
@@ -264,6 +282,8 @@ public class Chapter: NSObject {
 				s = "\n\\ip " + tx
 			case "DesTitle":
 				s = "\n\\d " + tx
+			case "Ascription":
+				s = "\n\\d " + tx
 			default:
 				s = ""
 			}
@@ -272,4 +292,7 @@ public class Chapter: NSObject {
 		return USFM
 	}
 
+	func saveUSFMText (_ chID:Int, _ text:String) -> Bool {
+		return dao!.updateUSFMText (chID, text)
+	}
 }

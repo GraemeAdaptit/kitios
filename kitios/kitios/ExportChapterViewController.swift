@@ -28,8 +28,17 @@ class ExportChapterViewController: UIViewController {
 		chInst = appDelegate.chapInst	// Get access to the instance of the current Chapter
 		navigationItem.title = bInst!.bibName
 		navigationItem.prompt = "Export chapter " + String(chInst!.chNum) + " of " + bkInst!.bkName
-		
-		ExportUSFM.text = chInst!.calcUSFMExportText()
+
+		// Generate the USFM text
+		let USFMexp = chInst!.calcUSFMExportText()
+		// Display it to the user
+		ExportUSFM.text = USFMexp
+		// Save it into the current Chapter record of kdb.sqlite
+		if chInst!.saveUSFMText (chInst!.chID, USFMexp) {
+			print("ExportChapterViewController:viewDidLoad saved USFM text to kdb.sqlite")
+		} else {
+			print("ExportChapterViewController:viewDidLoad save to kdb.sqlite FAILED")
+		}
     }
     
 

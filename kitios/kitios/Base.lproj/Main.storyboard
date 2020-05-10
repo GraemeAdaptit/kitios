@@ -11,9 +11,9 @@
         <!--Select Book-->
         <scene sceneID="s6T-e1-fNx">
             <objects>
-                <tableViewController storyboardIdentifier="SelectBook" title="Select Book" modalTransitionStyle="partialCurl" modalPresentationStyle="fullScreen" id="XA6-hc-AsZ" customClass="BooksTableViewController" customModule="KIT05" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="SelectBook" title="Select Book" modalTransitionStyle="partialCurl" modalPresentationStyle="fullScreen" id="XA6-hc-AsZ" customClass="BooksTableViewController" customModule="kitios" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="Qes-Oa-F25">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="752"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="774"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <prototypes>
@@ -48,7 +48,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Books" prompt="Select Bible Book" largeTitleDisplayMode="always" id="MNH-Xf-pk2">
-                        <barButtonItem key="backBarButtonItem" title="Books" id="ozY-1T-xD8"/>
+                        <barButtonItem key="backBarButtonItem" title="Books" width="50" id="ozY-1T-xD8"/>
                     </navigationItem>
                     <connections>
                         <segue destination="0tX-1T-6fC" kind="show" identifier="selectChapter" id="hbk-nV-daV"/>
@@ -61,9 +61,9 @@
         <!--Select Chapter-->
         <scene sceneID="8af-nw-zy5">
             <objects>
-                <tableViewController storyboardIdentifier="SelectChapter" title="Select Chapter" id="0tX-1T-6fC" customClass="ChaptersTableViewController" customModule="KIT05" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="SelectChapter" title="Select Chapter" id="0tX-1T-6fC" customClass="ChaptersTableViewController" customModule="kitios" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="FXt-hV-anH">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="752"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="774"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <prototypes>
@@ -112,13 +112,13 @@
         <!--Edit Chapter-->
         <scene sceneID="DYU-ee-HOP">
             <objects>
-                <tableViewController storyboardIdentifier="EditChapter" title="Edit Chapter" id="3Gc-YA-fTx" customClass="VersesTableViewController" customModule="KIT05" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="EditChapter" title="Edit Chapter" id="3Gc-YA-fTx" customClass="VersesTableViewController" customModule="kitios" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="80" sectionHeaderHeight="28" sectionFooterHeight="28" id="4Nh-0O-s3R">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="752"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="774"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ItemCell" id="tYa-vs-uO4" customClass="UIVerseItemCell" customModule="KIT05" customModuleProvider="target">
+                            <tableViewCell contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ItemCell" id="tYa-vs-uO4" customClass="UIVerseItemCell" customModule="kitios" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="414" height="71.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" multipleTouchEnabled="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="tYa-vs-uO4" translatesAutoresizingMaskIntoConstraints="NO" id="zIz-Mj-2Kv">
@@ -185,7 +185,7 @@
         <!--Key It Setup-->
         <scene sceneID="CKK-I0-xJe">
             <objects>
-                <viewController title="Key It Setup" id="Mq7-GK-ujF" customClass="KeyItSetupController" customModule="KIT05" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Key It Setup" id="Mq7-GK-ujF" customClass="KeyItSetupController" customModule="kitios" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="tQX-Xh-rBr">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -241,7 +241,7 @@
                     </view>
                     <connections>
                         <outlet property="bibleName" destination="zBE-yT-V2V" id="w6U-OL-Pbt"/>
-                        <segue destination="ep7-s1-4F9" kind="showDetail" identifier="keyItNav" id="PLe-ec-lei"/>
+                        <segue destination="ep7-s1-4F9" kind="presentation" identifier="keyItNav" modalPresentationStyle="fullScreen" modalTransitionStyle="coverVertical" id="PLe-ec-lei"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2zP-5k-uPm" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -251,9 +251,9 @@
         <!--Export Chapter-->
         <scene sceneID="mc2-wj-nES">
             <objects>
-                <viewController storyboardIdentifier="ExportChapter" title="Export Chapter" id="f0e-bE-QQt" customClass="ExportChapterViewController" customModule="KIT05" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ExportChapter" title="Export Chapter" id="f0e-bE-QQt" customClass="ExportChapterViewController" customModule="kitios" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="dFk-J1-ywt">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="752"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="774"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="BuF-Eh-6fZ">
@@ -288,8 +288,9 @@
             <objects>
                 <navigationController title="KeyIt Navigation" automaticallyAdjustsScrollViewInsets="NO" id="ep7-s1-4F9" sceneMemberID="viewController">
                     <toolbarItems/>
+                    <navigationItem key="navigationItem" id="CpA-US-wko"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" id="6YZ-yJ-ECZ">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="56"/>
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" systemColor="systemGreenColor" red="0.20392156859999999" green="0.78039215689999997" blue="0.34901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <textAttributes key="titleTextAttributes">

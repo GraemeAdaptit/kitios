@@ -143,8 +143,14 @@ var BibChaps: [BibChap] = []
 		var chNum = 1	// Start at Chapter 1
 		let currIt = 0	// No current VerseItem yet
 		for elem in elements {
-			let numVs = Int(elem)!
-			let numIt = numVs
+			var numIt = 0
+			var elemTr = elem		// for some Psalms a preceding "A" will be removed
+			if elem.prefix(1) == "A" {
+				numIt = 1	// 1 for the Psalm ascription
+				elemTr = String(elem.suffix(elem.count - 1))	// remove the "A"
+			}
+			let numVs = Int(elemTr)!
+			numIt = numIt + numVs	// for some Psalms numIt will include the ascription VerseItem
 			if dao!.chaptersInsertRec (bib, book, chNum, false, numVs, numIt, currIt) {
 				print("Book:createChapterRecords Created Chapter record for \(String(describing: bkName)) chapter \(chNum)")
 			} else {
