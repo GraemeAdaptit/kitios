@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		C81AC2892460F49000239969 /* kdb2.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = C81AC2882460F49000239969 /* kdb2.sqlite */; };
+		C81DC9F2246D01A500553D89 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = C81DC9F1246D01A400553D89 /* README.md */; };
 		C89FF4F6245FF26B00A85339 /* kdb.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = C8AA661B245FF16400B456AE /* kdb.sqlite */; };
 		C8AA65DF245FCE0E00B456AE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8AA65DE245FCE0E00B456AE /* AppDelegate.swift */; };
 		C8AA65E6245FCE0E00B456AE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C8AA65E4245FCE0E00B456AE /* Main.storyboard */; };
@@ -30,6 +31,7 @@
 
 /* Begin PBXFileReference section */
 		C81AC2882460F49000239969 /* kdb2.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = kdb2.sqlite; sourceTree = "<group>"; };
+		C81DC9F1246D01A400553D89 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		C8AA65DB245FCE0E00B456AE /* kitios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = kitios.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8AA65DE245FCE0E00B456AE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C8AA65E5245FCE0E00B456AE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -65,6 +67,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C81DC9F0246D00B800553D89 /* Documentation */ = {
+			isa = PBXGroup;
+			children = (
+				C81DC9F1246D01A400553D89 /* README.md */,
+			);
+			path = Documentation;
+			sourceTree = "<group>";
+		};
 		C8AA65D2245FCE0E00B456AE = {
 			isa = PBXGroup;
 			children = (
@@ -72,6 +82,7 @@
 				C8AA65DD245FCE0E00B456AE /* kitios */,
 				C8AA65FF245FE71C00B456AE /* models */,
 				C8AA65DC245FCE0E00B456AE /* Products */,
+				C81DC9F0246D00B800553D89 /* Documentation */,
 				C8AA65F7245FE36000B456AE /* Frameworks */,
 			);
 			sourceTree = "<group>";
@@ -198,6 +209,7 @@
 				C8AA660C245FE7DE00B456AE /* KIT_BooksNames.txt in Resources */,
 				C8AA65E8245FCE2F00B456AE /* Assets.xcassets in Resources */,
 				C8AA65E6245FCE0E00B456AE /* Main.storyboard in Resources */,
+				C81DC9F2246D01A500553D89 /* README.md in Resources */,
 				C81AC2892460F49000239969 /* kdb2.sqlite in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
