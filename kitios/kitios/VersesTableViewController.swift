@@ -223,7 +223,12 @@ class VersesTableViewController: UITableViewController {
 //		self.performSegue(withIdentifier: "chooseBook", sender: nil)
 //	}
 
-//	@IBAction func chooseBook(_ segue: UIStoryboardSegue) {
-//		performSegue(withIdentifier: "chooseBook", sender: nil)
-//	}
+	// The automatic Triggered Action of the Export button has been deleted, but it has
+	// a Sent Action that calls this function in order to save the current item text before
+	// performing the segue to the Export Chapter scene.
+
+	@IBAction func exportThisChapter(_ sender: Any) {
+		saveCurrentItemText ()
+		performSegue(withIdentifier: "exportChapter", sender: nil)
+	}
 }

@@ -250,7 +250,7 @@ public class Chapter: NSObject {
 //	}
 
 	func calcUSFMExportText() -> String {
-		var USFM = "\\id " + bkInst!.bkCode + "\n\\c " + String(chNum)
+		var USFM = "\\id " + bkInst!.bkCode + " " + bibInst!.bibName + "\n\\c " + String(chNum)
 		for i in 0...(BibItems.count - 1) {
 			var s: String
 			var vn: String
