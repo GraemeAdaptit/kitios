@@ -11,7 +11,7 @@
         <!--Select Book-->
         <scene sceneID="s6T-e1-fNx">
             <objects>
-                <tableViewController storyboardIdentifier="SelectBook" title="Select Book" modalTransitionStyle="partialCurl" modalPresentationStyle="fullScreen" id="XA6-hc-AsZ" customClass="BooksTableViewController" customModule="kitios" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="SelectBook" title="Select Book" id="XA6-hc-AsZ" customClass="BooksTableViewController" customModule="kitios" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="Qes-Oa-F25">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="774"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -48,7 +48,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Books" prompt="Select Bible Book" largeTitleDisplayMode="always" id="MNH-Xf-pk2">
-                        <barButtonItem key="backBarButtonItem" title="Books" width="50" id="ozY-1T-xD8"/>
+                        <barButtonItem key="backBarButtonItem" title="Books" id="ozY-1T-xD8"/>
                     </navigationItem>
                     <connections>
                         <segue destination="0tX-1T-6fC" kind="show" identifier="selectChapter" id="hbk-nV-daV"/>
