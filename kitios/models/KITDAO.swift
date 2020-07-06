@@ -33,28 +33,27 @@ public class KITDAO:NSObject {
 	internal let SQLITE_TRANSIENT = unsafeBitCast(-1, to: sqlite3_destructor_type.self)
 
 	override init() {
-
-		do {
+		super.init()
 			print("Entering init() of KITDAO object")
-			let directoryURL = try! dirManager.url(for: FileManager.SearchPathDirectory.documentDirectory, in: FileManager.SearchPathDomainMask.userDomainMask, appropriateFor: nil, create: true)
-
-			let dbPath = directoryURL.appendingPathComponent(dbName)
-			if sqlite3_open(dbPath.absoluteString.cString(using: String.Encoding.utf8)!, &db) == SQLITE_OK {
-				print("kdb.sqlite has been opened")
+			let docsDir:URL = FileManager.default.urls (for: .documentDirectory, in: .userDomainMask).first!
+			let kdbPath:URL = docsDir.appendingPathComponent ("kdb.sqlite")
+			if !FileManager.default.fileExists(atPath: kdbPath.path) {
+				if createAndOpenDatabase(kdbPath) {
+					print("kdb.sqlite has been created")
+				} else {
+					print("kdb.sqlite could not be created")
+				}
 			} else {
-				print("kdb.sqlite could not be opened")
+				// Open kdb.sqlite database
+				if sqlite3_open(kdbPath.absoluteString.cString(using: String.Encoding.utf8)!, &db) == SQLITE_OK {
+					print("kdb.sqlite has been opened")
+				} else {
+					print("kdb.sqlite could not be opened")
+				}
 			}
-		}
-		// The FileManager function will always find a Documents directory for the app and
-		// thus there will be no error thrown
-		//catch let err as NSError {
-			//print("Error: \(err.domain)")
-			// What should happen after this extremely unlikely error???
-		//}
 		print("The KITDAO instance has been created")
-
 	}
-
+	
 	// Ensure that the kdb.sqlite database is closed
 	deinit {
 		if sqlite3_close(db) == SQLITE_BUSY {
@@ -62,6 +61,78 @@ public class KITDAO:NSObject {
 		} else {
 			print ("kdb.sqlite database has been closed")
 		}
+	}
+	
+	//--------------------------------------------------------------------------------------------
+	//	Create and open kdb.sqlite database
+	//
+	//	On the first launch there will not be a kdb.sqlite file in the Documents directory, so
+	//	this function will be called to create it.
+	
+	func createAndOpenDatabase (_ path:URL) -> Bool {
+		// Create an empty kdb.sqlite
+		if sqlite3_open(path.absoluteString.cString(using: String.Encoding.utf8)!, &db) == SQLITE_OK {
+			print("kdb.sqlite has been created")
+		} else {
+			print("kdb.sqlite could not be created")
+			// TODO: What action in the extremely unlikely event that sqlite3 cannot create the empty database???
+		}
+		// Create the Bibles table
+		var sqlite3_stmt:OpaquePointer?=nil
+		var sql:String = "CREATE TABLE Bibles(bibleID INTEGER PRIMARY KEY, name TEXT, bookRecsCreated INTEGER, currBook  INTEGER);"
+		var nByte:Int32 = Int32(sql.utf8.count)
+		sqlite3_prepare_v2(db, sql, nByte, &sqlite3_stmt, nil)
+		sqlite3_step(sqlite3_stmt)
+		var result = sqlite3_finalize(sqlite3_stmt)
+		if result != 0 {
+			return false
+		}
+		// Create the Books table
+		sqlite3_stmt = nil
+		sql = "CREATE TABLE Books(bookID INTEGER, bibleID INTEGER, bookCode TEXT, bookName TEXT, chapRecsCreated INTEGER, numChaps INTEGER, currChapter  INTEGER, USFMText TEXT);"
+		nByte = Int32(sql.utf8.count)
+		sqlite3_prepare_v2(db, sql, nByte, &sqlite3_stmt, nil)
+		sqlite3_step(sqlite3_stmt)
+		result = sqlite3_finalize(sqlite3_stmt)
+		if result != 0 {
+			return false
+		}
+		// Create the Chapters table
+		sqlite3_stmt = nil
+		sql = "CREATE TABLE Chapters(chapterID INTEGER PRIMARY KEY, bibleID INTEGER, bookID INTEGER, chapterNumber INTEGER, itemRecsCreated INTEGER, numVerses INTEGER, numItems INTEGER, currItem INTEGER, USFMText TEXT);"
+		nByte = Int32(sql.utf8.count)
+		sqlite3_prepare_v2(db, sql, nByte, &sqlite3_stmt, nil)
+		sqlite3_step(sqlite3_stmt)
+		result = sqlite3_finalize(sqlite3_stmt)
+		if result != 0 {
+			return false
+		}
+		// Create the VerseItems table
+		sqlite3_stmt = nil
+		sql = "CREATE TABLE VerseItems(itemID INTEGER PRIMARY KEY, chapterID INTEGER, verseNumber INTEGER, itemType TEXT, itemOrder INTEGER, itemText TEXT, intSeq INTEGER, isBridge INTEGER, lastVsBridge INTEGER);"
+		nByte = Int32(sql.utf8.count)
+		sqlite3_prepare_v2(db, sql, nByte, &sqlite3_stmt, nil)
+		sqlite3_step(sqlite3_stmt)
+		result = sqlite3_finalize(sqlite3_stmt)
+		if result != 0 {
+			return false
+		}
+		// Create the BridgeItems table
+		sqlite3_stmt = nil
+		sql = "CREATE TABLE BridgeItems(bridgeID INTEGER PRIMARY KEY, itemID INTEGER, textCurrBridge TEXT, textExtraVerse TEXT);"
+		nByte = Int32(sql.utf8.count)
+		sqlite3_prepare_v2(db, sql, nByte, &sqlite3_stmt, nil)
+		sqlite3_step(sqlite3_stmt)
+		result = sqlite3_finalize(sqlite3_stmt)
+		if result != 0 {
+			return false
+		}
+
+		// Create the single record in the Bibles table
+		if !bibleInsertRec(1, "Bible", false, 0) {
+			return false
+		}
+		return true
 	}
 
 	//--------------------------------------------------------------------------------------------
@@ -71,6 +142,21 @@ public class KITDAO:NSObject {
 	//	* whether the Books records need to be created (on first launch) or
 	//	* what is the current Book (on subsequent launches)
 	
+	func bibleInsertRec (_ bibID:Int, _ bibName:String, _ bkRCr:Bool, _ currBook:Int) -> Bool {
+		var sqlite3_stmt:OpaquePointer?=nil
+		let sql:String = "INSERT INTO Bibles(bibleID, name, bookRecsCreated, currBook) VALUES(?, ?, ?, ?);"
+		let nByte:Int32 = Int32(sql.utf8.count)
+		
+		sqlite3_prepare_v2(db, sql, nByte, &sqlite3_stmt, nil)
+		sqlite3_bind_int(sqlite3_stmt, 1, Int32(bibID))
+		sqlite3_bind_text(sqlite3_stmt, 2, bibName.cString(using:String.Encoding.utf8)!, -1, SQLITE_TRANSIENT)
+		sqlite3_bind_int(sqlite3_stmt, 3, Int32((bkRCr ? 1 : 0)))
+		sqlite3_bind_int(sqlite3_stmt, 4, Int32(currBook))
+		sqlite3_step(sqlite3_stmt)
+		let result = sqlite3_finalize(sqlite3_stmt)
+		return (result == 0 ? true : false)
+	}
+
 	func bibleGetRec () -> (bibID:Int, bibName:String, bkRCr:Bool, currBk:Int) {
 		var sqlite3_stmt:OpaquePointer?=nil
 		let sql:String = "SELECT bibleID, name, bookRecsCreated, currBook FROM Bibles;"

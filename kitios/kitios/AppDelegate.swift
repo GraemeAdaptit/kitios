@@ -24,23 +24,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 		// Override point for customization after application launch.
 
-		do {
-			let srcPath:URL = Bundle.main.url (forResource: "kdb2", withExtension: "sqlite")!
-			let docsDir:URL = FileManager.default.urls (for: .documentDirectory, in: .userDomainMask).first!
-			let destPath:URL = docsDir.appendingPathComponent ("kdb.sqlite")
-			if !FileManager.default.fileExists(atPath: destPath.path) {
-				try! FileManager.default.copyItem(atPath: srcPath.path, toPath: destPath.path)
-				print("AppDelegate kdb.sqlite copied to Documents directory")
-			} else {
-				print("AppDelegate kdb.sqlite already in Documents directory")
-			}
-		}
-		// the small file kdb.sqlite is shipped with the program so there will be no error thrown
-		// by the FileManager copyItem function
-		// catch {
-		//print("kdb.sqlite unknown error. Error No. \(error)")
-		//}
-
 		dao = KITDAO()	// create an instance of the Data Access Object and keep reference to it
 
 		return true
