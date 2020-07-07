@@ -15,7 +15,7 @@
 //	is handled within this class.
 //
 //	This class is instantiated at the launching of the app and it opens a connection to the
-//	database, keeps that connection in the class variable db and retains it until the app
+//	database, keeps that connection in the instance property db and retains it until the app
 //	terminates. Only one instance of the class is used.
 //
 //	TODO: Check whether interruption of the app (such as by a phone call coming to the
@@ -24,7 +24,7 @@
 
 import UIKit
 
-public class KITDAO:NSObject {
+public class KITDAO {
 
 	let dbName = "kdb.sqlite"
 	let dirManager = FileManager.default
@@ -32,8 +32,7 @@ public class KITDAO:NSObject {
 	
 	internal let SQLITE_TRANSIENT = unsafeBitCast(-1, to: sqlite3_destructor_type.self)
 
-	override init() {
-		super.init()
+	init() {
 			print("Entering init() of KITDAO object")
 			let docsDir:URL = FileManager.default.urls (for: .documentDirectory, in: .userDomainMask).first!
 			let kdbPath:URL = docsDir.appendingPathComponent ("kdb.sqlite")
