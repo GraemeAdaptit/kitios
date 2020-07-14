@@ -10,8 +10,12 @@
 //	this scene is bypassed on subsequent launches.
 //
 //  Created by Graeme Costin on 3/3/20.
-//  Copyright © 2020 Costin Computing Services. All rights reserved.
+// The author disclaims copyright to this source code.  In place of
+// a legal notice, here is a blessing:
 //
+//    May you do good and not evil.
+//    May you find forgiveness for yourself and forgive others.
+//    May you share freely, never taking more than you give.
 
 import UIKit
 

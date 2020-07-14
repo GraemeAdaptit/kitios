@@ -3,7 +3,13 @@
 //  KIT04
 //
 //  Created by Graeme Costin on 25/10/19.
-//  Copyright © 2019 Costin Computing Services. All rights reserved.
+// The author disclaims copyright to this source code.  In place of
+// a legal notice, here is a blessing:
+//
+//    May you do good and not evil.
+//    May you find forgiveness for yourself and forgive others.
+//    May you share freely, never taking more than you give.
+
 //
 //	There will be one instance of the class Book and it will be for the Bible book that
 //	the user has currently selected for keyboarding. When the user switches to keyboarding

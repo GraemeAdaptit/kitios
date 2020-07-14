@@ -7,9 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C81AC2892460F49000239969 /* kdb2.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = C81AC2882460F49000239969 /* kdb2.sqlite */; };
 		C81DC9F2246D01A500553D89 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = C81DC9F1246D01A400553D89 /* README.md */; };
-		C89FF4F6245FF26B00A85339 /* kdb.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = C8AA661B245FF16400B456AE /* kdb.sqlite */; };
 		C8AA65DF245FCE0E00B456AE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8AA65DE245FCE0E00B456AE /* AppDelegate.swift */; };
 		C8AA65E6245FCE0E00B456AE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C8AA65E4245FCE0E00B456AE /* Main.storyboard */; };
 		C8AA65E8245FCE2F00B456AE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C8AA65E7245FCE2F00B456AE /* Assets.xcassets */; };
@@ -30,7 +28,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		C81AC2882460F49000239969 /* kdb2.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = kdb2.sqlite; sourceTree = "<group>"; };
 		C81DC9F1246D01A400553D89 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		C8AA65DB245FCE0E00B456AE /* kitios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = kitios.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8AA65DE245FCE0E00B456AE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -53,7 +50,6 @@
 		C8AA6611245FEBAD00B456AE /* VersesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VersesTableViewController.swift; sourceTree = "<group>"; };
 		C8AA6612245FEBAD00B456AE /* UIVerseItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIVerseItemCell.swift; sourceTree = "<group>"; };
 		C8AA6613245FEBAE00B456AE /* BooksTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BooksTableViewController.swift; sourceTree = "<group>"; };
-		C8AA661B245FF16400B456AE /* kdb.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; name = kdb.sqlite; path = /Users/graemecostin/kitios/kitios/models/kdb.sqlite; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -132,8 +128,6 @@
 		C8AA65FF245FE71C00B456AE /* models */ = {
 			isa = PBXGroup;
 			children = (
-				C81AC2882460F49000239969 /* kdb2.sqlite */,
-				C8AA661B245FF16400B456AE /* kdb.sqlite */,
 				C8AA6609245FE7DD00B456AE /* KIT_BooksNames.txt */,
 				C8AA660A245FE7DE00B456AE /* KIT_BooksSpec.txt */,
 				C8AA6608245FE7DD00B456AE /* KITDAO.swift */,
@@ -203,14 +197,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C89FF4F6245FF26B00A85339 /* kdb.sqlite in Resources */,
 				C8AA660D245FE7DE00B456AE /* KIT_BooksSpec.txt in Resources */,
 				C8AA65EB245FCE2F00B456AE /* LaunchScreen.storyboard in Resources */,
 				C8AA660C245FE7DE00B456AE /* KIT_BooksNames.txt in Resources */,
 				C8AA65E8245FCE2F00B456AE /* Assets.xcassets in Resources */,
 				C8AA65E6245FCE0E00B456AE /* Main.storyboard in Resources */,
 				C81DC9F2246D01A500553D89 /* README.md in Resources */,
-				C81AC2892460F49000239969 /* kdb2.sqlite in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
