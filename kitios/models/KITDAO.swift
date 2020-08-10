@@ -1,5 +1,5 @@
 //
-//  KIT02DAO.swift
+//  KITDAO.swift
 //  KIT02
 //
 //  Created by Graeme Costin on 16/9/19.
