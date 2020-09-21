@@ -1,8 +1,10 @@
 //
 //  KITDAO.swift
-//  KIT02
 //
-//  Created by Graeme Costin on 16/9/19.
+//  GDLC 21SEP20	Simplified serveral true/false returns from
+//		return (result == 0 ? true : false) to return (result == 0)
+//
+//  Created by Graeme Costin on 16SEP19.
 // The author disclaims copyright to this source code.  In place of
 // a legal notice, here is a blessing:
 //
@@ -142,9 +144,8 @@ public class KITDAO {
 	//--------------------------------------------------------------------------------------------
 	//	Bibles data table
 
-	// The single record in the Bibles table needs to be read when the app launches to find out
-	//	* whether the Books records need to be created (on first launch) or
-	//	* what is the current Book (on subsequent launches)
+	// The single record in the Bibles table needs to be inserted when the app first launches.
+	// The default values are provided as parameters.
 	
 	func bibleInsertRec (_ bibID:Int, _ bibName:String, _ bkRCr:Bool, _ currBook:Int) -> Bool {
 		var sqlite3_stmt:OpaquePointer?=nil
@@ -160,6 +161,10 @@ public class KITDAO {
 		let result = sqlite3_finalize(sqlite3_stmt)
 		return (result == 0 ? true : false)
 	}
+	
+	// The single record in the Bibles table needs to be read when the app launches to find out
+	//	* whether the Books records need to be created (on first launch) or
+	//	* what is the current Book (on subsequent launches)
 
 	func bibleGetRec () -> (bibID:Int, bibName:String, bkRCr:Bool, currBk:Int) {
 		var sqlite3_stmt:OpaquePointer?=nil
@@ -193,7 +198,7 @@ public class KITDAO {
 		sqlite3_bind_text(sqlite3_stmt, 1, bibName.cString(using:String.Encoding.utf8)!, -1, SQLITE_TRANSIENT)
 		sqlite3_step(sqlite3_stmt)
 		let result = sqlite3_finalize(sqlite3_stmt)
-		return (result == 0 ? true : false)
+		return (result == 0)
 	}
 
 	// The bookRecsCreated flag starts as false and is changed to true during the first launch;
@@ -206,7 +211,7 @@ public class KITDAO {
 		sqlite3_prepare_v2(db, sql, nByte, &sqlite3_stmt, nil)
 		sqlite3_step(sqlite3_stmt)
 		let result = sqlite3_finalize(sqlite3_stmt)
-		return (result == 0 ? true : false)
+		return (result == 0)
 	}
 
 	// This function needs an Integer parameter for the current Book
@@ -219,7 +224,7 @@ public class KITDAO {
 		sqlite3_bind_int(sqlite3_stmt, 1, Int32(bookID))
 		sqlite3_step(sqlite3_stmt)
 		let result = sqlite3_finalize(sqlite3_stmt)
-		return (result == 0 ? true : false)
+		return (result == 0)
 	}
 
 	//--------------------------------------------------------------------------------------------
@@ -243,7 +248,7 @@ public class KITDAO {
 		sqlite3_bind_int(sqlite3_stmt, 7, Int32(currChap))
 		sqlite3_step(sqlite3_stmt)
 		let result = sqlite3_finalize(sqlite3_stmt)
-		return (result == 0 ? true : false)
+		return (result == 0)
 	}
 
 	// The Books records need to be read to populate the array of books for the Bible bib
@@ -305,7 +310,7 @@ public class KITDAO {
 		sqlite3_bind_int(sqlite3_stmt, 5, Int32(currCh))
 		sqlite3_step(sqlite3_stmt)
 		let result = sqlite3_finalize(sqlite3_stmt)
-		return (result == 0 ? true : false)
+		return (result == 0)
 	}
 
 	//--------------------------------------------------------------------------------------------
@@ -331,7 +336,7 @@ public class KITDAO {
 
 		sqlite3_step(sqlite3_stmt)
 		let result = sqlite3_finalize(sqlite3_stmt)
-		return (result == 0 ? true : false)
+		return (result == 0)
 	}
 
 	// The Chapters records for the currently selected Book need to be read to populate the array
@@ -387,7 +392,7 @@ public class KITDAO {
 		sqlite3_bind_int(sqlite3_stmt, 3, Int32(currIt))
 		sqlite3_step(sqlite3_stmt)
 		let result = sqlite3_finalize(sqlite3_stmt)
-		return (result == 0 ? true : false)
+		return (result == 0)
 	}
 
 	// Set the value of the field USFMText when the Export scene is used
@@ -430,7 +435,7 @@ public class KITDAO {
 			sqlite3_bind_int(sqlite3_stmt, 7, Int32((isBrid ? 1 : 0)))
 			sqlite3_step(sqlite3_stmt)
 			let result = sqlite3_finalize(sqlite3_stmt)
-			return (result == 0 ? true : false)
+			return (result == 0)
 		}
 
 	// The VerseItems records for the current Chapter needs to be read in order to set up the scrolling display of
@@ -464,7 +469,7 @@ public class KITDAO {
 			chInst.appendItemToArray(itID, chID, vsNum, itTyp, itOrd, itText, intSeq, isBrg, 0)
 		}
 		let result = sqlite3_finalize(sqlite3_stmt)
-		return (result == 0 ? true : false)
+		return (result == 0)
 	}
 
 	// The text of a VerseItem record in the UITableView needs to be updated
@@ -481,7 +486,7 @@ public class KITDAO {
 		sqlite3_bind_text(sqlite3_stmt, 2, itTxt.cString(using:String.Encoding.utf8)!, -1, SQLITE_TRANSIENT)
 		sqlite3_step(sqlite3_stmt)
 		let result = sqlite3_finalize(sqlite3_stmt)
-		return (result == 0 ? true : false)
+		return (result == 0)
 	}
 
 	// The VerseItem record for a publication VerseItem needs to be deleted when the user chooses to delete a publication item

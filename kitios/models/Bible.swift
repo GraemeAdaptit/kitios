@@ -1,10 +1,9 @@
 //
 //  Bible.swift
-//  KIT05
 //
 //	GDLC 12MAR20 Updated for KIT05
 //
-//  Created by Graeme Costin on 9/10/19.
+//  Created by Graeme Costin on 9OCT19.
 // The author disclaims copyright to this source code.  In place of
 // a legal notice, here is a blessing:
 //

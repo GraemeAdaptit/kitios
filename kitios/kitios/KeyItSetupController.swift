@@ -1,6 +1,7 @@
 //
 //  KeyItSetupController.swift
-//  KIT05
+//
+//	GDLC 21SEP20	Removed redundant @IBOutlet for saveBibleName
 //
 //	The KeyItSetupController allows the user to edit the name of the Bible and then
 //	starts the creation of the Bible -> curr Book -> curr Chapter -> curr VerseItem
@@ -37,7 +38,6 @@ class KeyItSetupController: UIViewController, UITextFieldDelegate {
 		// Bible Book IDs are assigned by the Bible Societies as 1 to 39 OT and 41 to 67 NT)
 
 	@IBOutlet weak var bibleName: UITextField!
-	@IBOutlet weak var saveButton: UIButton!
 	@IBOutlet weak var goButton: UIButton!
 
 	required init?(coder aDecoder: NSCoder) {
@@ -61,12 +61,13 @@ class KeyItSetupController: UIViewController, UITextFieldDelegate {
 	}
 
 	override func viewDidAppear(_ animated: Bool) {
-		if bkRCr {
-			segueToNavController ()
-		} else {
+//	We can allow subsequent editing of the name of the Bible
+//		if bkRCr {
+//			segueToNavController ()
+//		} else {
 			// Initialise the text field
 			bibleName.text = bibName
-		}
+//		}
 	}
     
 	// MARK: Actions
@@ -81,8 +82,7 @@ class KeyItSetupController: UIViewController, UITextFieldDelegate {
 		segueToNavController()
 	}
 
-//	Don't need a button for this; when the user taps "Go" goNavController() automatically saves the edited name
-//	@IBAction func saveBibleName(_ sender: UIButton) {
+//	Don't need a button for this; when the user taps "Go" segueToNavController() automatically saves the edited name
 	func saveBibleName () {
 		// Remove the insertion point from the Name of Bible text field
 		self.view.endEditing(true)
