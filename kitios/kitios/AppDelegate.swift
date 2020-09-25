@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	var window: UIWindow?
 	// A pointer to the one and only KITDAO instance is kept in the AppDelegate
 	// so that all parts of the app can use it
-	var dao: KITDAO?
+	public var dao: KITDAO?
 		
 	public var bibInst: Bible?			// During the launch of KIT an instance of the class Bible will be created
 	public var bookInst: Book?			// Once launching is complete there will be an instance of the current Book

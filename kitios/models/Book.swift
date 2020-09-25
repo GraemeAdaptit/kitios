@@ -19,6 +19,7 @@ import UIKit
 public class Book:NSObject {
 	
 	var dao: KITDAO?		// access to the KITDAO instance for using kdb.sqlite
+	var bibInst: Bible?		// access to the instance of Bible for updating BibBooks[]
 	// Get access to the AppDelegate
 	let appDelegate = UIApplication.shared.delegate as! AppDelegate
 
@@ -34,7 +35,6 @@ public class Book:NSObject {
 	var currChapOfst: Int = 0	// offset to the current Chapter in BibChaps[] array
 	
 	// TODO: Eliminate the need for bibInst by using a setter function in Bible?
-	var bibInst: Bible? 	// access to the instance of Bible for updating BibBooks[]
 	var chapInst: Chapter?	// instance in memory of the current Chapter
 
 // This struct and the BibChaps array are used for letting the user select the
@@ -70,8 +70,7 @@ var BibChaps: [BibChap] = []
 	// action needs to be avoided until after there is a current Book. Thus Book.init() must
 	// not be called before a current Book is chosen or has been read from kdb.sqlite.
 
-	init(_ bkID: Int, _ bibID: Int, _ bkCode: String, _ bkName: String, _ chapRCr: Bool, _ numChaps: Int, _ currChap: Int,
-		 _ bibInst:Bible, _ kitdao:KITDAO) {
+	init(_ bkID: Int, _ bibID: Int, _ bkCode: String, _ bkName: String, _ chapRCr: Bool, _ numChaps: Int, _ currChap: Int) {
 		super.init()
 		print("start of Book.init() for \(bkName)")
 		
@@ -83,10 +82,10 @@ var BibChaps: [BibChap] = []
 		self.numChap = numChaps		// numChaps INTEGER
 		self.currChap = currChap	// currChapter INTEGER
 
-		// Access to the instance of Bible for dealing with BibInst[]
-		self.bibInst = bibInst
 		// Access to the KITDAO instance for dealing with kdb.sqlite
-		dao = kitdao
+		dao = appDelegate.dao
+		// Access to the instance of Bible for dealing with BibInst[]
+		bibInst = appDelegate.bibInst
 
 		// First time this Book has been selected the Chapter records must be created
 		if !chapRCr {

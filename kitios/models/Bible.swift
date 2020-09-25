@@ -201,7 +201,7 @@ public class Bible:NSObject {
 		bookInst = nil
 		
 		// create a Book instance for the currently selected book
-		bookInst = Book(book.bkID, book.bibID, book.bkCode, book.bkName, book.chapRCr, book.numCh, book.currChap, self, dao!)
+		bookInst = Book(book.bkID, book.bibID, book.bkCode, book.bkName, book.chapRCr, book.numCh, book.currChap)
 		// Keep a reference in the AppDelegate
 		appDelegate.bookInst = self.bookInst
 		print("KIT has created an instance of class Book for the old current Book \(book.bkName)")
@@ -224,7 +224,7 @@ public class Bible:NSObject {
 		bookInst = nil
 		
 		// create a Book instance for the currently selected book
-		bookInst = Book(book.bkID, book.bibID, book.bkCode, book.bkName, book.chapRCr, book.numCh, book.currChap, self, dao!)
+		bookInst = Book(book.bkID, book.bibID, book.bkCode, book.bkName, book.chapRCr, book.numCh, book.currChap)
 		// Keep a reference in the AppDelegate
 		appDelegate.bookInst = self.bookInst
 		print("KIT has created an instance of class Book for the new current Book \(book.bkName)")
