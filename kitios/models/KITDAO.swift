@@ -233,7 +233,7 @@ public class KITDAO {
 	// The 66 records for the Books table need to be created and populated on the initial launch of the app
 	// This function will be called 66 times by the KIT software
 	
-	func booksInsertRec (_ bkID:Int,_ bibID:Int, _ bkCode:String, _ bkName:String, _ chRCr:Bool, _ numCh:Int, _ currChap:Int) -> Bool {
+	func booksInsertRec (_ bkID:Int,_ bibID:Int, _ bkCode:String, _ bkName:String, _ chRCr:Bool, _ numCh:Int, _ currCh:Int) -> Bool {
 		var sqlite3_stmt:OpaquePointer?=nil
 		let sql:String = "INSERT INTO Books(bookID, bibleID, bookCode, bookName, chapRecsCreated, numChaps, currChapter) VALUES(?, ?, ?, ?, ?, ?, ?);"
 		let nByte:Int32 = Int32(sql.utf8.count)
@@ -245,7 +245,7 @@ public class KITDAO {
 		sqlite3_bind_text(sqlite3_stmt, 4, bkName.cString(using:String.Encoding.utf8)!, -1, SQLITE_TRANSIENT)
 		sqlite3_bind_int(sqlite3_stmt, 5, Int32((chRCr ? 1 : 0)))
 		sqlite3_bind_int(sqlite3_stmt, 6, Int32(numCh))
-		sqlite3_bind_int(sqlite3_stmt, 7, Int32(currChap))
+		sqlite3_bind_int(sqlite3_stmt, 7, Int32(currCh))
 		sqlite3_step(sqlite3_stmt)
 		let result = sqlite3_finalize(sqlite3_stmt)
 		return (result == 0)

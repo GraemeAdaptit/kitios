@@ -42,7 +42,7 @@ public class Bible:NSObject {
 	var currBookOfst = -1	// Offset in BibBooks[] to the current book 0 to 38 (OT) 39 to 65 (NT)
 	var bookInst: Book?		// instance in memory of the current Book
 	
-// BibBooks array
+// BibBooks array (for listing the Books so the user can choose one)
 	struct BibBook {
 		var bkID: Int		// bookID INTEGER
 		var bibID: Int		// bibleID INTEGER
@@ -83,7 +83,7 @@ public class Bible:NSObject {
 		// First launch: the Books records will not have been created so create them
 		if !bkRCr {
 			// Create the 66 Book records for this Bible
-			createBooksRecords(bib: bibID)
+			createBooksRecords(bID)
 			print("First launch: the 66 Books records have been created")
 		}
 
@@ -102,7 +102,7 @@ public class Bible:NSObject {
 // createBooksRecords creates the Books records for every Bible book from the text files in the app's resources
 // and stores these records in the database kdb.sqlite
 	
-	func createBooksRecords (bib: Int) {
+	func createBooksRecords (_ bID: Int) {
 		// Open KIT_BooksSpec.txt and read its data
 		var specLines:[String] = []
 		var nameLines:[String] = []
@@ -142,7 +142,7 @@ public class Bible:NSObject {
 				// Create the Books record for this Book
 				let bkStrs:[String] = spec.components(separatedBy: ", ")
 				let bkID = Int(bkStrs[0])!
-				let bibID = bib
+				let bibID = bID
 				let bkCode:String = bkStrs[1]
 				let bkName = bookNames[bkID]!
 				let chRCr = false

@@ -63,7 +63,7 @@ class KeyItSetupController: UIViewController, UITextFieldDelegate {
 	override func viewDidAppear(_ animated: Bool) {
 //	We can allow subsequent editing of the name of the Bible
 //		if bkRCr {
-//			segueToNavController ()
+//			performSegue (withIdentifier: "keyItNav", sender: self)
 //		} else {
 			// Initialise the text field
 			bibleName.text = bibName
@@ -79,7 +79,8 @@ class KeyItSetupController: UIViewController, UITextFieldDelegate {
 
 	@IBAction func goNavController (_ sender: UIButton) {
 		saveBibleName()
-		segueToNavController()
+		createBibleInstance()
+		performSegue (withIdentifier: "keyItNav", sender: self)
 	}
 
 //	Don't need a button for this; when the user taps "Go" segueToNavController() automatically saves the edited name
@@ -95,7 +96,7 @@ class KeyItSetupController: UIViewController, UITextFieldDelegate {
 		
 	}
 
-	func segueToNavController () {
+	func createBibleInstance () {
 		print("KeyItSetupController:segueToNavController create Bible instance")
 		// Create an instance of the class Bible whose initialisation will create the array
 		// of Bible books and start building the partial in-memory data structures for
@@ -103,8 +104,7 @@ class KeyItSetupController: UIViewController, UITextFieldDelegate {
 		bInst = Bible(bibID, bibName, bkRCr, currBook)
 		// Ensure rest of app has access to the Bible instance
 		appDelegate.bibInst = bInst
-		print("KeyItSetupController:segueToNavController KIT has created an instance of class Bible")
-		performSegue (withIdentifier: "keyItNav", sender: self)
+		print("KeyItSetupController:createBibleInstance KIT has created an instance of class Bible")
 	}
 
 	/*

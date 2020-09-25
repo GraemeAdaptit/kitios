@@ -1,6 +1,5 @@
 //
 //  Book.swift
-//  KIT04
 //
 //  Created by Graeme Costin on 25/10/19.
 // The author disclaims copyright to this source code.  In place of
@@ -10,19 +9,14 @@
 //    May you find forgiveness for yourself and forgive others.
 //    May you share freely, never taking more than you give.
 
-//
-//	There will be one instance of the class Book and it will be for the Bible book that
-//	the user has currently selected for keyboarding. When the user switches to keyboarding
-//	a different Book the current instance of Book will be deleted and a new instance
-//	created for the newly selected Book.
+// There will be one instance of this class for the currently selected Book.
+// This instance will have a lifetime of the current book selection; its life
+// will be terminated when the user selects a different Book to keyboard, at
+// which time a new Book instance will be created for the newly selected Book.
 
 import UIKit
 
 public class Book:NSObject {
-
-// There will be one instance of this class for the currently selected Book.
-// This instance will have a lifetime of the current book selection; its life
-// will be terminated when the user selects a different Book to keyboard.
 	
 	var dao: KITDAO?		// access to the KITDAO instance for using kdb.sqlite
 	// Get access to the AppDelegate
