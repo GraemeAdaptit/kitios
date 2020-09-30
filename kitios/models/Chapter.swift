@@ -131,7 +131,8 @@ public class Chapter: NSObject {
 			let itText = ""
 			let intSeq = 0
 			let isBrid = false
-			if dao!.verseItemsInsertRec (chID, vsNum, itTyp, itOrd, itText, intSeq, isBrid) {
+			let lastVsBridge = 0
+			if dao!.verseItemsInsertRec (chID, vsNum, itTyp, itOrd, itText, intSeq, isBrid, lastVsBridge) {
 //				print("Chapter:createItemRecords Created Verse record for chap \(chNum) vs \(vsNum)")
 			} else {
 				print("ERROR: Book:createItemRecords: Creating Verse record failed for chap \(chNum) vs \(vsNum)")
@@ -143,7 +144,8 @@ public class Chapter: NSObject {
 			let itText = ""
 			let intSeq = 0
 			let isBrid = false
-			if dao!.verseItemsInsertRec (chID, vsNum, itTyp, itOrd, itText, intSeq, isBrid) {
+			let lastVsBridge = 0
+			if dao!.verseItemsInsertRec (chID, vsNum, itTyp, itOrd, itText, intSeq, isBrid, lastVsBridge) {
 //				print("Chapter:createItemRecords Created Verse record for chap \(chNum) vs \(vsNum)")
 			} else {
 				print("ERROR: Book:createItemRecords: Creating Verse record failed for chap \(chNum) vs \(vsNum)")

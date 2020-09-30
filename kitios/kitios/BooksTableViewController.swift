@@ -49,7 +49,6 @@ class BooksTableViewController: UITableViewController {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		print("BooksTableViewController:viewDidLoad")
 		// Get access to the instance of Bible
 		let appDelegate = UIApplication.shared.delegate as! AppDelegate
 		bInst = appDelegate.bibInst

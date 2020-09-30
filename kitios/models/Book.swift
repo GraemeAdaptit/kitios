@@ -161,22 +161,17 @@ var BibChaps: [BibChap] = []
 		chapRCr = true
 		// numChap = numChap This was done when the count of elements in the chapters string was found
 		
-		// Update the Book record with number of Chapters
+		// Update kdb.sqlite Books record of current Book to indicate that its Chapter records have been
+		// created, the number of Chapters has been found, but there is not yet a current Chapter
 		if dao!.booksUpdateRec (bibID, bkID, chapRCr, numChap, currChap) {
 			print("Book:createChapterRecords updated the record for this Book")
 		} else {
 			print("Book:createChapterRecords updating the record for this Book failed")
 		}
 	
-		// Update the entry in BibBooks[] for the current Book to show that its Chapter records have been created
-		// and that its number of Chapters has been found
+		// Update the entry in BibBooks[] for the current Book to show that its Chapter records have
+		// been created and that its number of Chapters has been found
 		bibInst!.setBibBooksNumChap(numChap)
-		
-		// Update kdb.sqlite Books record of current Book to indicate that its Chapter records have been created,
-		// the number of Chapters has been found, but there is not yet a current Chapter
-		if !dao!.booksUpdateRec (bib, book, chapRCr, numChap, currChap) {
-			print("Book:createChapterRecords: Updating current book record failed")
-		}
 	}
 
 // dao.readChaptersRecs() calls appendChapterToArray() for each row it reads from the kdb.sqlite database

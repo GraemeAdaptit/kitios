@@ -420,9 +420,9 @@ public class KITDAO {
 	//	* when the user chooses to insert a publication VerseItem
 	//	* when the user chooses to undo a verse bridge
 
-	func verseItemsInsertRec (_ chID:Int, _ vsNum:Int, _ itTyp:String, _ itOrd:Int, _ itText:String, _ intSeq:Int, _ isBrid:Bool) -> Bool {
+	func verseItemsInsertRec (_ chID:Int, _ vsNum:Int, _ itTyp:String, _ itOrd:Int, _ itText:String, _ intSeq:Int, _ isBrid:Bool, _ lastVsBridge:Int) -> Bool {
 			var sqlite3_stmt:OpaquePointer?=nil
-			let sql:String = "INSERT INTO VerseItems(chapterID, verseNumber, itemType, itemOrder, itemText, intSeq, isBridge) VALUES(?, ?, ?, ?, ?, ?, ?);"
+			let sql:String = "INSERT INTO VerseItems(chapterID, verseNumber, itemType, itemOrder, itemText, intSeq, isBridge, lastVsBridge) VALUES(?, ?, ?, ?, ?, ?, ?, ?);"
 			let nByte:Int32 = Int32(sql.utf8.count)
 
 			sqlite3_prepare_v2(db, sql, nByte, &sqlite3_stmt, nil)
@@ -433,6 +433,7 @@ public class KITDAO {
 			sqlite3_bind_text(sqlite3_stmt, 5, itText.cString(using:String.Encoding.utf8)!, -1, SQLITE_TRANSIENT)
 			sqlite3_bind_int(sqlite3_stmt, 6, Int32(intSeq))
 			sqlite3_bind_int(sqlite3_stmt, 7, Int32((isBrid ? 1 : 0)))
+			sqlite3_bind_int(sqlite3_stmt, 8, Int32(lastVsBridge))
 			sqlite3_step(sqlite3_stmt)
 			let result = sqlite3_finalize(sqlite3_stmt)
 			return (result == 0)
