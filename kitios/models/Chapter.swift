@@ -182,10 +182,16 @@ public class Chapter: NSObject {
 		return 0
 	}
 
+	// Return the BibItem at an index
+	
+	func getBibItem(at index:Int) -> BibItem {
+		return BibItems[index]
+	}
+	
 // Go to the current BibItem
 // This function is called by the VersesTableViewController to find out which VerseItem
-// in the current Chapter is the current VerseItem, and to create the Chapter instance and
-// to make the Chapter record remember that selection.
+// in the current Chapter is the current VerseItem, and to make the Chapter record
+// remember that selection.
 //
 // Returns the current Item offset in BibItems[] array to the VersesTableViewController
 // because this equals the row number in the TableView.

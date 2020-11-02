@@ -57,8 +57,9 @@ class VersesTableViewController: UITableViewController {
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		print("VersesTableViewController:viewWillAppear")
-		// Get the itemID of the current VerseItem
+		// Get the offset and ID of the current VerseItem
 		currItOfst = chInst!.goCurrentItem()
+		currIt = chInst!.BibItems[currItOfst].itID
 		// Scroll to make this VerseItem visible
 		tableView.selectRow(at: IndexPath(row: currItOfst, section: 0), animated: animated, scrollPosition: UITableView.ScrollPosition.middle)
 		tableView.scrollToRow(at: IndexPath(row: currItOfst, section: 0), at: UITableView.ScrollPosition.middle, animated: animated)
@@ -137,18 +138,16 @@ class VersesTableViewController: UITableViewController {
 	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		// Save the text in the current BibItem before changing to the new one
 		saveCurrentItemText()
-//		chInst!.saveCurrentBibItemText()
-//		print("VersesTableViewController:tableView:didSelectRowAt Saved current verse")
 
 		// Go to the newly selected VerseItem
-		let bibItem = chInst!.BibItems[indexPath.row]
+		let bibItem = chInst!.getBibItem(at: (indexPath.row))
 		print("VersesTableViewController:tableView:didSelectRowAt Tap selected verse \(bibItem.vsNum)")
 
 		// Set up the selected Item as the current VerseItem
 		chInst!.setupCurrentItem(bibItem.itID)
 		currIt = bibItem.itID
 		currItOfst = indexPath.row
-		// Scroll to make this VerseItem visible
+		// Scroll to make this VerseItem visible <- already visible because the user has just tapped in it
 		tableView.selectRow(at: IndexPath(row: currItOfst, section: 0), animated: true, scrollPosition: UITableView.ScrollPosition.middle)
 		let cell = tableView.cellForRow(at: IndexPath(row: currItOfst, section: 0)) as! UIVerseItemCell
 		cell.itText.becomeFirstResponder()
