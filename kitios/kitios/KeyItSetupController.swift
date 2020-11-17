@@ -61,13 +61,15 @@ class KeyItSetupController: UIViewController, UITextFieldDelegate {
 	}
 
 	override func viewDidAppear(_ animated: Bool) {
-//	We can allow subsequent editing of the name of the Bible
-//		if bkRCr {
-//			performSegue (withIdentifier: "keyItNav", sender: self)
-//		} else {
-			// Initialise the text field
+//	Once the user has dealt with the Setup scene, subsequent launches skip this step.
+//	Any future editing of the name of the Bible will be done in a separate scene.
+		if bkRCr {
+			createBibleInstance()
+			performSegue (withIdentifier: "keyItNav", sender: self)
+		} else {
+			// Initialise the text field and wait for user to edit Bible name
 			bibleName.text = bibName
-//		}
+		}
 	}
     
 	// MARK: Actions

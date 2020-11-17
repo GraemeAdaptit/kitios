@@ -111,7 +111,7 @@ var BibChaps: [BibChap] = []
 // When the user chooses a different Book, the in-memory instance of the previous current Book and
 // any instances owned by it need to be deleted
 	deinit {
-		// TODO: deinit any owned class instances - Chapters and VerseItems
+		// TODO: deinit any owned class instances - Chapters and VerseItems ??
 		print("Book deinit() The previous current Book and its Chapters and VerseItems have been deleted from memory")
 	}
 
@@ -216,7 +216,7 @@ var BibChaps: [BibChap] = []
 // When the user selects a Chapter from the UITableView of Chapters it needs to be recorded as the
 // current Chapter and initialisation of data structures in a new Chapter instance must happen.
 	
-	func setupCurrentChapter(withOffset chapOfst: Int) {
+	func setupCurrentChapter(withOffset chapOfst: Int, _ diffChap:Bool) {
 		let chap = BibChaps[chapOfst]
 		print("Making chapter \(chap.chNum) the current Chapter")
 		currChap = chap.chID
@@ -228,11 +228,14 @@ var BibChaps: [BibChap] = []
 				print("ERROR: The currChap for \(bkName) in kdb.sqlite was not updated to \(chap.chNum)")
 			}
 
-		// delete any previous in-memory instance of Chapter
-		chapInst = nil
+		// If the user has changed to a different Chapter then
+		// delete any previous in-memory instance of Chapter and create a new one
+		if diffChap {
+			chapInst = nil
 
-		// create a Chapter instance for the current Chapter of the current Book
-		chapInst = Chapter(chap.chID, chap.bibID, chap.bkID, chap.chNum, chap.itRCr, chap.numVs, chap.numIt, chap.curIt)
+			// create a Chapter instance for the current Chapter of the current Book
+			chapInst = Chapter(chap.chID, chap.bibID, chap.bkID, chap.chNum, chap.itRCr, chap.numVs, chap.numIt, chap.curIt)
+		}
 		// Keep a reference in the AppDelegate
 		appDelegate.chapInst = self.chapInst
 		print("KIT has created an instance of class Chapter for the new current Chapter \(chap.chNum)")

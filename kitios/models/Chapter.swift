@@ -230,6 +230,7 @@ public class Chapter: NSObject {
 		}
 	}
 
+	// TODO: This function is not currently used - delete it???
 	func setupCurrentItemFromTableRow(_ tableRow: Int) {
 		currItOfst = tableRow
 		currIt = BibItems[tableRow].itID

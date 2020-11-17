@@ -149,8 +149,11 @@ class VersesTableViewController: UITableViewController {
 		currItOfst = indexPath.row
 		// Scroll to make this VerseItem visible <- already visible because the user has just tapped in it
 		tableView.selectRow(at: IndexPath(row: currItOfst, section: 0), animated: true, scrollPosition: UITableView.ScrollPosition.middle)
-		let cell = tableView.cellForRow(at: IndexPath(row: currItOfst, section: 0)) as! UIVerseItemCell
+		let cell = tableView.cellForRow(at: indexPath) as! UIVerseItemCell
+// TODO: Is this the proper solution for Bug 2?
+//		cell.itText.backgroundColor = .white
 		cell.itText.becomeFirstResponder()
+//		cell.setSelected(true, animated: false)
 	}
 
 	func saveCurrentItemText () {
@@ -167,7 +170,7 @@ class VersesTableViewController: UITableViewController {
 	}
 
 	override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-		print("VersesTableViewController:didEndDisplaying cell for VerseItem \(indexPath.row)")
+//		print("VersesTableViewController:didEndDisplaying cell for VerseItem \(indexPath.row)")
 		let savCell = cell as! UIVerseItemCell
 		if savCell.dirty {
 			let textSrc = savCell.itText.text! as String
@@ -177,61 +180,31 @@ class VersesTableViewController: UITableViewController {
 		}
 	}
 
-	/*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
     // MARK: - Navigation
 
-//    // In a storyboard-based application, you will often want to do a little preparation before navigation
-//   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//		if let svc = segue.destination as? ChaptersTableViewController {
-//			svc.letUserChooseChapter = true
-//		}
-//    }
-
-//	@IBAction func chooseBookButtonPressed(_ sender: UIButton) {
-//		prepare(for segue: chooseBook, sender: Any?)
-//		self.performSegue(withIdentifier: "chooseBook", sender: nil)
-//	}
-
-	// The automatic Triggered Action of the Export button has been deleted, but it has
-	// a Sent Action that calls this function in order to save the current item text before
-	// performing the segue to the Export Chapter scene.
-
+	@IBAction func publItems(_ sender: UIBarButtonItem) {
+		let vc: TableViewController = self.storyboard?.instantiateViewController(withIdentifier: "TableViewController") as! TableViewController
+		// Preferred Size
+		vc.preferredContentSize = CGSize(width: 200, height: 200)
+		vc.modalPresentationStyle = .popover
+		let popover: UIPopoverPresentationController = vc.popoverPresentationController!
+		popover.delegate = self
+		popover.sourceView = self.view
+		// RightBarItem
+		popover.barButtonItem = sender
+		present(vc, animated: true, completion:nil)
+	}
+	
 	@IBAction func exportThisChapter(_ sender: Any) {
 		saveCurrentItemText ()
 		performSegue(withIdentifier: "exportChapter", sender: nil)
 	}
+}
+
+extension VersesTableViewController: UIPopoverPresentationControllerDelegate {
+	
+	func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+		return .none
+	}
+	
 }
