@@ -1,5 +1,5 @@
 //
-//  TableTableViewController.swift
+//  PubItemsViewController.swift
 //  kitios
 //
 //  Created by Graeme Costin on 5/11/20.
@@ -12,7 +12,7 @@
 
 import UIKit
 
-class TableViewController: UITableViewController {
+class PubItemsViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()

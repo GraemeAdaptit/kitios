@@ -183,7 +183,7 @@ class VersesTableViewController: UITableViewController {
     // MARK: - Navigation
 
 	@IBAction func publItems(_ sender: UIBarButtonItem) {
-		let vc: TableViewController = self.storyboard?.instantiateViewController(withIdentifier: "TableViewController") as! TableViewController
+		let vc: PubItemsViewController = self.storyboard?.instantiateViewController(withIdentifier: "PubItemsViewController") as! PubItemsViewController
 		// Preferred Size
 		vc.preferredContentSize = CGSize(width: 200, height: 200)
 		vc.modalPresentationStyle = .popover

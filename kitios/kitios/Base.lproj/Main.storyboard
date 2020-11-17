@@ -193,10 +193,10 @@
             </objects>
             <point key="canvasLocation" x="2808.6956521739135" y="-2956.4732142857142"/>
         </scene>
-        <!--TableViewController-->
+        <!--PubItemsViewController-->
         <scene sceneID="BWY-eJ-OxG">
             <objects>
-                <tableViewController storyboardIdentifier="TableViewController" title="TableViewController" id="okg-SZ-zo5" customClass="TableViewController" customModule="kitios" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="PubItemsViewController" title="PubItemsViewController" id="okg-SZ-zo5" userLabel="PubItemsViewController" customClass="PubItemsViewController" customModule="kitios" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="Ecu-0f-Got">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

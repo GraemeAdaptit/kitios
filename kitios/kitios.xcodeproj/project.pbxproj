@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		C81DC9F2246D01A500553D89 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = C81DC9F1246D01A400553D89 /* README.md */; };
-		C857BCE72553B8A900476AB6 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C857BCE62553B8A900476AB6 /* TableViewController.swift */; };
+		C857BCE72553B8A900476AB6 /* PubItemsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C857BCE62553B8A900476AB6 /* PubItemsViewController.swift */; };
 		C8AA65DF245FCE0E00B456AE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8AA65DE245FCE0E00B456AE /* AppDelegate.swift */; };
 		C8AA65E6245FCE0E00B456AE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C8AA65E4245FCE0E00B456AE /* Main.storyboard */; };
 		C8AA65E8245FCE2F00B456AE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C8AA65E7245FCE2F00B456AE /* Assets.xcassets */; };
@@ -30,7 +30,7 @@
 
 /* Begin PBXFileReference section */
 		C81DC9F1246D01A400553D89 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		C857BCE62553B8A900476AB6 /* TableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
+		C857BCE62553B8A900476AB6 /* PubItemsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PubItemsViewController.swift; sourceTree = "<group>"; };
 		C8AA65DB245FCE0E00B456AE /* kitios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = kitios.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8AA65DE245FCE0E00B456AE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C8AA65E5245FCE0E00B456AE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -102,7 +102,7 @@
 				C8AA660E245FEBAD00B456AE /* KeyItSetupController.swift */,
 				C8AA6612245FEBAD00B456AE /* UIVerseItemCell.swift */,
 				C8AA6611245FEBAD00B456AE /* VersesTableViewController.swift */,
-				C857BCE62553B8A900476AB6 /* TableViewController.swift */,
+				C857BCE62553B8A900476AB6 /* PubItemsViewController.swift */,
 				C8AA65DE245FCE0E00B456AE /* AppDelegate.swift */,
 				C8AA65E4245FCE0E00B456AE /* Main.storyboard */,
 				C8AA65E7245FCE2F00B456AE /* Assets.xcassets */,
@@ -222,7 +222,7 @@
 				C8AA6614245FEBAE00B456AE /* KeyItSetupController.swift in Sources */,
 				C8AA6604245FE78300B456AE /* Book.swift in Sources */,
 				C8AA6616245FEBAE00B456AE /* ChaptersTableViewController.swift in Sources */,
-				C857BCE72553B8A900476AB6 /* TableViewController.swift in Sources */,
+				C857BCE72553B8A900476AB6 /* PubItemsViewController.swift in Sources */,
 				C8AA6606245FE78300B456AE /* Bible.swift in Sources */,
 				C8AA6617245FEBAE00B456AE /* VersesTableViewController.swift in Sources */,
 				C8AA660B245FE7DE00B456AE /* KITDAO.swift in Sources */,
