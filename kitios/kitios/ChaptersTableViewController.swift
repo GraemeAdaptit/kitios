@@ -1,6 +1,6 @@
 //
 //  ChaptersTableViewController.swift
-//  KIT05
+//  kitios
 //
 //	This is the UITableViewController for the Select Chapter scene. This scene will be entered
 //	after the current Book is selected and set up, and so it will have available the array of

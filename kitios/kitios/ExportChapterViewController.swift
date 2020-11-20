@@ -1,6 +1,6 @@
 //
 //  ExportChapterViewController.swift
-//  KIT05
+//  kitios
 //
 //  Created by Graeme Costin on 2/5/20.
 // The author disclaims copyright to this source code.  In place of

@@ -1,6 +1,8 @@
 //
 //  PubItemsViewController.swift
-//  kitios
+//	kitios
+//
+//	This is the TableViewController for the publication items popover menu
 //
 //  Created by Graeme Costin on 5/11/20.
 // The author disclaims copyright to this source code.  In place of
@@ -27,12 +29,12 @@ class PubItemsViewController: UITableViewController {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
+        // Just one section
         return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
+		// No. of rows
         return 5
     }
 

@@ -1,6 +1,6 @@
 //
 //  VersesTableViewController.swift
-//  KIT05
+//	kitios
 //
 //	This is the UITableViewController for the Edit Chapter scene. This scene will be entered
 //	only when a current Book and current Chapter have been chosen.
@@ -15,7 +15,7 @@
 
 import UIKit
 
-class VersesTableViewController: UITableViewController {
+class VersesTableViewController: UITableViewController, UITextViewDelegate {
 
 	var bInst: Bible?
 	var bkInst: Book?
@@ -105,9 +105,9 @@ class VersesTableViewController: UITableViewController {
 		let cell = tableView.dequeueReusableCell(withIdentifier: "ItemCell", for: indexPath) as! UIVerseItemCell
 		let vsItem = chInst!.BibItems[indexPath.row]
 		if vsItem.itTyp == "Ascription" {
-			cell.itType.text = vsItem.itTyp
+			cell.pubBut.setTitle(vsItem.itTyp, for: .normal)
 		} else {
-			cell.itType.text = vsItem.itTyp + " " + String(vsItem.vsNum)
+			cell.pubBut.setTitle(vsItem.itTyp + " " + String(vsItem.vsNum), for: .normal)
 		}
 		cell.itText.text = vsItem.itTxt
 		cell.tableRow = indexPath.row
@@ -119,6 +119,7 @@ class VersesTableViewController: UITableViewController {
 			}
 		}
 		print("VersesTableViewController:tableView:cellForRowAt Fetched verse \(vsItem.vsNum)")
+//		cell.cellDelegate = self
         return cell
     }
 
@@ -129,33 +130,43 @@ class VersesTableViewController: UITableViewController {
 		chInst!.copyAndSaveVItem(tableRow, textSrc)
 	}
 
+	// Called by the custom verse item cell when the user taps on the cell's label
+	func userTappedOnCellLabel (_ tableRow: Int) {
+		changeCurrentCell(tableRow)
+	}
+	
 	// Called by the custom verse item cell when the user taps inside the cell's editable text
 	func userTappedInTextOfCell(_ tableRow: Int) {
-		tableView(self.tableView, didSelectRowAt: IndexPath(row: tableRow, section: 0))
+		changeCurrentCell(tableRow)
+		let cell = tableView.cellForRow(at: IndexPath(row: tableRow, section: 0)) as! UIVerseItemCell
+		cell.itText.becomeFirstResponder()
 	}
 
 	// Called by iOS when the user selects a table row
 	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		// Save the text in the current BibItem before changing to the new one
-		saveCurrentItemText()
-
-		// Go to the newly selected VerseItem
-		let bibItem = chInst!.getBibItem(at: (indexPath.row))
-		print("VersesTableViewController:tableView:didSelectRowAt Tap selected verse \(bibItem.vsNum)")
-
-		// Set up the selected Item as the current VerseItem
-		chInst!.setupCurrentItem(bibItem.itID)
-		currIt = bibItem.itID
-		currItOfst = indexPath.row
-		// Scroll to make this VerseItem visible <- already visible because the user has just tapped in it
-		tableView.selectRow(at: IndexPath(row: currItOfst, section: 0), animated: true, scrollPosition: UITableView.ScrollPosition.middle)
-		let cell = tableView.cellForRow(at: indexPath) as! UIVerseItemCell
-// TODO: Is this the proper solution for Bug 2?
-//		cell.itText.backgroundColor = .white
-		cell.itText.becomeFirstResponder()
-//		cell.setSelected(true, animated: false)
+		changeCurrentCell(indexPath.row)
 	}
 
+	func changeCurrentCell (_ newOfst: Int) {
+		if newOfst != currItOfst {
+			// Save the text in the current BibItem before changing to the new one
+			saveCurrentItemText()
+
+			// Go to the newly selected VerseItem
+			let bibItem = chInst!.getBibItem(at: newOfst)
+			print("VersesTableViewController:tableView:didSelectRowAt Tap selected verse \(bibItem.vsNum)")
+
+			// Set up the selected Item as the current VerseItem
+			chInst!.setupCurrentItem(bibItem.itID)
+			currIt = bibItem.itID
+			currItOfst = newOfst
+			// Scroll to make this VerseItem visible <- already visible because the user has just tapped in it
+			tableView.selectRow(at: IndexPath(row: currItOfst, section: 0), animated: true, scrollPosition: UITableView.ScrollPosition.middle)
+//		let cell = tableView.cellForRow(at: IndexPath(row: newOfst, section: 0)) as! UIVerseItemCell
+//		cell.itText.becomeFirstResponder()
+		}
+	}
+	
 	func saveCurrentItemText () {
 		print("Current VerseItem Offset: \(currItOfst), ID: \(currIt)")
 		let currCell = tableView.cellForRow(at: IndexPath(row: currItOfst, section: 0)) as! UIVerseItemCell?
@@ -182,6 +193,30 @@ class VersesTableViewController: UITableViewController {
 
     // MARK: - Navigation
 
+
+	// Action for the itType button in the VerseItem cell
+	func pubItemsPopoverAction(_ button: UIButton, _ tableRow:Int, _ showRect:CGRect) {
+		print ("\(String(describing: button.title(for: .normal))) pressed")
+		userTappedOnCellLabel(tableRow)
+		var anchorRect    = tableView.convert(showRect, to: tableView)
+		anchorRect        = tableView.convert(anchorRect, to: view)
+//		anchorRect.origin.x += 105
+		let vc: PubItemsViewController = self.storyboard?.instantiateViewController(withIdentifier: "PubItemsViewController") as! PubItemsViewController
+		// Preferred Size
+		let screenWidth = UIScreen.main.bounds.size.width
+		let popoverWidth = min(screenWidth/2, 100)
+		anchorRect.origin.x = screenWidth - popoverWidth
+		vc.preferredContentSize = CGSize(width: popoverWidth, height: 200)
+		vc.modalPresentationStyle = .popover
+		let popover: UIPopoverPresentationController = vc.popoverPresentationController!
+		popover.delegate = self
+		popover.sourceView = view
+		popover.sourceRect = showRect
+		popover.permittedArrowDirections = .left
+		present(vc, animated: true, completion:nil)
+	}
+
+	// Action for the Pub button in the Navigation Bar - will soon be removed
 	@IBAction func publItems(_ sender: UIBarButtonItem) {
 		let vc: PubItemsViewController = self.storyboard?.instantiateViewController(withIdentifier: "PubItemsViewController") as! PubItemsViewController
 		// Preferred Size
