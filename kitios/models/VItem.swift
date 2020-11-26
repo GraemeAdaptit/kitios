@@ -1,6 +1,6 @@
 //
 //  VItem.swift
-//  KIT05
+//  kitios
 //
 //  Created by Graeme Costin on 7/4/20.
 // The author disclaims copyright to this source code.  In place of
@@ -9,6 +9,15 @@
 //    May you do good and not evil.
 //    May you find forgiveness for yourself and forgive others.
 //    May you share freely, never taking more than you give.
+//
+//	BUT NOTE: An instance of this class for the current VerseItem for the Edit Chapter Scene
+//	may perhaps be a good place to hold the VItemMenu for the popover for this VerseItem.
+//
+//	NOTE: This is what I planned back in April 2020 but the class VItem has not yet been used!
+//	The TableView's custom cells together with the BibItems[] array in the Chapter instance
+//	were all that was needed. But now that I look at the computations involved in generating
+//	the items for use in the popovers of the class PubItemsViewController I almost wish I had
+//	used the class VItem!
 //
 //	There will be one instance at a time of the class VItem and it will be for the current
 //	VerseItem that the user has selected for keyboarding. When the user switches to keyboarding

@@ -1,6 +1,6 @@
 //
 //  Chapter.swift
-//  KIT05
+//  kitios
 //
 //  Created by Graeme Costin on 8/1/20.
 // The author disclaims copyright to this source code.  In place of
@@ -72,6 +72,8 @@ public class Chapter: NSObject {
 
 	var BibItems: [BibItem] = []
 
+	var curPoMenu: VIMenu?	// instance in memory of the current popover menu
+	
 // When the instance of current Book creates the instance for the current Chapter it supplies the values
 // for the currently selected Chapter from the BibChaps array
 		
@@ -206,6 +208,7 @@ public class Chapter: NSObject {
 			// the offset into the BibItems[] array
 			currItOfst = offsetToBibItem(withID: currIt)
 		}
+		createPopoverMenu()
 		// Update the database Chapter record
 		if dao!.chaptersUpdateRec (chID, itRCr, currIt) {
 			print ("Chapter:goCurrentItem updated \(bkInst!.bkName) \(chNum) Chapter record")
@@ -221,7 +224,7 @@ public class Chapter: NSObject {
 	func setupCurrentItem(_ currIt:Int) {
 		self.currIt = currIt
 		currItOfst = offsetToBibItem(withID: currIt)
-
+		createPopoverMenu()
 		// Update the database Chapter record
 		if dao!.chaptersUpdateRec (chID, itRCr, currIt) {
 //			print ("Chapter:goCurrentItem updated \(bkInst!.bkName) \(chNum) Chapter record")
@@ -234,6 +237,7 @@ public class Chapter: NSObject {
 	func setupCurrentItemFromTableRow(_ tableRow: Int) {
 		currItOfst = tableRow
 		currIt = BibItems[tableRow].itID
+		createPopoverMenu()
 		// Update the database Chapter record
 		if dao!.chaptersUpdateRec (chID, itRCr, currIt) {
 //			print ("Chapter:goCurrentItem updated \(bkInst!.bkName) \(chNum) Chapter record")
@@ -252,17 +256,15 @@ public class Chapter: NSObject {
 		}
 //		chDirty = true	// An item in this chapter has been edited (used in UI)
 	}
-	
-//	// Function saveCurrentBibItemText() assumes that the ItemText has been copied from the cell
-//	// in the TableView to the BibItems[] element.
-//	func saveCurrentBibItemText () {
-//		if dao!.itemsUpdateRecText (BibItems[currItOfst].itID, BibItems[currItOfst].itTxt) {
-//			print ("Chapter:saveCurrentItemText text of current item saved to kdb.sqlite")
-//		} else {
-//			print ("Chapter:saveCurrentItemText save of current item text to kdb.sqlite FAILED")
-//		}
-//	}
 
+	// Create the popover menu for the current VerseItem
+	func createPopoverMenu () {
+		// Delete previous popover menu
+		curPoMenu = nil
+		curPoMenu = VIMenu(currItOfst)
+	}
+
+	// Generate USFM export string for this Chapter
 	func calcUSFMExportText() -> String {
 		var USFM = "\\id " + bkInst!.bkCode + " " + bibInst!.bibName + "\n\\c " + String(chNum)
 		for i in 0...(BibItems.count - 1) {
@@ -278,25 +280,23 @@ public class Chapter: NSObject {
 					vn = String(item.vsNum)
 				}
 				s = "\n\\v " + vn + " " + tx
-			case "VerseCont":
-				s = "\n" + tx
-			case "Para", "ParaCont":
-				s = "\n\\p "
-			case "Heading":
+			case "Para":			// Paragraph before a verse
+				s = "\n\\p"
+			case "ParaCont":		// Paragraph within a verse
+				s = "\n\\p " + tx
+			case "Heading":			// Heading/Subject Heading
 				s = "\n\\s " + tx
-			case "ParlRef":
+			case "ParlRef":			// Parallel Reference
 				s = "\n\\r " + tx
-			case "Title":
+			case "Title":			// Title for a Book
 				s = "\n\\mt " + tx
-			case "InTitle":
+			case "InTitle":			// Title within Book introductory matter
 				s = "\n\\imt " + tx
-			case "InSubj":
+			case "InSubj":			// Subject heading within Book introductory matter
 				s = "\n\\ims " + tx
-			case "InPara":
+			case "InPara":			// Paragraph within Book introductory matter
 				s = "\n\\ip " + tx
-			case "DesTitle":
-				s = "\n\\d " + tx
-			case "Ascription":
+			case "Ascription":		// Ascriptions before verse 1 of some Psalms
 				s = "\n\\d " + tx
 			default:
 				s = ""

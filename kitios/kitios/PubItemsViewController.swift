@@ -16,8 +16,13 @@ import UIKit
 
 class PubItemsViewController: UITableViewController {
 
+	var popMenu: VIMenu?
+	
     override func viewDidLoad() {
         super.viewDidLoad()
+		// Get access to the AppDelegate
+		let appDelegate = UIApplication.shared.delegate as! AppDelegate
+		popMenu = appDelegate.chapInst?.curPoMenu
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -35,12 +40,22 @@ class PubItemsViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		// No. of rows
-        return 5
+		return popMenu!.numRows
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "popOverCell", for: indexPath)
-		cell.textLabel?.text = "Item" + String(indexPath.row + 1)
+		let pMenu = popMenu!.VIMenuItems[indexPath.row]
+		let textLabel = cell.textLabel
+		textLabel?.text = pMenu.VIMenuLabel
+		textLabel?.numberOfLines = 1
+		textLabel?.adjustsFontSizeToFitWidth = true
+		textLabel?.minimumScaleFactor = 9
+		if pMenu.VIMenuHLight == "B" {
+			cell.textLabel?.textColor = .blue
+		} else {
+			cell.textLabel?.textColor = .red
+		}
         return cell
     }
 
