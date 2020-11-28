@@ -191,9 +191,6 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 		}
 	}
 
-    // MARK: - Navigation
-
-
 	// Action for the itType button in the VerseItem cell
 	func pubItemsPopoverAction(_ button: UIButton, _ tableRow:Int, _ showRect:CGRect) {
 		print ("\(String(describing: button.title(for: .normal))) pressed")
@@ -204,10 +201,10 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 		let vc: PubItemsViewController = self.storyboard?.instantiateViewController(withIdentifier: "PubItemsViewController") as! PubItemsViewController
 		// Preferred Size
 		let screenWidth = UIScreen.main.bounds.size.width
-		let popoverWidth = Int(screenWidth * 0.75)
+		let popoverWidth = Int(screenWidth * 0.85)
 		anchorRect.origin.x = screenWidth - CGFloat(popoverWidth)
 		let numRows = chInst?.curPoMenu?.numRows ?? 5
-		let popoverHeight = numRows * 50
+		let popoverHeight = (numRows * 50) + 10
 		vc.preferredContentSize = CGSize(width: popoverWidth, height: popoverHeight)
 		vc.modalPresentationStyle = .popover
 		let popover: UIPopoverPresentationController = vc.popoverPresentationController!

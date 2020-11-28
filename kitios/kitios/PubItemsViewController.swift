@@ -16,13 +16,15 @@ import UIKit
 
 class PubItemsViewController: UITableViewController {
 
+	var chInst: Chapter?
 	var popMenu: VIMenu?
 	
     override func viewDidLoad() {
         super.viewDidLoad()
 		// Get access to the AppDelegate
 		let appDelegate = UIApplication.shared.delegate as! AppDelegate
-		popMenu = appDelegate.chapInst?.curPoMenu
+		chInst = appDelegate.chapInst
+		popMenu = chInst!.curPoMenu
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -58,6 +60,12 @@ class PubItemsViewController: UITableViewController {
 		}
         return cell
     }
+
+	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		let popRow = indexPath.row
+		let menuItem = popMenu!.VIMenuItems[popRow]
+		chInst!.popMenuAction(menuItem.VIMenuAction)
+	}
 
     /*
     // Override to support conditional editing of the table view.

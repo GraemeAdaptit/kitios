@@ -41,9 +41,10 @@ class VIMenu : NSObject {
 	let appDelegate = UIApplication.shared.delegate as! AppDelegate
 	
 	init(_ curItOfst: Int) {
-		let bibItem = appDelegate.chapInst!.BibItems[curItOfst]
+		let chInst = appDelegate.chapInst
+		let bibItem = chInst!.BibItems[curItOfst]
 		VIType = bibItem.itTyp
-		let chNum = appDelegate.chapInst!.chNum
+		let chNum = chInst!.chNum
 		switch VIType {
 		case "Ascription":		// Ascriptions before verse 1 of some Psalms
 			let viMI = VIMenuItem("Delete Ascription", "delAsc", "R")
@@ -88,7 +89,7 @@ class VIMenu : NSObject {
 			let viMI3 = VIMenuItem("Delete Heading", "delHead", "R")
 			VIMenuItems.append(viMI3)
 		case "Para":			// Paragraph before a verse
-			let viMI1 = VIMenuItem("Create Heading", "crHead", "B")
+			let viMI1 = VIMenuItem("Create Heading", "crHdAft", "B")
 			VIMenuItems.append(viMI1)
 			let viMI2 = VIMenuItem("Delete Paragraph", "delPara", "R")
 			VIMenuItems.append(viMI2)
@@ -99,27 +100,31 @@ class VIMenu : NSObject {
 			let viMI1 = VIMenuItem("Delete Parallel Ref", "delPalRef", "R")
 			VIMenuItems.append(viMI1)
 		case "Verse":
-			if (appDelegate.chapInst!.bkID == 19) && (chNum == 1) && (bibItem.vsNum == 1) {
-				let viMI1 = VIMenuItem("Create Ascription", "crAsc", "B")
+			if (chInst!.bkID == 19) && (bibItem.vsNum == 1) && (!chInst!.hasAscription) {
+				let viMI1 = VIMenuItem("Create Ascription", "crAsc", "R")
 				VIMenuItems.append(viMI1)
 			}
-			if (bibItem.vsNum == 1) && (chNum == 1) {
-				let viMI2 = VIMenuItem("Create Title", "crTitle", "B")
-				VIMenuItems.append(viMI2)
+			if (bibItem.vsNum == 1) {
+				if (chNum == 1) && (!chInst!.hasTitle) {
+					let viMI2 = VIMenuItem("Create Title", "crTitle", "B")
+					VIMenuItems.append(viMI2)
+				}
 			}
-			let viMI3 = VIMenuItem("Create Paragraph Before", "crParaBef", "B")
+			let viMI3 = VIMenuItem("Create Heading Before", "crHdBef", "B")
 			VIMenuItems.append(viMI3)
+			let viMI4 = VIMenuItem("Create Paragraph Before", "crParaBef", "B")
+			VIMenuItems.append(viMI4)
 			if !bibItem.isBrg {
-				let viMI4 = VIMenuItem("Create Paragraph In", "crParaIn", "B")
-				VIMenuItems.append(viMI4)
-			}
-			if bibItem.vsNum != appDelegate.chapInst!.numVs {
-				let viMI5 = VIMenuItem("Bridge Next Verse", "brid", "R")
+				let viMI5 = VIMenuItem("Create Paragraph In", "crParaIn", "B")
 				VIMenuItems.append(viMI5)
 			}
-			if bibItem.isBrg {
-				let viMI6 = VIMenuItem("Unbridge Last Verse", "unBrid", "R")
+			if bibItem.vsNum != chInst!.numVs {
+				let viMI6 = VIMenuItem("Bridge Next Verse", "brid", "R")
 				VIMenuItems.append(viMI6)
+			}
+			if bibItem.isBrg {
+				let viMI7 = VIMenuItem("Unbridge Last Verse", "unBrid", "R")
+				VIMenuItems.append(viMI7)
 			}
 		default:
 			let viMI1 = VIMenuItem("***MENU ERROR***", "NOOP", "R")

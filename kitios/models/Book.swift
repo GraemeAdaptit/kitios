@@ -32,7 +32,7 @@ public class Book:NSObject {
 	var numChap: Int = 0		// numChaps INTEGER
 	var currChap: Int = 0		// currChapter INTEGER (the ID assigned by SQLite when the Chapter was created)
 	
-	var currChapOfst: Int = 0	// offset to the current Chapter in BibChaps[] array
+	var currChapOfst: Int = -1	// offset to the current Chapter in BibChaps[] array (-1 means not yet set)
 	
 	// TODO: Eliminate the need for bibInst by using a setter function in Bible?
 	var chapInst: Chapter?	// instance in memory of the current Chapter
@@ -216,7 +216,8 @@ var BibChaps: [BibChap] = []
 // When the user selects a Chapter from the UITableView of Chapters it needs to be recorded as the
 // current Chapter and initialisation of data structures in a new Chapter instance must happen.
 	
-	func setupCurrentChapter(withOffset chapOfst: Int, _ diffChap:Bool) {
+	func setupCurrentChapter(withOffset chapOfst: Int) {
+		let diffChap = (chapOfst != currChapOfst)
 		let chap = BibChaps[chapOfst]
 		print("Making chapter \(chap.chNum) the current Chapter")
 		currChap = chap.chID
@@ -241,4 +242,9 @@ var BibChaps: [BibChap] = []
 		print("KIT has created an instance of class Chapter for the new current Chapter \(chap.chNum)")
 	}
 
+	// Set the new value for the current VerseItem
+	// called when the user selects a Chapter of the current Book
+	func setCurVItem (_ curIt: Int) {
+		BibChaps[currChapOfst].curIt = curIt
+	}
 }

@@ -27,7 +27,7 @@ class ChaptersTableViewController: UITableViewController {
 	// Boolean for whether the let the user choose a Chapter
 	var letUserChooseChapter = false
 	// tableRow of the selected Chapter
-	var chRow = 0	// -1 means that a Chapter has not yet been selected
+	var chRow = 0	// safe value in case a Chapter has not yet been selected
 
 	required init?(coder aDecoder: NSCoder) {
 		print("ChaptersTableViewController:init")
@@ -124,9 +124,9 @@ class ChaptersTableViewController: UITableViewController {
 	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		// Set up the selected Chapter as the current Chapter
 		let chRowNew = indexPath.row
-		let diffChap = chRowNew != chRow
+//		let diffChap = chRowNew != chRow
+		bkInst!.setupCurrentChapter(withOffset: chRowNew/*, diffChap*/)
 		chRow = chRowNew
-		bkInst!.setupCurrentChapter(withOffset: chRow, diffChap)
 		let cell = tableView.cellForRow(at: indexPath)
 		cell!.textLabel!.textColor = UIColor.blue
 		// Current Chapter is selected so segue to Edit Chapter scene

@@ -72,7 +72,10 @@ public class Chapter: NSObject {
 
 	var BibItems: [BibItem] = []
 
+	// Properties of the Chapter instance related to popover menus
 	var curPoMenu: VIMenu?	// instance in memory of the current popover menu
+	var hasAscription = false	// true if the Psalm has an Ascription
+	var hasTitle = false		// true if Chapter 1 has a Book Title
 	
 // When the instance of current Book creates the instance for the current Chapter it supplies the values
 // for the currently selected Chapter from the BibChaps array
@@ -170,6 +173,8 @@ public class Chapter: NSObject {
 	func appendItemToArray(_ itID:Int, _ chID:Int, _ vsNum:Int, _ itTyp:String, _ itOrd:Int, _ itTxt:String, _ intSeq:Int, _ isBrg:Bool, _ lvBrg:Int) {
 		let itRec = BibItem(itID, chID, vsNum, itTyp, itOrd, itTxt, intSeq, isBrg, lvBrg)
 		BibItems.append(itRec)
+		if itTyp == "Ascription" {hasAscription = true}
+		if itTyp == "Title" {hasTitle = true}
 	}
 
 // Find the offset in BibItems[] to the element having VerseItemID withID
@@ -225,6 +230,8 @@ public class Chapter: NSObject {
 		self.currIt = currIt
 		currItOfst = offsetToBibItem(withID: currIt)
 		createPopoverMenu()
+		// Update the BibChap recrod for this Chapter
+		bkInst!.setCurVItem (currIt)
 		// Update the database Chapter record
 		if dao!.chaptersUpdateRec (chID, itRCr, currIt) {
 //			print ("Chapter:goCurrentItem updated \(bkInst!.bkName) \(chNum) Chapter record")
@@ -264,6 +271,26 @@ public class Chapter: NSObject {
 		curPoMenu = VIMenu(currItOfst)
 	}
 
+	// Function to carry out the actions required for the popover menu items
+	func popMenuAction(_ act: String) {
+		switch act {
+		case "delAsc":
+			deleteAscription()
+		case "crAsc":
+			createAscription()
+		default:
+			print("BUG! Unknown action code")
+		}
+	}
+
+	// Called when the current VerseItem is an Ascription
+	func deleteAscription () {
+	}
+
+	// Call when the current VerseItem is Verse 1 of a Psalm
+	func createAscription () {
+	}
+	
 	// Generate USFM export string for this Chapter
 	func calcUSFMExportText() -> String {
 		var USFM = "\\id " + bkInst!.bkCode + " " + bibInst!.bibName + "\n\\c " + String(chNum)
