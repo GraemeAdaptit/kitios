@@ -16,15 +16,23 @@ import UIKit
 
 class PubItemsViewController: UITableViewController {
 
+//	let appDelegate = UIApplication.shared.delegate as! AppDelegate
 	var chInst: Chapter?
+	var VTVCtrl: VersesTableViewController?
 	var popMenu: VIMenu?
-	
+
+	required init?(coder aDecoder: NSCoder) {
+		super.init(coder: aDecoder)
+		print("KeyItSetupController:init")
+	}
+
     override func viewDidLoad() {
         super.viewDidLoad()
 		// Get access to the AppDelegate
 		let appDelegate = UIApplication.shared.delegate as! AppDelegate
 		chInst = appDelegate.chapInst
 		popMenu = chInst!.curPoMenu
+		VTVCtrl = appDelegate.VTVCtrl
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -64,7 +72,11 @@ class PubItemsViewController: UITableViewController {
 	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		let popRow = indexPath.row
 		let menuItem = popMenu!.VIMenuItems[popRow]
+		// Perform the necessary actions, including adjusting the kdb.sqlite database
+		// and the BibItems[] array
 		chInst!.popMenuAction(menuItem.VIMenuAction)
+		// Dismiss the popover menu
+		VTVCtrl!.refreshDisplayAfterPopoverMenuActions()
 	}
 
     /*

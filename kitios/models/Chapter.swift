@@ -32,8 +32,6 @@ public class Chapter: NSObject {
 	
 	var currItOfst: Int = -1// offset to current item in BibItems[] and row in the TableView
 
-//	var chDirty = false		// Whenever a verse of the chapter is edited chDirty is set true (use in UI)
-
 	// Get access to the AppDelegate
 	let appDelegate = UIApplication.shared.delegate as! AppDelegate
 	
@@ -41,6 +39,7 @@ public class Chapter: NSObject {
 	var bibInst: Bible? 	// access to the instance of Bible for updating BibBooks[]
 	var bkInst: Book?		// access to the instance for the current Book
 
+//	Probably don't need this
 //	var USFMText:String = ""
 
 // This struct and the BibItems array are used for letting the user select the
@@ -118,9 +117,7 @@ public class Chapter: NSObject {
 			print("VerseItems records for chapter \(chNum) have been read from kdb.sqlite")
 		} else {
 			print("ERROR: VerseItems records for chapter \(chNum) have not been read from kdb.sqlite")
-			
 		}
-
 	}
 	
 // Create a VerseItem record in kdb.sqlite for each VerseItem in this Chapter
@@ -132,15 +129,15 @@ public class Chapter: NSObject {
 		if numIt > numVs {
 			let vsNum = 1
 			let itTyp = "Ascription"
-			let itOrd = 99
+			let itOrd = 70	// 100 * VerseNumber - 30
 			let itText = ""
 			let intSeq = 0
 			let isBrid = false
 			let lastVsBridge = 0
-			if dao!.verseItemsInsertRec (chID, vsNum, itTyp, itOrd, itText, intSeq, isBrid, lastVsBridge) {
-//				print("Chapter:createItemRecords Created Verse record for chap \(chNum) vs \(vsNum)")
+			if dao!.verseItemsInsertRec (chID, vsNum, itTyp, itOrd, itText, intSeq, isBrid, lastVsBridge) != -1 {
+//				print("Chapter:createItemRecords Created Ascription record for Psalm \(chNum)")
 			} else {
-				print("ERROR: Book:createItemRecords: Creating Verse record failed for chap \(chNum) vs \(vsNum)")
+				print("ERROR: Book:createItemRecords: Creating Ascription record failed for Psalm \(chNum)")
 			}
 		}
 		for vsNum in 1...numVs {
@@ -150,7 +147,7 @@ public class Chapter: NSObject {
 			let intSeq = 0
 			let isBrid = false
 			let lastVsBridge = 0
-			if dao!.verseItemsInsertRec (chID, vsNum, itTyp, itOrd, itText, intSeq, isBrid, lastVsBridge) {
+			if dao!.verseItemsInsertRec (chID, vsNum, itTyp, itOrd, itText, intSeq, isBrid, lastVsBridge) != -1 {
 //				print("Chapter:createItemRecords Created Verse record for chap \(chNum) vs \(vsNum)")
 			} else {
 				print("ERROR: Book:createItemRecords: Creating Verse record failed for chap \(chNum) vs \(vsNum)")
@@ -230,7 +227,7 @@ public class Chapter: NSObject {
 		self.currIt = currIt
 		currItOfst = offsetToBibItem(withID: currIt)
 		createPopoverMenu()
-		// Update the BibChap recrod for this Chapter
+		// Update the BibChap record for this Chapter
 		bkInst!.setCurVItem (currIt)
 		// Update the database Chapter record
 		if dao!.chaptersUpdateRec (chID, itRCr, currIt) {
@@ -271,24 +268,84 @@ public class Chapter: NSObject {
 		curPoMenu = VIMenu(currItOfst)
 	}
 
-	// Function to carry out the actions required for the popover menu items
+	// Function to carry out on the data model the actions required for the popover menu items
+	// All of the possible actions change the BibItems[] array so, after carrying out the
+	// specific action, this function clears BibItems[] and reloads it from the database
 	func popMenuAction(_ act: String) {
 		switch act {
 		case "delAsc":
 			deleteAscription()
 		case "crAsc":
 			createAscription()
+		case "crParaBef":
+			createParagraphBefore(BibItems[currItOfst].vsNum)
 		default:
 			print("BUG! Unknown action code")
 		}
+
+		// Clear the current BibItems[] array
+		BibItems.removeAll()
+		// Reload the BibItems[] array of VerseItems
+		let result = dao!.readVerseItemsRecs (self)
+		if result {
+			print("VerseItems records for chapter \(chNum) have been read from kdb.sqlite")
+		} else {
+			print("ERROR: VerseItems records for chapter \(chNum) have not been read from kdb.sqlite")
+		}
 	}
 
-	// Called when the current VerseItem is an Ascription
+	// Can be called when the current VerseItem is an Ascription
 	func deleteAscription () {
+		if dao!.itemsDeleteRec(currIt) {
+			print("Ascription deleted")
+			// Note that the Psalm no longer has an Ascription
+			hasAscription = false
+			// Decrement number of items
+			numIt = numIt - 1
+			// Make the next VerseItem the current one
+			currIt = BibItems[currItOfst + 1].itID
+			// Update the database Chapter record so that the following item becomes the current item
+			if dao!.chaptersUpdateRecPub (chID, numIt, currIt) {
+//				print ("Chapter:goCurrentItem updated \(bkInst!.bkName) \(chNum) Chapter record")
+			} else {
+				print ("Chapter:goCurrentItem ERROR updating \(bkInst!.bkName) \(chNum) Chapter record")
+			}
+		}
 	}
 
-	// Call when the current VerseItem is Verse 1 of a Psalm
+	// Can be called when the current VerseItem is Verse 1 of a Psalm
 	func createAscription () {
+		let newitemID = dao!.verseItemsInsertRec (chID, 1, "Ascription", 70, "", 0, false, 0)
+		if newitemID != -1 {
+			print ("Ascription created")
+			// Note that the Psalm now has an Ascription
+			hasAscription = true
+			// Increment number of items
+			numIt = numIt + 1
+			// Make the new Ascription the current VerseItem
+			currIt = newitemID
+			// Update the database Chapter record so that the new Ascription item becomes the current item
+			if dao!.chaptersUpdateRecPub (chID, newitemID, BibItems[1].itID) {
+//				print ("Chapter:goCurrentItem updated \(bkInst!.bkName) \(chNum) Chapter record")
+			} else {
+				print ("Chapter:goCurrentItem ERROR updating \(bkInst!.bkName) \(chNum) Chapter record")
+			}
+		} else {
+			print ("Chapter:createAscription ERROR inserting into database")
+		}
+	}
+
+	// Create a paragraph break before a verse.
+	func createParagraphBefore (_ vsNum: Int) {
+		let newitemID = dao!.verseItemsInsertRec (chID, vsNum, "Para", vsNum * 100 - 10, "", 0, false, 0)
+		if newitemID != -1 {
+			print ("Para Before created")
+			// Increment number of items
+			numIt = numIt + 1
+			// Leave the Verse as the current VerseItem (there is nothing to keyboard in the Para record)
+		} else {
+			print ("Chapter:createAscription ERROR inserting into database")
+		}
 	}
 	
 	// Generate USFM export string for this Chapter

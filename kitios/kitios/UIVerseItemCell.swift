@@ -74,22 +74,7 @@ class UIVerseItemCell: UITableViewCell, UITextViewDelegate {
 		let buttonFrame = button.frame
 		let showRect    = self.convert(buttonFrame, to: VTVCtrl!.tableView)
 		VTVCtrl!.pubItemsPopoverAction(button, tableRow, showRect)
-//		showRect        = VTVCtrl!.tableView.convert(showRect, to: VTVCtrl!.view)
-//		showRect.origin.x += 80
-//		self.cellDelegate?.customCell(cell: self, didTapPub: button)
-//		let vc: PubItemsViewController = VTVCtrl!.storyboard?.instantiateViewController(withIdentifier: "PubItemsViewController") as! PubItemsViewController
-//		// Preferred Size
-//		vc.preferredContentSize = CGSize(width: 150, height: 200)
-//		vc.modalPresentationStyle = .popover
-//		let popover: UIPopoverPresentationController = vc.popoverPresentationController!
-//		popover.delegate = self
-//		popover.sourceView = VTVCtrl!.view
-//		popover.sourceRect = showRect
-//		popover.permittedArrowDirections = .left
-//		VTVCtrl!.present(vc, animated: true, completion:nil)
 	}
-	
-	
 	
 //	This function introduces behaviour that looks a little like mutual recursion
 //	between parts of the UIKit - looks logical to me, but causes a crash!

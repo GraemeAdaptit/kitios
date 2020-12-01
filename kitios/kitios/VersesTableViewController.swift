@@ -104,9 +104,12 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UIVerseItemCell {
 		let cell = tableView.dequeueReusableCell(withIdentifier: "ItemCell", for: indexPath) as! UIVerseItemCell
 		let vsItem = chInst!.BibItems[indexPath.row]
-		if vsItem.itTyp == "Ascription" {
+		switch vsItem.itTyp {
+		case "Ascription":
 			cell.pubBut.setTitle(vsItem.itTyp, for: .normal)
-		} else {
+		case "Para":
+			cell.pubBut.setTitle("Paragraph", for: .normal)
+		default:
 			cell.pubBut.setTitle(vsItem.itTyp + " " + String(vsItem.vsNum), for: .normal)
 		}
 		cell.itText.text = vsItem.itTxt
@@ -119,7 +122,6 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 			}
 		}
 		print("VersesTableViewController:tableView:cellForRowAt Fetched verse \(vsItem.vsNum)")
-//		cell.cellDelegate = self
         return cell
     }
 
@@ -139,7 +141,9 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 	func userTappedInTextOfCell(_ tableRow: Int) {
 		changeCurrentCell(tableRow)
 		let cell = tableView.cellForRow(at: IndexPath(row: tableRow, section: 0)) as! UIVerseItemCell
-		cell.itText.becomeFirstResponder()
+		if chInst!.BibItems[tableRow].itTyp != "Para" {
+			cell.itText.becomeFirstResponder()
+		}
 	}
 
 	// Called by iOS when the user selects a table row
@@ -161,7 +165,7 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 			currIt = bibItem.itID
 			currItOfst = newOfst
 			// Scroll to make this VerseItem visible <- already visible because the user has just tapped in it
-			tableView.selectRow(at: IndexPath(row: currItOfst, section: 0), animated: true, scrollPosition: UITableView.ScrollPosition.middle)
+//			tableView.selectRow(at: IndexPath(row: currItOfst, section: 0), animated: true, scrollPosition: UITableView.ScrollPosition.middle)
 //		let cell = tableView.cellForRow(at: IndexPath(row: newOfst, section: 0)) as! UIVerseItemCell
 //		cell.itText.becomeFirstResponder()
 		}
@@ -215,7 +219,36 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 		present(vc, animated: true, completion:nil)
 	}
 
-	// Action for the Pub button in the Navigation Bar - will soon be removed
+	// Adjust the VerseItems TableView after popover menu changes to the data model
+	func refreshDisplayAfterPopoverMenuActions() {
+		dismiss(animated: true, completion:nil)
+		tableView.reloadData()
+		// Get current VerseItem from Chapter instance
+		currIt = chInst!.currIt
+		currItOfst = chInst!.currItOfst
+		// Scroll to make this VerseItem visible
+		tableView.scrollToRow(at: IndexPath(row: currItOfst, section: 0), at: UITableView.ScrollPosition.middle, animated: true)
+		tableView.selectRow(at: IndexPath(row: currItOfst, section: 0), animated: true, scrollPosition: UITableView.ScrollPosition.middle)
+		// Activate it for text input
+		let cell = tableView.cellForRow(at: IndexPath(row: currItOfst, section: 0)) as! UIVerseItemCell
+		let bibItem = chInst!.getBibItem(at: currItOfst)
+		if bibItem.itTyp != "Para" {
+			cell.itText.becomeFirstResponder()
+		}
+	}
+	
+	// Dismiss popover TODO: No longer needed as a separate function?
+//	func dismissPopoverMenu() {
+//		dismiss(animated: true, completion:nil)
+//	}
+
+	// Reload data into the TableView  TODO: No longer needed as a separate function?
+//	func reloadVerseItems() {
+//		tableView.reloadData()
+//	}
+	
+/*
+// Action for the Pub button in the Navigation Bar - will soon be removed
 	@IBAction func publItems(_ sender: UIBarButtonItem) {
 		let vc: PubItemsViewController = self.storyboard?.instantiateViewController(withIdentifier: "PubItemsViewController") as! PubItemsViewController
 		// Preferred Size
@@ -228,13 +261,19 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 		popover.barButtonItem = sender
 		present(vc, animated: true, completion:nil)
 	}
-	
+*/
+
+	@IBAction func refreshVerseItems(_ sender: UIRefreshControl) {
+		tableView.reloadData()
+		sender.endRefreshing()
+	}
+
 	@IBAction func exportThisChapter(_ sender: Any) {
 		saveCurrentItemText ()
 		performSegue(withIdentifier: "exportChapter", sender: nil)
 	}
 }
-
+	
 extension VersesTableViewController: UIPopoverPresentationControllerDelegate {
 	
 	func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {

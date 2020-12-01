@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Mq7-GK-ujF">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Mq7-GK-ujF">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -173,20 +173,20 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="Verses" prompt="Edit Chapter X of Y" id="5d7-3A-F7h">
                         <barButtonItem key="backBarButtonItem" title="Verses" id="N2e-gi-xGW"/>
-                        <rightBarButtonItems>
-                            <barButtonItem title="Export" id="vxd-3g-ktB">
-                                <color key="tintColor" systemColor="systemPurpleColor"/>
-                                <connections>
-                                    <action selector="exportThisChapter:" destination="3Gc-YA-fTx" id="eDD-QN-yxF"/>
-                                </connections>
-                            </barButtonItem>
-                            <barButtonItem title="Pub" id="EA5-7a-QBu">
-                                <connections>
-                                    <action selector="publItems:" destination="3Gc-YA-fTx" id="wsX-vV-1Sd"/>
-                                </connections>
-                            </barButtonItem>
-                        </rightBarButtonItems>
+                        <barButtonItem key="rightBarButtonItem" title="Export" id="vxd-3g-ktB">
+                            <color key="tintColor" systemColor="systemPurpleColor"/>
+                            <connections>
+                                <action selector="exportThisChapter:" destination="3Gc-YA-fTx" id="eDD-QN-yxF"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
+                    <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="B4L-Gk-axe">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <connections>
+                            <action selector="refreshVerseItems:" destination="3Gc-YA-fTx" eventType="valueChanged" id="gmO-gj-IzX"/>
+                        </connections>
+                    </refreshControl>
                     <connections>
                         <segue destination="f0e-bE-QQt" kind="show" identifier="exportChapter" id="kca-if-BWX"/>
                     </connections>

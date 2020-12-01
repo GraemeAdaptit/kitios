@@ -111,7 +111,7 @@ class ChaptersTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ChapterCell", for: indexPath)
 		let chapter = bkInst!.BibChaps[indexPath.row]
 		cell.textLabel?.text = "Chapter " + String(chapter.chNum)
-		let numVsItText = (chapter.numVs > 0 ? String(chapter.numVs) + " verses (" + String(chapter.numIt) + " items)" : "" )
+		let numVsItText = (chapter.numVs > 0 ? String(chapter.numVs) + " verses" : "" )
 		cell.detailTextLabel?.text = numVsItText
 		if chapter.itRCr {
 			cell.textLabel!.textColor = UIColor.blue

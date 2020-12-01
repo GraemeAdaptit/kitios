@@ -395,6 +395,24 @@ public class KITDAO {
 		return (result == 0)
 	}
 
+	// The Chapters record for the current Chapter needs to be updated after changes to the publication items:
+	//	* to change the number of VerseItems
+	//	* to change the current VerseItem after one has been deleted or inserted.
+
+	func chaptersUpdateRecPub (_ chID:Int, _ numIt:Int, _ currIt:Int) -> Bool {
+		var sqlite3_stmt:OpaquePointer?=nil
+		let sql:String = "UPDATE Chapters SET numItems = ?2, currItem = ?3 WHERE chapterID = ?1;"
+		let nByte:Int32 = Int32(sql.utf8.count)
+
+		sqlite3_prepare_v2(db, sql, nByte, &sqlite3_stmt, nil)
+		sqlite3_bind_int(sqlite3_stmt, 1, Int32(chID))
+		sqlite3_bind_int(sqlite3_stmt, 2, Int32(numIt))
+		sqlite3_bind_int(sqlite3_stmt, 3, Int32(currIt))
+		sqlite3_step(sqlite3_stmt)
+		let result = sqlite3_finalize(sqlite3_stmt)
+		return (result == 0)
+	}
+
 	// Set the value of the field USFMText when the Export scene is used
 	func updateUSFMText (_ chID:Int, _ text:String) -> Bool {
 		var sqlite3_stmt:OpaquePointer?=nil
@@ -420,7 +438,7 @@ public class KITDAO {
 	//	* when the user chooses to insert a publication VerseItem
 	//	* when the user chooses to undo a verse bridge
 
-	func verseItemsInsertRec (_ chID:Int, _ vsNum:Int, _ itTyp:String, _ itOrd:Int, _ itText:String, _ intSeq:Int, _ isBrid:Bool, _ lastVsBridge:Int) -> Bool {
+	func verseItemsInsertRec (_ chID:Int, _ vsNum:Int, _ itTyp:String, _ itOrd:Int, _ itText:String, _ intSeq:Int, _ isBrid:Bool, _ lastVsBridge:Int) -> Int {
 			var sqlite3_stmt:OpaquePointer?=nil
 			let sql:String = "INSERT INTO VerseItems(chapterID, verseNumber, itemType, itemOrder, itemText, intSeq, isBridge, lastVsBridge) VALUES(?, ?, ?, ?, ?, ?, ?, ?);"
 			let nByte:Int32 = Int32(sql.utf8.count)
@@ -436,7 +454,12 @@ public class KITDAO {
 			sqlite3_bind_int(sqlite3_stmt, 8, Int32(lastVsBridge))
 			sqlite3_step(sqlite3_stmt)
 			let result = sqlite3_finalize(sqlite3_stmt)
-			return (result == 0)
+			if result == 0 {
+				return Int(sqlite3_last_insert_rowid(db))
+			} else {
+				return -1
+			}
+//			return (result == 0)
 		}
 
 	// The VerseItems records for the current Chapter needs to be read in order to set up the scrolling display of
@@ -490,14 +513,26 @@ public class KITDAO {
 		return (result == 0)
 	}
 
-	// The VerseItem record for a publication VerseItem needs to be deleted when the user chooses to delete a publication item
-	// This function will also be called when the user chooses to bridge two verses (the contents of the second verse is
-	//	appended to the first verse, the second verse text is put into a new BridgeItem, and then the second VerseItem is
-	//	deleted. Unbridging follows the reverse procedure and the original second verse is re-created and the BridgeItem
-	//	is deleted
+	// The VerseItem record for a publication VerseItem needs to be deleted when the user
+	//	chooses to delete a publication item.
+	// This function will also be called when the user chooses to bridge two verses
+	//	(the contents of the second verse is appended to the first verse, the second verse
+	//	text is put into a new BridgeItem, and then the second VerseItem is deleted.
+	//	Unbridging follows the reverse procedure and the original second verse is
+	//	re-created and the BridgeItem is deleted.
+	// This function will also be called when the user deletes a Psalm Ascription because
+	//	the translation being keyboarded does not include Ascriptions.
 
-	func itemsDeleteRec () -> Bool {
-		return true
+	func itemsDeleteRec (_ itID:Int) -> Bool {
+		var sqlite3_stmt:OpaquePointer?=nil
+		let sql:String = "DELETE FROM VerseItems WHERE itemID = ?1;"
+		let nByte:Int32 = Int32(sql.utf8.count)
+
+		sqlite3_prepare_v2(db, sql, nByte, &sqlite3_stmt, nil)
+		sqlite3_bind_int(sqlite3_stmt, 1, Int32(itID))
+		sqlite3_step(sqlite3_stmt)
+		let result = sqlite3_finalize(sqlite3_stmt)
+		return (result == 0)
 	}
 
 	//--------------------------------------------------------------------------------------------
