@@ -118,6 +118,11 @@ public class Chapter: NSObject {
 		} else {
 			print("ERROR: VerseItems records for chapter \(chNum) have not been read from kdb.sqlite")
 		}
+		// Ensure that numIt is correct (to guard against any accumulated data errors)
+		self.numIt = BibItems.count
+		if dao!.chaptersUpdateRecPub (chID, self.numIt, self.currIt) {
+			print("Chapter init(): numIt updated in kdb.sqlite")
+		}
 	}
 	
 // Create a VerseItem record in kdb.sqlite for each VerseItem in this Chapter
@@ -405,12 +410,14 @@ public class Chapter: NSObject {
 		let nextItem = BibItems[currItOfst + 1]
 		// Delete ParaCont record
 		dao!.itemsDeleteRec(currIt)
+		numIt = numIt - 1
 		// Append continuation text to original Verse
 		let txtBef = prevItem.itTxt
 		let txtAft = nextItem.itTxt
 		dao!.itemsUpdateRecText(prevItem.itID, txtBef + txtAft)
 		// Delete VerseCont record
 		dao!.itemsDeleteRec(nextItem.itID)
+		numIt = numIt - 1
 	}
 
 	// Generate USFM export string for this Chapter
@@ -429,10 +436,10 @@ public class Chapter: NSObject {
 					vn = String(item.vsNum)
 				}
 				s = "\n\\v " + vn + " " + tx
-			case "Para":			// Paragraph before a verse
+			case "VerseCont":
+				s = "\n" + tx
+			case "Para", "ParaCont":		// Paragraph before or within a verse
 				s = "\n\\p"
-			case "ParaCont":		// Paragraph within a verse
-				s = "\n\\p " + tx
 			case "Heading":			// Heading/Subject Heading
 				s = "\n\\s " + tx
 			case "ParlRef":			// Parallel Reference
