@@ -107,8 +107,10 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 		switch vsItem.itTyp {
 		case "Ascription":
 			cell.pubBut.setTitle(vsItem.itTyp, for: .normal)
-		case "Para":
+		case "Para", "ParaCont":
 			cell.pubBut.setTitle("Paragraph", for: .normal)
+		case "VerseCont":
+			cell.pubBut.setTitle("Verse " + String(vsItem.vsNum) + " (cont)", for: .normal)
 		default:
 			cell.pubBut.setTitle(vsItem.itTyp + " " + String(vsItem.vsNum), for: .normal)
 		}
@@ -133,7 +135,7 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 	}
 
 	// Called by the custom verse item cell when the user taps on the cell's label
-	func userTappedOnCellLabel (_ tableRow: Int) {
+	func userTappedOnCellLabel(_ tableRow: Int) {
 		changeCurrentCell(tableRow)
 	}
 	
@@ -151,7 +153,7 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 		changeCurrentCell(indexPath.row)
 	}
 
-	func changeCurrentCell (_ newOfst: Int) {
+	func changeCurrentCell(_ newOfst: Int) {
 		if newOfst != currItOfst {
 			// Save the text in the current BibItem before changing to the new one
 			saveCurrentItemText()
@@ -166,12 +168,10 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 			currItOfst = newOfst
 			// Scroll to make this VerseItem visible <- already visible because the user has just tapped in it
 //			tableView.selectRow(at: IndexPath(row: currItOfst, section: 0), animated: true, scrollPosition: UITableView.ScrollPosition.middle)
-//		let cell = tableView.cellForRow(at: IndexPath(row: newOfst, section: 0)) as! UIVerseItemCell
-//		cell.itText.becomeFirstResponder()
 		}
 	}
 	
-	func saveCurrentItemText () {
+	func saveCurrentItemText() {
 		print("Current VerseItem Offset: \(currItOfst), ID: \(currIt)")
 		let currCell = tableView.cellForRow(at: IndexPath(row: currItOfst, section: 0)) as! UIVerseItemCell?
 		if currCell != nil {
@@ -184,6 +184,26 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 		}
 	}
 
+	func currTextSplit() -> (cursPos:Int, txtBef:String, txtAft:String) {
+		let currCell = tableView.cellForRow(at: IndexPath(row: currItOfst, section: 0)) as! UIVerseItemCell?
+		if currCell != nil {
+			let tView = currCell!.itText
+			if let selectedRange: UITextRange = tView!.selectedTextRange {
+				let cursorPosition = tView!.offset(from: tView!.beginningOfDocument, to: selectedRange.start)
+				let currPosition = tView!.position(from: tView!.beginningOfDocument, offset: cursorPosition)!
+				let textBefore = tView!.textRange(from: tView!.beginningOfDocument, to: currPosition)
+				let befText = tView!.text(in: textBefore!)! as String
+				let textAfter = tView!.textRange(from: currPosition, to: tView!.endOfDocument)
+				let aftText = tView!.text(in: textAfter!)! as String
+				return (cursorPosition, befText, aftText)
+			} else {
+				return (0, "", "")
+			}
+		} else {
+			return (0, "", "")
+		}
+	}
+	
 	override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
 //		print("VersesTableViewController:didEndDisplaying cell for VerseItem \(indexPath.row)")
 		let savCell = cell as! UIVerseItemCell
@@ -263,10 +283,11 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 	}
 */
 
-	@IBAction func refreshVerseItems(_ sender: UIRefreshControl) {
-		tableView.reloadData()
-		sender.endRefreshing()
-	}
+	// TODO: Is this needed? It was inserted as part of a tutorial exercise.
+//	@IBAction func refreshVerseItems(_ sender: UIRefreshControl) {
+//		tableView.reloadData()
+//		sender.endRefreshing()
+//	}
 
 	@IBAction func exportThisChapter(_ sender: Any) {
 		saveCurrentItemText ()

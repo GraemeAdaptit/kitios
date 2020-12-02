@@ -37,9 +37,8 @@ class VIMenu : NSObject {
 	var numRows: Int = 0				// number of rows needed for the popover menu
 	var VIMenuItems: [VIMenuItem] = []	// array of the menu items
 	
-	// Get access to the AppDelegate TODO: Check whether this is needed
 	let appDelegate = UIApplication.shared.delegate as! AppDelegate
-	
+
 	init(_ curItOfst: Int) {
 		let chInst = appDelegate.chapInst
 		let bibItem = chInst!.BibItems[curItOfst]
@@ -94,7 +93,7 @@ class VIMenu : NSObject {
 			let viMI2 = VIMenuItem("Delete Paragraph", "delPara", "R")
 			VIMenuItems.append(viMI2)
 		case "ParaCont":		// Paragraph within a verse
-			let viMI1 = VIMenuItem("Delete Paragraph", "delPara", "R")
+			let viMI1 = VIMenuItem("Delete Paragraph", "delPCon", "R")
 			VIMenuItems.append(viMI1)
 		case "ParlRef":			// Parallel Reference
 			let viMI1 = VIMenuItem("Delete Parallel Ref", "delPalRef", "R")
@@ -115,7 +114,7 @@ class VIMenu : NSObject {
 			let viMI4 = VIMenuItem("Create Paragraph Before", "crParaBef", "B")
 			VIMenuItems.append(viMI4)
 			if !bibItem.isBrg {
-				let viMI5 = VIMenuItem("Create Paragraph In", "crParaIn", "B")
+				let viMI5 = VIMenuItem("Create Paragraph In", "crParaCont", "B")
 				VIMenuItems.append(viMI5)
 			}
 			if bibItem.vsNum != chInst!.numVs {

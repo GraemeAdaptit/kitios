@@ -270,7 +270,8 @@ public class Chapter: NSObject {
 
 	// Function to carry out on the data model the actions required for the popover menu items
 	// All of the possible actions change the BibItems[] array so, after carrying out the
-	// specific action, this function clears BibItems[] and reloads it from the database
+	// specific action, this function clears BibItems[] and reloads it from the database;
+	// following this the VersesTableViewController needs to reload the TableView.
 	func popMenuAction(_ act: String) {
 		switch act {
 		case "delAsc":
@@ -279,6 +280,12 @@ public class Chapter: NSObject {
 			createAscription()
 		case "crParaBef":
 			createParagraphBefore(BibItems[currItOfst].vsNum)
+		case "delPara":
+			deleteParagraphBefore()
+		case "crParaCont":
+			createParagraphCont(BibItems[currItOfst].vsNum)
+		case "delPCon":
+			deleteParagraphCont()
 		default:
 			print("BUG! Unknown action code")
 		}
@@ -344,10 +351,68 @@ public class Chapter: NSObject {
 			numIt = numIt + 1
 			// Leave the Verse as the current VerseItem (there is nothing to keyboard in the Para record)
 		} else {
-			print ("Chapter:createAscription ERROR inserting into database")
+			print ("Chapter:createParagraphBefore ERROR inserting into database")
 		}
 	}
-	
+
+	// Can be called when the current VerseItem is a Para
+	func deleteParagraphBefore () {
+		if dao!.itemsDeleteRec(currIt) {
+			print("Para deleted")
+			// Decrement number of items
+			numIt = numIt - 1
+			// Make the next VerseItem the current one
+			currIt = BibItems[currItOfst + 1].itID
+			// Update the database Chapter record so that the following item becomes the current item
+			if dao!.chaptersUpdateRecPub (chID, numIt, currIt) {
+//				print ("Chapter:goCurrentItem updated \(bkInst!.bkName) \(chNum) Chapter record")
+			} else {
+				print ("Chapter:goCurrentItem ERROR updating \(bkInst!.bkName) \(chNum) Chapter record")
+			}
+		}
+	}
+
+	// Create a paragraph break inside a verse
+	func createParagraphCont(_ vsNum: Int) {
+		let result = appDelegate.VTVCtrl!.currTextSplit()
+		var cursPos = result.cursPos
+		var txtBef = result.txtBef
+		var txtAft = result.txtAft
+		// Remove text after cursor from Verse
+		dao!.itemsUpdateRecText(BibItems[currItOfst].itID, txtBef)
+		// Create the ParaCont record
+		let newPContID = dao!.verseItemsInsertRec (chID, vsNum, "ParaCont", vsNum * 100 + 10, "", 0, false, 0)
+		if newPContID != -1 {
+			print ("ParaCont created")
+			// Increment number of items
+			numIt = numIt + 1
+		} else {
+			print ("Chapter:createParagraphCont ERROR inserting ParaCont into database")
+		}
+		// Create the VerseCont record and insert the txtAft from the original Verse
+		let newVCont = dao!.verseItemsInsertRec (chID, vsNum, "VerseCont", vsNum * 100 + 20, txtAft, 0, false, 0)
+		if newVCont != -1 {
+			print ("VerseCont created")
+			// Increment number of items
+			numIt = numIt + 1
+		} else {
+			print ("Chapter:createParagraphCont ERROR inserting VerseCont into database")
+		}
+	}
+
+	func deleteParagraphCont() {
+		let prevItem = BibItems[currItOfst - 1]
+		let nextItem = BibItems[currItOfst + 1]
+		// Delete ParaCont record
+		dao!.itemsDeleteRec(currIt)
+		// Append continuation text to original Verse
+		let txtBef = prevItem.itTxt
+		let txtAft = nextItem.itTxt
+		dao!.itemsUpdateRecText(prevItem.itID, txtBef + txtAft)
+		// Delete VerseCont record
+		dao!.itemsDeleteRec(nextItem.itID)
+	}
+
 	// Generate USFM export string for this Chapter
 	func calcUSFMExportText() -> String {
 		var USFM = "\\id " + bkInst!.bkCode + " " + bibInst!.bibName + "\n\\c " + String(chNum)
