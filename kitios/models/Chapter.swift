@@ -284,13 +284,15 @@ public class Chapter: NSObject {
 		case "crAsc":
 			createAscription()
 		case "crParaBef":
-			createParagraphBefore(BibItems[currItOfst].vsNum)
+			createParagraphBefore()
 		case "delPara":
 			deleteParagraphBefore()
 		case "crParaCont":
-			createParagraphCont(BibItems[currItOfst].vsNum)
+			createParagraphCont()
 		case "delPCon":
 			deleteParagraphCont()
+		case "brid":
+			bridgeNextVerse()
 		default:
 			print("BUG! Unknown action code")
 		}
@@ -348,7 +350,8 @@ public class Chapter: NSObject {
 	}
 
 	// Create a paragraph break before a verse.
-	func createParagraphBefore (_ vsNum: Int) {
+	func createParagraphBefore () {
+		let vsNum = BibItems[currItOfst].vsNum
 		let newitemID = dao!.verseItemsInsertRec (chID, vsNum, "Para", vsNum * 100 - 10, "", 0, false, 0)
 		if newitemID != -1 {
 			print ("Para Before created")
@@ -378,11 +381,12 @@ public class Chapter: NSObject {
 	}
 
 	// Create a paragraph break inside a verse
-	func createParagraphCont(_ vsNum: Int) {
+	func createParagraphCont() {
 		let result = appDelegate.VTVCtrl!.currTextSplit()
-		var cursPos = result.cursPos
-		var txtBef = result.txtBef
-		var txtAft = result.txtAft
+//		var cursPos = result.cursPos
+		let txtBef = result.txtBef
+		let txtAft = result.txtAft
+		let vsNum = BibItems[currItOfst].vsNum
 		// Remove text after cursor from Verse
 		dao!.itemsUpdateRecText(BibItems[currItOfst].itID, txtBef)
 		// Create the ParaCont record
@@ -420,6 +424,22 @@ public class Chapter: NSObject {
 		numIt = numIt - 1
 	}
 
+	func bridgeNextVerse() {
+		// Get the vsNum and iTxt from  the verse to be added to the bridge
+		let nexVsNum = BibItems[currItOfst + 1].vsNum
+		let nexVsTxt = BibItems[currItOfst + 1].itTxt
+		// Delete the verse record being added to the bridge
+		dao!.itemsDeleteRec(BibItems[currItOfst + 1].itID)
+		numIt = numIt - 1
+		// Create related BridgeItems record
+		let curVsItID = BibItems[currItOfst].itID
+		let curVsTxt = BibItems[currItOfst].itTxt
+		let bridID = dao!.bridgeInsertRec(curVsItID, curVsTxt, nexVsTxt)
+		// Copy text of next verse into the bridge head verse
+		let newBridHdTxt = curVsTxt + " " + nexVsTxt
+		dao!.itemsUpdateForBridge(curVsItID, newBridHdTxt, true, nexVsNum)
+	}
+	
 	// Generate USFM export string for this Chapter
 	func calcUSFMExportText() -> String {
 		var USFM = "\\id " + bkInst!.bkCode + " " + bibInst!.bibName + "\n\\c " + String(chNum)

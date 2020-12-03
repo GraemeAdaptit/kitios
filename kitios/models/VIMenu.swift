@@ -117,7 +117,8 @@ class VIMenu : NSObject {
 				let viMI5 = VIMenuItem("Create Paragraph In", "crParaCont", "B")
 				VIMenuItems.append(viMI5)
 			}
-			if bibItem.vsNum != chInst!.numVs {
+			let isNxtVs = (chInst!.BibItems[curItOfst + 1].itTyp == "Verse")
+			if (bibItem.vsNum != chInst!.numVs) && isNxtVs {
 				let viMI6 = VIMenuItem("Bridge Next Verse", "brid", "R")
 				VIMenuItems.append(viMI6)
 			}

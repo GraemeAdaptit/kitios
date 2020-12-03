@@ -111,6 +111,12 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 			cell.pubBut.setTitle("Paragraph", for: .normal)
 		case "VerseCont":
 			cell.pubBut.setTitle("Verse " + String(vsItem.vsNum) + " (cont)", for: .normal)
+		case "Verse":
+			if vsItem.isBrg {
+				cell.pubBut.setTitle("Verses " + String(vsItem.vsNum) + "-" + String(vsItem.lvBrg), for: .normal)
+			} else {
+				cell.pubBut.setTitle("Verse " + String(vsItem.vsNum), for: .normal)
+			}
 		default:
 			cell.pubBut.setTitle(vsItem.itTyp + " " + String(vsItem.vsNum), for: .normal)
 		}

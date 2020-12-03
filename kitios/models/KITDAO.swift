@@ -437,6 +437,7 @@ public class KITDAO {
 	// It will also be called
 	//	* when the user chooses to insert a publication VerseItem
 	//	* when the user chooses to undo a verse bridge
+	// This function returns the rowID of the newly inserted record or -1 if the insert fails
 
 	func verseItemsInsertRec (_ chID:Int, _ vsNum:Int, _ itTyp:String, _ itOrd:Int, _ itText:String, _ intSeq:Int, _ isBrid:Bool, _ lastVsBridge:Int) -> Int {
 			var sqlite3_stmt:OpaquePointer?=nil
@@ -459,7 +460,6 @@ public class KITDAO {
 			} else {
 				return -1
 			}
-//			return (result == 0)
 		}
 
 	// The VerseItems records for the current Chapter needs to be read in order to set up the scrolling display of
@@ -467,7 +467,7 @@ public class KITDAO {
 
 	func readVerseItemsRecs (_ chInst:Chapter) -> Bool {
 		var sqlite3_stmt:OpaquePointer?=nil
-		let sql:String = "SELECT itemID, chapterID, verseNumber, itemType, itemOrder, itemText, intSeq, isBridge FROM VerseItems WHERE chapterID = ?1 ORDER BY itemOrder;"
+		let sql:String = "SELECT itemID, chapterID, verseNumber, itemType, itemOrder, itemText, intSeq, isBridge, lastVsBridge FROM VerseItems WHERE chapterID = ?1 ORDER BY itemOrder;"
 		let nByte:Int32 = Int32(sql.utf8.count)
 
 		sqlite3_prepare_v2(db, sql, nByte, &sqlite3_stmt, nil)
@@ -489,8 +489,9 @@ public class KITDAO {
 			let intSeq = Int(sqlite3_column_int(sqlite3_stmt, 6))
 			let isBr = Int(sqlite3_column_int(sqlite3_stmt, 7))
 			let isBrg = (isBr == 0 ? false : true)
+			let lvBrg = Int(sqlite3_column_int(sqlite3_stmt, 8))
 
-			chInst.appendItemToArray(itID, chID, vsNum, itTyp, itOrd, itText, intSeq, isBrg, 0)
+			chInst.appendItemToArray(itID, chID, vsNum, itTyp, itOrd, itText, intSeq, isBrg, lvBrg)
 		}
 		let result = sqlite3_finalize(sqlite3_stmt)
 		return (result == 0)
@@ -511,6 +512,24 @@ public class KITDAO {
 		sqlite3_step(sqlite3_stmt)
 		let result = sqlite3_finalize(sqlite3_stmt)
 		return (result == 0)
+	}
+
+	// When a verse is added to form (or extend) a bridge, the VerseItem record that is the head
+	// of the bridge needs to be updated.
+	func itemsUpdateForBridge(_ itID:Int, _ itTxt:String, _ isBridge:Bool, _ LastVsBr:Int) -> Bool {
+		var sqlite3_stmt:OpaquePointer?=nil
+		let sql:String = "UPDATE VerseItems SET itemText = ?2, isBridge = ?3, lastVsBridge = ?4 WHERE itemID = ?1;"
+		let nByte:Int32 = Int32(sql.utf8.count)
+
+		sqlite3_prepare_v2(db, sql, nByte, &sqlite3_stmt, nil)
+		sqlite3_bind_int(sqlite3_stmt, 1, Int32(itID))
+		sqlite3_bind_text(sqlite3_stmt, 2, itTxt.cString(using:String.Encoding.utf8)!, -1, SQLITE_TRANSIENT)
+		sqlite3_bind_int(sqlite3_stmt, 3, Int32(isBridge ? 1 : 0))
+		sqlite3_bind_int(sqlite3_stmt, 4, Int32(LastVsBr))
+		sqlite3_step(sqlite3_stmt)
+		let result = sqlite3_finalize(sqlite3_stmt)
+		return (result == 0)
+
 	}
 
 	// The VerseItem record for a publication VerseItem needs to be deleted when the user
@@ -541,22 +560,61 @@ public class KITDAO {
 	// When a bridge is created a BridgeItem record is created to hold the following verse that is being appended
 	// to the bridge. This is needed only if the user later undoes the bridge and the original following verse is
 	// restored; otherwise the BridgeItem record just sits there out of the way of normal operations.
+	// This function returns the rowID of the newly inserted record or -1 if insert fails
 
-	func bridgeInsertRec() -> Bool {
-		return true
+	func bridgeInsertRec(_ itemID: Int, _ txtCurr: String, _ txtExtra: String) -> Int {
+		var sqlite3_stmt:OpaquePointer?=nil
+		let sql:String = "INSERT INTO BridgeItems(itemID, textCurrBridge, textExtraVerse) VALUES(?, ?, ?);"
+		let nByte:Int32 = Int32(sql.utf8.count)
+
+		sqlite3_prepare_v2(db, sql, nByte, &sqlite3_stmt, nil)
+		sqlite3_bind_int(sqlite3_stmt, 1, Int32(itemID))
+		sqlite3_bind_text(sqlite3_stmt, 2, txtCurr.cString(using:String.Encoding.utf8)!, -1, SQLITE_TRANSIENT)
+		sqlite3_bind_text(sqlite3_stmt, 3, txtExtra.cString(using:String.Encoding.utf8)!, -1, SQLITE_TRANSIENT)
+		sqlite3_step(sqlite3_stmt)
+		let result = sqlite3_finalize(sqlite3_stmt)
+		if result == 0 {
+			return Int(sqlite3_last_insert_rowid(db))
+		} else {
+			return -1
+		}
 	}
 
 	// When a bridge is being undone it is necessary to retrieve the record containing the original following verse
 	// that is about to be restored.
 
-	func bridgeGetRec() -> Bool {
-		return true
+	func bridgeGetRec(_ bridgeID:Int) -> (itemID:Int, txtBrid:String, txtExtVs:String) {
+		var sqlite3_stmt:OpaquePointer?=nil
+		let sql:String = "SELECT itemID, textCurrBridge, textExtraVerse FROM BridgeItems WHERE bridgeID = ?1;"
+		let nByte:Int32 = Int32(sql.utf8.count)
+		sqlite3_prepare_v2(db, sql, nByte, &sqlite3_stmt, nil)
+		sqlite3_bind_int(sqlite3_stmt, 1, Int32(bridgeID))
+		sqlite3_step(sqlite3_stmt)
+
+		let itemID = Int(sqlite3_column_int(sqlite3_stmt, 1))
+		let bBridp: UnsafePointer<UInt8>? = sqlite3_column_text(sqlite3_stmt, 2)
+		let bBridn = Int(sqlite3_column_bytes(sqlite3_stmt,2))
+		let dataBr = Data(bytes: bBridp!, count: Int(bBridn))
+		let txtBrid = String(data: dataBr, encoding: String.Encoding.utf8)
+		let bExtrap: UnsafePointer<UInt8>? = sqlite3_column_text(sqlite3_stmt, 3)
+		let bExtran = Int(sqlite3_column_bytes(sqlite3_stmt,3 ))
+		let dataEx = Data(bytes: bExtrap!, count: Int(bExtran))
+		let txtExtra = String(data: dataEx, encoding: String.Encoding.utf8)
+		return (itemID, txtBrid!, txtExtra!)
 	}
 
 	// When a bridge has been undone the BridgeItem record involved needs to be deleted
 
-	func bridgeDeleteRec() -> Bool {
-		return true
+	func bridgeDeleteRec(_ bridgeID:Int) -> Bool {
+		var sqlite3_stmt:OpaquePointer?=nil
+		let sql:String = "DELETE FROM BridgeItems WHERE bridgeID = ?1;"
+		let nByte:Int32 = Int32(sql.utf8.count)
+
+		sqlite3_prepare_v2(db, sql, nByte, &sqlite3_stmt, nil)
+		sqlite3_bind_int(sqlite3_stmt, 1, Int32(bridgeID))
+		sqlite3_step(sqlite3_stmt)
+		let result = sqlite3_finalize(sqlite3_stmt)
+		return (result == 0)
 	}
 
 }
