@@ -293,6 +293,8 @@ public class Chapter: NSObject {
 			deleteParagraphCont()
 		case "brid":
 			bridgeNextVerse()
+		case "unBrid":
+			unbridgeLastVerse()
 		default:
 			print("BUG! Unknown action code")
 		}
@@ -438,6 +440,61 @@ public class Chapter: NSObject {
 		// Copy text of next verse into the bridge head verse
 		let newBridHdTxt = curVsTxt + " " + nexVsTxt
 		dao!.itemsUpdateForBridge(curVsItID, newBridHdTxt, true, nexVsNum)
+	}
+
+	struct BridItem {
+		var BridgeID: Int			// ID of the BridgeItems record
+		var textCurrBridge: String	// text of current Verse or bridge
+		var textExtraVerse: String	// text of extra verse added to bridge
+
+		init (_ BridgeID:Int, _ textCurrBridge:String, _ textExtraVerse:String) {
+			self.BridgeID = BridgeID
+			self.textCurrBridge = textCurrBridge
+			self.textExtraVerse = textExtraVerse
+		}
+	}
+	
+	var BridItems: [BridItem] = []
+
+	// dao.bridgeGetRecs() calls appendItemToBridArray() for each row it reads from
+	// the BridgeItems table in the kdb.sqlite database
+
+	func appendItemToBridArray(_ BridgeID:Int, _ textCurrBridge:String, _ textExtraVerse:String) {
+			let bridRec = BridItem(BridgeID, textCurrBridge, textExtraVerse)
+			BridItems.append(bridRec)
+		}
+
+	func unbridgeLastVerse() {
+		// Get the most recent BridgeItems record for this verse
+		let result = dao!.bridgeGetRecs(BibItems[currItOfst].itID, self)
+		if result {
+			print("BridgeItems records for verse \(BibItems[currItOfst].vsNum) have been read from kdb.sqlite")
+		} else {
+			print("ERROR: BridgeItems records for verse \(BibItems[currItOfst].vsNum) have not been read from kdb.sqlite")
+		}
+		// The most recent bridge item will be the last in the list
+		let curBridItem = BridItems.last
+		// Create the verse record being removed from the bridge
+		let nextVsNum = BibItems[currItOfst].lvBrg
+		if dao!.verseItemsInsertRec (chID, nextVsNum, "Verse", 100 * nextVsNum, curBridItem!.textExtraVerse, 0, false, 0) != -1 {
+//				print("Chapter:createItemRecords Created Verse record for chap \(chNum) vs \(nextVsNum)")
+		} else {
+			print("ERROR: Book:createItemRecords: Creating Verse record failed for chap \(chNum) vs \(nextVsNum)")
+		}
+		numIt = numIt + 1
+		// Copy text of the previous bridge head into the new bridge head
+		var isBrid: Bool
+		var lastVsBr = BibItems[currItOfst].lvBrg - 1
+		if lastVsBr == BibItems[currItOfst].vsNum {
+			// The head of the bridge will become a normal verse
+			isBrid = false; lastVsBr = 0
+		} else {
+			// The head of the bridge will still be a bridge head
+			isBrid = true
+		}
+		dao!.itemsUpdateForBridge(BibItems[currItOfst].itID, curBridItem!.textCurrBridge, isBrid, lastVsBr)
+		// Delete this BridgeItems record
+		dao!.bridgeDeleteRec(curBridItem!.BridgeID)
 	}
 	
 	// Generate USFM export string for this Chapter

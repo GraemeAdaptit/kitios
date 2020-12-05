@@ -580,27 +580,31 @@ public class KITDAO {
 		}
 	}
 
-	// When a bridge is being undone it is necessary to retrieve the record containing the original following verse
-	// that is about to be restored.
+	// When a bridge is being undone it is necessary to retrieve the record containing the original
+	// following verse that is about to be restored. There may be more than one BridgeItems record
+	// for the current VerseItem; the one that will be used during the unbridging is the most recent one.
 
-	func bridgeGetRec(_ bridgeID:Int) -> (itemID:Int, txtBrid:String, txtExtVs:String) {
+	func bridgeGetRecs(_ itemID:Int, _ chInst:Chapter) -> Bool {
 		var sqlite3_stmt:OpaquePointer?=nil
-		let sql:String = "SELECT itemID, textCurrBridge, textExtraVerse FROM BridgeItems WHERE bridgeID = ?1;"
+		let sql:String = "SELECT bridgeID, textCurrBridge, textExtraVerse FROM BridgeItems WHERE itemID = ?1 ORDER BY bridgeID;"
 		let nByte:Int32 = Int32(sql.utf8.count)
 		sqlite3_prepare_v2(db, sql, nByte, &sqlite3_stmt, nil)
-		sqlite3_bind_int(sqlite3_stmt, 1, Int32(bridgeID))
-		sqlite3_step(sqlite3_stmt)
+		sqlite3_bind_int(sqlite3_stmt, 1, Int32(itemID))
 
-		let itemID = Int(sqlite3_column_int(sqlite3_stmt, 1))
-		let bBridp: UnsafePointer<UInt8>? = sqlite3_column_text(sqlite3_stmt, 2)
-		let bBridn = Int(sqlite3_column_bytes(sqlite3_stmt,2))
-		let dataBr = Data(bytes: bBridp!, count: Int(bBridn))
-		let txtBrid = String(data: dataBr, encoding: String.Encoding.utf8)
-		let bExtrap: UnsafePointer<UInt8>? = sqlite3_column_text(sqlite3_stmt, 3)
-		let bExtran = Int(sqlite3_column_bytes(sqlite3_stmt,3 ))
-		let dataEx = Data(bytes: bExtrap!, count: Int(bExtran))
-		let txtExtra = String(data: dataEx, encoding: String.Encoding.utf8)
-		return (itemID, txtBrid!, txtExtra!)
+		while (sqlite3_step(sqlite3_stmt) == SQLITE_ROW) {
+			let bridgeID = Int(sqlite3_column_int(sqlite3_stmt, 0))
+			let bBridp: UnsafePointer<UInt8>? = sqlite3_column_text(sqlite3_stmt, 1)
+			let bBridn = Int(sqlite3_column_bytes(sqlite3_stmt,1))
+			let dataBr = Data(bytes: bBridp!, count: Int(bBridn))
+			let txtBrid = String(data: dataBr, encoding: String.Encoding.utf8)
+			let bExtrap: UnsafePointer<UInt8>? = sqlite3_column_text(sqlite3_stmt, 2)
+			let bExtran = Int(sqlite3_column_bytes(sqlite3_stmt,2))
+			let dataEx = Data(bytes: bExtrap!, count: Int(bExtran))
+			let txtExtra = String(data: dataEx, encoding: String.Encoding.utf8)
+			chInst.appendItemToBridArray (bridgeID, txtBrid!, txtExtra!)
+		}
+		let result = sqlite3_finalize(sqlite3_stmt)
+		return (result == 0)
 	}
 
 	// When a bridge has been undone the BridgeItem record involved needs to be deleted
