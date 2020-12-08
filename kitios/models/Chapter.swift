@@ -426,6 +426,9 @@ public class Chapter: NSObject {
 		numIt = numIt - 1
 	}
 
+	// This function uses the current values in BibItems[] but makes changes in
+	// the database via KITDAO. After the database changes have been made,
+	//  BibItems[] will be refreshed from KITDAO.
 	func bridgeNextVerse() {
 		// Get the vsNum and iTxt from  the verse to be added to the bridge
 		let nexVsNum = BibItems[currItOfst + 1].vsNum
@@ -464,6 +467,9 @@ public class Chapter: NSObject {
 			BridItems.append(bridRec)
 		}
 
+	// This function uses the current values in BibItems[] but makes changes in
+	// the database via KITDAO. After the database changes have been made,
+	//  BibItems[] will be refreshed from KITDAO.
 	func unbridgeLastVerse() {
 		// Get the most recent BridgeItems record for this verse
 		let result = dao!.bridgeGetRecs(BibItems[currItOfst].itID, self)

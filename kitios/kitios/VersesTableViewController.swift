@@ -60,9 +60,8 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 		// Get the offset and ID of the current VerseItem
 		currItOfst = chInst!.goCurrentItem()
 		currIt = chInst!.BibItems[currItOfst].itID
-		// Scroll to make this VerseItem visible
+		// Select this VerseItem and scroll to make it visible
 		tableView.selectRow(at: IndexPath(row: currItOfst, section: 0), animated: animated, scrollPosition: UITableView.ScrollPosition.middle)
-		tableView.scrollToRow(at: IndexPath(row: currItOfst, section: 0), at: UITableView.ScrollPosition.middle, animated: animated)
 	}
 	
 	override func viewDidAppear(_ animated: Bool) {
@@ -172,8 +171,8 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 			chInst!.setupCurrentItem(bibItem.itID)
 			currIt = bibItem.itID
 			currItOfst = newOfst
-			// Scroll to make this VerseItem visible <- already visible because the user has just tapped in it
-//			tableView.selectRow(at: IndexPath(row: currItOfst, section: 0), animated: true, scrollPosition: UITableView.ScrollPosition.middle)
+			// Select this VerseItem and ensure that it is visible
+			tableView.selectRow(at: IndexPath(row: currItOfst, section: 0), animated: true, scrollPosition: UITableView.ScrollPosition.middle)
 		}
 	}
 	
@@ -211,7 +210,6 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 	}
 	
 	override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-//		print("VersesTableViewController:didEndDisplaying cell for VerseItem \(indexPath.row)")
 		let savCell = cell as! UIVerseItemCell
 		if savCell.dirty {
 			let textSrc = savCell.itText.text! as String
@@ -250,10 +248,9 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 		dismiss(animated: true, completion:nil)
 		tableView.reloadData()
 		// Get current VerseItem from Chapter instance
-		currIt = chInst!.currIt
-		currItOfst = chInst!.currItOfst
-		// Scroll to make this VerseItem visible
-		tableView.scrollToRow(at: IndexPath(row: currItOfst, section: 0), at: UITableView.ScrollPosition.middle, animated: true)
+		currItOfst = chInst!.goCurrentItem()
+		currIt = chInst!.BibItems[currItOfst].itID
+		// Select this VerseItem and scroll to make it visible
 		tableView.selectRow(at: IndexPath(row: currItOfst, section: 0), animated: true, scrollPosition: UITableView.ScrollPosition.middle)
 		// Activate it for text input
 		let cell = tableView.cellForRow(at: IndexPath(row: currItOfst, section: 0)) as! UIVerseItemCell

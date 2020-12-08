@@ -75,7 +75,7 @@ class PubItemsViewController: UITableViewController {
 		// Perform the necessary actions, including adjusting the kdb.sqlite database
 		// and the BibItems[] array
 		chInst!.popMenuAction(menuItem.VIMenuAction)
-		// Dismiss the popover menu
+		// Dismiss the popover menu and rework the TableView of VerseItems
 		VTVCtrl!.refreshDisplayAfterPopoverMenuActions()
 	}
 
