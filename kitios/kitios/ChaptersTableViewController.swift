@@ -21,6 +21,7 @@ class ChaptersTableViewController: UITableViewController {
 	let appDelegate = UIApplication.shared.delegate as! AppDelegate
 	var bInst: Bible?
 	var bkInst: Book?
+	var chapName: String?
 	
 	// Boolean for detecting when Back button has been pressed
 	var goingForwards = false
@@ -43,9 +44,14 @@ class ChaptersTableViewController: UITableViewController {
 		// Get access to the array Book.BibChaps
 		print("ChaptersTableViewController:viewDidLoad")
 		bInst = appDelegate.bibInst
-		bkInst = bInst?.bookInst!	// Get access to the instance of the current Book
+		bkInst = bInst!.bookInst	// Get access to the instance of the current Book
 		navigationItem.title = bInst!.bibName
-		navigationItem.prompt = "Choose chapter of " + bkInst!.bkName
+		chapName = bkInst!.chapName
+		if bkInst!.bkID == 19 {
+			navigationItem.prompt = "Choose \(chapName?.capitalized ?? "Psalm")"
+		} else {
+			navigationItem.prompt = "Choose \(chapName?.capitalized ?? "Chapter") of " + bkInst!.bkName
+		}
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -110,7 +116,7 @@ class ChaptersTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ChapterCell", for: indexPath)
 		let chapter = bkInst!.BibChaps[indexPath.row]
-		cell.textLabel?.text = "Chapter " + String(chapter.chNum)
+		cell.textLabel?.text = "\(chapName!.capitalized) " + String(chapter.chNum)
 		let numVsItText = (chapter.numVs > 0 ? String(chapter.numVs) + " verses" : "" )
 		cell.detailTextLabel?.text = numVsItText
 		if chapter.itRCr {

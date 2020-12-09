@@ -45,7 +45,11 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 		chInst = appDelegate.chapInst	// Get access to the instance of the current Chapter
 		appDelegate.VTVCtrl = self		// Allow the AppDelegate to access this controller
 		navigationItem.title = bInst!.bibName
-		navigationItem.prompt = "Keyboard chapter " + String(chInst!.chNum) + " of " + bkInst!.bkName
+		if bkInst!.bkID == 19 {
+			navigationItem.prompt = "Keyboard \(bkInst!.chapName?.capitalized ?? "Psalm") " + String(chInst!.chNum)
+		} else {
+			navigationItem.prompt = "Keyboard \(bkInst!.chapName ?? "chapter") " + String(chInst!.chNum) + " of " + bkInst!.bkName
+		}
 
 		// Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false

@@ -36,6 +36,7 @@ public class Book:NSObject {
 	
 	// TODO: Eliminate the need for bibInst by using a setter function in Bible?
 	var chapInst: Chapter?	// instance in memory of the current Chapter
+	var chapName: String?	// Name used for chapters (most books have "chapter", Psalms have "psalm")
 
 // This struct and the BibChaps array are used for letting the user select the
 // Chapter to keyboard in the current selected Book.
@@ -81,6 +82,11 @@ var BibChaps: [BibChap] = []
 		self.chapRCr = chapRCr		// chapRecsCreated INTEGER
 		self.numChap = numChaps		// numChaps INTEGER
 		self.currChap = currChap	// currChapter INTEGER
+		if bkID == 19 {
+			chapName = "psalm"
+		} else {
+			chapName = "chapter"
+		}
 
 		// Access to the KITDAO instance for dealing with kdb.sqlite
 		dao = appDelegate.dao
