@@ -283,6 +283,8 @@ public class Chapter: NSObject {
 			deleteAscription()
 		case "crTitle":
 			createTitle()
+		case "delTitle":
+			deleteTitle()
 		case "crAsc":
 			createAscription()
 		case "crParaBef":
@@ -312,25 +314,6 @@ public class Chapter: NSObject {
 		}
 	}
 
-	// Can be called when the current VerseItem is an Ascription
-	func deleteAscription () {
-		if dao!.itemsDeleteRec(currIt) {
-			print("Ascription deleted")
-			// Note that the Psalm no longer has an Ascription
-			hasAscription = false
-			// Decrement number of items
-			numIt = numIt - 1
-			// Make the next VerseItem the current one
-			currIt = BibItems[currItOfst + 1].itID
-			// Update the database Chapter record so that the following item becomes the current item
-			if dao!.chaptersUpdateRecPub (chID, numIt, currIt) {
-//				print ("Chapter:deleteAscription updated \(bkInst!.bkName) \(chNum) Chapter record")
-			} else {
-				print ("Chapter:deleteAscription ERROR updating \(bkInst!.bkName) \(chNum) Chapter record")
-			}
-		}
-	}
-
 	// Can be called when the current VerseItem is Verse 1 of a Psalm
 	func createAscription () {
 		let newitemID = dao!.verseItemsInsertRec (chID, 1, "Ascription", 70, "", 0, false, 0)
@@ -353,6 +336,25 @@ public class Chapter: NSObject {
 		}
 	}
 
+	// Can be called when the current VerseItem is an Ascription
+	func deleteAscription () {
+		if dao!.itemsDeleteRec(currIt) {
+			print("Ascription deleted")
+			// Note that the Psalm no longer has an Ascription
+			hasAscription = false
+			// Decrement number of items
+			numIt = numIt - 1
+			// Make the next VerseItem the current one
+			currIt = BibItems[currItOfst + 1].itID
+			// Update the database Chapter record so that the following item becomes the current item
+			if dao!.chaptersUpdateRecPub (chID, numIt, currIt) {
+//				print ("Chapter:deleteAscription updated \(bkInst!.bkName) \(chNum) Chapter record")
+			} else {
+				print ("Chapter:deleteAscription ERROR updating \(bkInst!.bkName) \(chNum) Chapter record")
+			}
+		}
+	}
+
 	// Create Book title
 	func createTitle() {
 		let newitemID = dao!.verseItemsInsertRec (chID, 1, "Title", 10, "", 0, false, 0)
@@ -372,6 +374,25 @@ public class Chapter: NSObject {
 			}
 		} else {
 			print ("Chapter:createTitle ERROR inserting into database")
+		}
+	}
+
+	// Can be called when the current VerseItem is an Ascription
+	func deleteTitle () {
+		if dao!.itemsDeleteRec(currIt) {
+			print("Title deleted")
+			// Note that the Psalm no longer has a Title
+			hasTitle = false
+			// Decrement number of items
+			numIt = numIt - 1
+			// Make the next VerseItem the current one
+			currIt = BibItems[currItOfst + 1].itID
+			// Update the database Chapter record so that the following item becomes the current item
+			if dao!.chaptersUpdateRecPub (chID, numIt, currIt) {
+//				print ("Chapter:deleteTitle updated \(bkInst!.bkName) \(chNum) Chapter record")
+			} else {
+				print ("Chapter:deleteTitle ERROR updating \(bkInst!.bkName) \(chNum) Chapter record")
+			}
 		}
 	}
 

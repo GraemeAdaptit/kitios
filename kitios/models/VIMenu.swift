@@ -53,7 +53,7 @@ class VIMenu : NSObject {
 			VIMenuItems.append(viMI1)
 			let viMI2 = VIMenuItem("Create Intro Title", "crInTit", "B")
 			VIMenuItems.append(viMI2)
-			let viMI3 = VIMenuItem("Delete Title", "delTit", "R")
+			let viMI3 = VIMenuItem("Delete Title", "delTitle", "R")
 			VIMenuItems.append(viMI3)
 		case "InTitle":			// Title within Book introductory matter
 			let viMI1 = VIMenuItem("Create Intro Paragraph", "crInPar", "B")
