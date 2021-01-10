@@ -19,9 +19,9 @@
 import UIKit
 
 class VIMenuItem : NSObject {
-	var VIMenuLabel : String	// Menu lebel displayed to users
+	var VIMenuLabel : String	// Menu label displayed to users
 	var VIMenuAction : String	// Menu action to be done if chosen by user
-	var VIMenuHLight : String	// Highlight colour B= blue, R = Red (for delete/dangerous)
+	var VIMenuHLight : String	// Highlight colour B= blue (for normal), R = Red (for delete/dangerous)
 	
 	init(_ label:String, _ action: String, _ highLight: String) {
 		self.VIMenuLabel = label
@@ -117,10 +117,11 @@ class VIMenu : NSObject {
 				let viMI5 = VIMenuItem("Create Paragraph In", "crParaCont", "B")
 				VIMenuItems.append(viMI5)
 			}
-			let isNxtVs = (chInst!.BibItems[curItOfst + 1].itTyp == "Verse")
-			if (bibItem.vsNum != chInst!.numVs) && isNxtVs {
-				let viMI6 = VIMenuItem("Bridge Next Verse", "brid", "R")
-				VIMenuItems.append(viMI6)
+			if (bibItem.vsNum != chInst!.numVs) {
+				if (chInst!.BibItems[curItOfst + 1].itTyp == "Verse") {
+					let viMI6 = VIMenuItem("Bridge Next Verse", "brid", "R")
+					VIMenuItems.append(viMI6)
+				}
 			}
 			if bibItem.isBrg {
 				let viMI7 = VIMenuItem("Unbridge Last Verse", "unBrid", "R")

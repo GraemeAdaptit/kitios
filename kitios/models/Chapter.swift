@@ -30,8 +30,31 @@ public class Chapter: NSObject {
 	var numIt: Int = 0		// numItems INTEGER
 	var currIt: Int = 0		// currItem INTEGER (the ID assigned by SQLite when the VerseItem was created)
 	
-	var currItOfst: Int = -1// offset to current item in BibItems[] and row in the TableView
+//	var currItOfst: Int = -1// offset to current item in BibItems[] and row in the TableView
 
+	// currItOfst has custom getter and setter in order to ensure that a VIMenu is created for the
+	// current VerseItem whenever the VerseItem is selected. This avoids putting the logic in the
+	// setter in several places throughout the source code.
+	//
+	// The initial value of -1 means that there is not yet a current VerseItem
+	// (the offsets for all actual VerseItems are >= zero)
+	var field: Int = -1	// offset to current item in BibItems[] and row in the TableView
+	var currItOfst: Int {
+	get {
+		return field
+	}
+		set (ofst) {
+			if (curPoMenu == nil) {
+				curPoMenu = VIMenu(ofst)
+			} else if (ofst != field) {
+				// Delete previous popover menu
+				curPoMenu = nil
+				curPoMenu = VIMenu(ofst)
+			}
+			field = ofst
+		}
+	}
+	
 	// Get access to the AppDelegate
 	let appDelegate = UIApplication.shared.delegate as! AppDelegate
 	
@@ -72,7 +95,7 @@ public class Chapter: NSObject {
 	var BibItems: [BibItem] = []
 
 	// Properties of the Chapter instance related to popover menus
-	var curPoMenu: VIMenu?	// instance in memory of the current popover menu
+	var curPoMenu: VIMenu?		// instance in memory of the current popover menu
 	var hasAscription = false	// true if the Psalm has an Ascription
 	var hasTitle = false		// true if Chapter 1 has a Book Title
 	
@@ -214,8 +237,9 @@ public class Chapter: NSObject {
 			// Already have the itemID of the current item so need to get
 			// the offset into the BibItems[] array
 			currItOfst = offsetToBibItem(withID: currIt)
+			// Setting currItOfst ensures that there is a VIMenu for the current VerseItem
 		}
-		createPopoverMenu()
+//		createPopoverMenu (currItOfst)
 		// Update the database Chapter record
 		if dao!.chaptersUpdateRec (chID, itRCr, currIt) {
 			print ("Chapter:goCurrentItem updated \(bkInst!.bkName) \(chNum) Chapter record")
@@ -231,7 +255,8 @@ public class Chapter: NSObject {
 	func setupCurrentItem(_ currIt:Int) {
 		self.currIt = currIt
 		currItOfst = offsetToBibItem(withID: currIt)
-		createPopoverMenu()
+		// Setting currItOfst ensures that there is a VIMenu for the current VerseItem
+//		createPopoverMenu (currItOfst)
 		// Update the BibChap record for this Chapter
 		bkInst!.setCurVItem (currIt)
 		// Update the database Chapter record
@@ -246,7 +271,8 @@ public class Chapter: NSObject {
 	func setupCurrentItemFromTableRow(_ tableRow: Int) {
 		currItOfst = tableRow
 		currIt = BibItems[tableRow].itID
-		createPopoverMenu()
+		// Setting currItOfst ensures that there is a VIMenu for the current VerseItem
+//		createPopoverMenu (currItOfst)
 		// Update the database Chapter record
 		if dao!.chaptersUpdateRec (chID, itRCr, currIt) {
 //			print ("Chapter:goCurrentItem updated \(bkInst!.bkName) \(chNum) Chapter record")
@@ -266,12 +292,12 @@ public class Chapter: NSObject {
 //		chDirty = true	// An item in this chapter has been edited (used in UI)
 	}
 
-	// Create the popover menu for the current VerseItem
-	func createPopoverMenu () {
-		// Delete previous popover menu
-		curPoMenu = nil
-		curPoMenu = VIMenu(currItOfst)
-	}
+//	// Create the popover menu for the current VerseItem
+//	func createPopoverMenu () {
+//		// Delete previous popover menu
+//		curPoMenu = nil
+//		curPoMenu = VIMenu(currItOfst)
+//	}
 
 	// Function to carry out on the data model the actions required for the popover menu items
 	// All of the possible actions change the BibItems[] array so, after carrying out the
