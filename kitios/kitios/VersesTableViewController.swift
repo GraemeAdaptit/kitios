@@ -124,6 +124,10 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 			cell.pubBut.setTitle(vsItem.itTyp + " " + String(vsItem.vsNum), for: .normal)
 		}
 		cell.itText.text = vsItem.itTxt
+		// GDLC 19JAN21 BUG9 Simply setting the background colour of itText to white does not make the text edit
+		// cursor visible on iOS 11.0.1, so this bug will be documented as a feature that can be avoided by
+		// upgrading to iOS 12 or later.
+		//cell.itText.backgroundColor = .white
 		cell.tableRow = indexPath.row
 		cell.VTVCtrl = self
 		cell.textChanged {[weak tableView] (_) in
@@ -236,7 +240,7 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 		let popoverWidth = Int(screenWidth * 0.85)
 		anchorRect.origin.x = screenWidth - CGFloat(popoverWidth)
 		let numRows = chInst?.curPoMenu?.numRows ?? 5
-		let popoverHeight = (numRows * 50) + 10
+		let popoverHeight = (numRows * 45)	// + 10
 		vc.preferredContentSize = CGSize(width: popoverWidth, height: popoverHeight)
 		vc.modalPresentationStyle = .popover
 		let popover: UIPopoverPresentationController = vc.popoverPresentationController!
