@@ -38,14 +38,14 @@ class BooksTableViewController: UITableViewController {
 	var bkRow = 0
 
 
-	required init?(coder aDecoder: NSCoder) {
-		super.init(coder: aDecoder)
-		print("BooksTableViewController:init")
-	}
-
-	deinit {
-		print("BooksTableViewController:deinit")
-	}
+//	required init?(coder aDecoder: NSCoder) {
+//		super.init(coder: aDecoder)
+//		print("BooksTableViewController:init")
+//	}
+//
+//	deinit {
+//		print("BooksTableViewController:deinit")
+//	}
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()

@@ -9,8 +9,7 @@
 //    May you find forgiveness for yourself and forgive others.
 //    May you share freely, never taking more than you give.
 //
-//  Created by Graeme Costin on 23/11/20.
-//  Copyright © 2020 Costin Computing Services. All rights reserved.
+//  Created by Graeme Costin on 23NOV20.
 //
 //	VIMenu gathers the data necessary for populating a popover TableView when the user
 //	taps the VerseItem label. The action of tapping a VerseItem label makes that VerseItem

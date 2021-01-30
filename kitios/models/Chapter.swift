@@ -15,7 +15,6 @@
 //	a different Chapter the current instance of Chapter will be deleted and a new instance
 //	created for the newly selected Chapter.
 
-
 import UIKit
 
 public class Chapter: NSObject {
