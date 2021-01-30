@@ -410,7 +410,7 @@ public class Chapter: NSObject {
 		}
 	}
 
-	// Can be called when the current VerseItem is an Ascription
+	// Can be called when the current VerseItem is a Title
 	func deleteTitle () {
 		if dao!.itemsDeleteRec(currIt) {
 			print("Title deleted")
@@ -428,6 +428,7 @@ public class Chapter: NSObject {
 			}
 		}
 	}
+
 
 	// Create a paragraph break before a verse.
 	func createParagraphBefore () {

@@ -240,7 +240,7 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 		let popoverWidth = Int(screenWidth * 0.85)
 		anchorRect.origin.x = screenWidth - CGFloat(popoverWidth)
 		let numRows = chInst?.curPoMenu?.numRows ?? 5
-		let popoverHeight = (numRows * 45)	// + 10
+		let popoverHeight = (numRows * 50)	// + 10
 		vc.preferredContentSize = CGSize(width: popoverWidth, height: popoverHeight)
 		vc.modalPresentationStyle = .popover
 		let popover: UIPopoverPresentationController = vc.popoverPresentationController!

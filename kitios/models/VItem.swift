@@ -10,9 +10,6 @@
 //    May you find forgiveness for yourself and forgive others.
 //    May you share freely, never taking more than you give.
 //
-//	BUT NOTE: An instance of this class for the current VerseItem for the Edit Chapter Scene
-//	may perhaps be a good place to hold the VItemMenu for the popover for this VerseItem.
-//
 //	NOTE: This is what I planned back in April 2020 but the class VItem has not yet been used!
 //	The TableView's custom cells together with the BibItems[] array in the Chapter instance
 //	were all that was needed. But now that I look at the computations involved in generating
