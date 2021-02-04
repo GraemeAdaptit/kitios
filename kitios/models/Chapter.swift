@@ -303,14 +303,14 @@ public class Chapter: NSObject {
 	// following this the VersesTableViewController needs to reload the TableView.
 	func popMenuAction(_ act: String) {
 		switch act {
+		case "crAsc":
+			createAscription()
 		case "delAsc":
 			deleteAscription()
 		case "crTitle":
 			createTitle()
 		case "delTitle":
 			deleteTitle()
-		case "crAsc":
-			createAscription()
 		case "crParaBef":
 			createParagraphBefore()
 		case "delPara":
@@ -319,6 +319,10 @@ public class Chapter: NSObject {
 			createParagraphCont()
 		case "delPCon":
 			deleteParagraphCont()
+		case "crHdBef":
+			createSubjHeading()	// Pass crHdBef as parameter???
+		case "delHead":
+			deleteSubjHeading()
 		case "brid":
 			bridgeNextVerse()
 		case "unBrid":
@@ -519,6 +523,43 @@ public class Chapter: NSObject {
 //				print ("Chapter:deleteParagraphCont updated \(bkInst!.bkName) \(chNum) Chapter record")
 		} else {
 			print ("Chapter:deleteParagraphCont ERROR updating \(bkInst!.bkName) \(chNum) Chapter record")
+		}
+	}
+
+	func createSubjHeading() {
+		let vsNum = BibItems[currItOfst].vsNum
+		let newitemID = dao!.verseItemsInsertRec (chID, vsNum, "Heading", vsNum * 100 - 20, "", 0, false, 0)
+		if newitemID != -1 {
+			print ("Subject Heading created")
+			// Increment number of items
+			numIt = numIt + 1
+			// Make the new Subject Heading the current VerseItem
+			currIt = newitemID
+			// Update the database Chapter record so that the new Subject Heading item becomes the current item
+			if dao!.chaptersUpdateRecPub (chID, numIt, newitemID) {
+//				print ("Chapter:createSubjHeading updated \(bkInst!.bkName) \(chNum) Chapter record")
+			} else {
+				print ("Chapter:createSubjHeading ERROR updating \(bkInst!.bkName) \(chNum) Chapter record")
+			}
+		} else {
+			print ("Chapter:createSubjHeading ERROR inserting into database")
+		}
+	}
+
+	// Can be called when the current VerseItem is a Subject Heading
+	func deleteSubjHeading () {
+		if dao!.itemsDeleteRec(currIt) {
+			print("Subj Heading deleted")
+			// Decrement number of items
+			numIt = numIt - 1
+			// Make the next VerseItem the current one
+			currIt = BibItems[currItOfst + 1].itID
+			// Update the database Chapter record so that the following item becomes the current item
+			if dao!.chaptersUpdateRecPub (chID, numIt, currIt) {
+//				print ("Chapter:deleteSubjHeading updated \(bkInst!.bkName) \(chNum) Chapter record")
+			} else {
+				print ("Chapter:deleteSubjHeading ERROR updating \(bkInst!.bkName) \(chNum) Chapter record")
+			}
 		}
 	}
 
