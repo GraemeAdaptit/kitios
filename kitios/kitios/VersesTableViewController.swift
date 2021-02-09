@@ -122,6 +122,12 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 			} else {
 				cell.pubBut.setTitle("Verse " + String(vsItem.vsNum), for: .normal)
 			}
+		case "InTitle":
+			cell.pubBut.setTitle("Intro Title", for: .normal)
+		case "InSubj":
+			cell.pubBut.setTitle("Intro Heading", for: .normal)
+		case "InPara":
+			cell.pubBut.setTitle("Intro Paragraph", for: .normal)
 		default:
 			cell.pubBut.setTitle(vsItem.itTyp, for: .normal)
 		}
@@ -221,7 +227,7 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 	
 	override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
 		let savCell = cell as! UIVerseItemCell
-		if savCell.dirty {
+ 		if savCell.dirty {
 			let textSrc = savCell.itText.text! as String
 			saveCellText(savCell.tableRow, textSrc)
 			print("VersesTableViewController:saveCurrentItemText Saved current item \(savCell.tableRow)")
