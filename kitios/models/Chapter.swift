@@ -290,13 +290,6 @@ public class Chapter: NSObject {
 //		chDirty = true	// An item in this chapter has been edited (used in UI)
 	}
 
-//	// Create the popover menu for the current VerseItem
-//	func createPopoverMenu () {
-//		// Delete previous popover menu
-//		curPoMenu = nil
-//		curPoMenu = VIMenu(currItOfst)
-//	}
-
 	// Function to carry out on the data model the actions required for the popover menu items
 	// All of the possible actions change the BibItems[] array so, after carrying out the
 	// specific action, this function clears BibItems[] and reloads it from the database;
@@ -319,10 +312,18 @@ public class Chapter: NSObject {
 			createParagraphCont()
 		case "delPCon":
 			deleteParagraphCont()
+		case "delVCon":
+			deleteVerseCont()
 		case "crHdBef":
-			createSubjHeading()	// Pass crHdBef as parameter???
+			createSubjHeading()
+		case "crHdAft":
+			createSubjHeading()
 		case "delHead":
 			deleteSubjHeading()
+		case "crPalRef":
+			createParallelRef()
+		case "delPalRef":
+			deleteParallelRef()
 		case "brid":
 			bridgeNextVerse()
 		case "unBrid":
@@ -432,7 +433,6 @@ public class Chapter: NSObject {
 		}
 	}
 
-
 	// Create a paragraph break before a verse.
 	func createParagraphBefore () {
 		let vsNum = BibItems[currItOfst].vsNum
@@ -493,7 +493,8 @@ public class Chapter: NSObject {
 			print ("VerseCont created")
 			// Increment number of items
 			numIt = numIt + 1
-			// Update the database Chapter record so that the new VerseCont becomes the current item
+			// Update currIt and the database Chapter record so that the new VerseCont becomes the current item
+			currIt = newVCont
 			if dao!.chaptersUpdateRecPub (chID, numIt, newVCont) {
 //				print ("Chapter:createParagraphCont updated \(bkInst!.bkName) \(chNum) Chapter record")
 			} else {
@@ -518,7 +519,8 @@ public class Chapter: NSObject {
 		// Delete VerseCont record
 		dao!.itemsDeleteRec(nextItem.itID)
 		numIt = numIt - 1
-		// Update the database Chapter record so that the original VerseItem becomes the current item
+		// Update currIt and the database Chapter record so that the original VerseItem becomes the current item
+		currIt = prevItID
 		if dao!.chaptersUpdateRecPub (chID, numIt, prevItID) {
 //				print ("Chapter:deleteParagraphCont updated \(bkInst!.bkName) \(chNum) Chapter record")
 		} else {
@@ -526,8 +528,33 @@ public class Chapter: NSObject {
 		}
 	}
 
+	func deleteVerseCont() {
+		let prevItem = BibItems[currItOfst - 2]	// step back over the ParaCont to the previous Verse
+		let contItem = BibItems[currItOfst]	// get the continuation of the Verse
+		let prevVersID = prevItem.itID
+		let txtBef = prevItem.itTxt
+		let txtAft = contItem.itTxt
+		// Append continuation text to original Verse
+		dao!.itemsUpdateRecText(prevItem.itID, txtBef + txtAft)
+		// Delete VerseCont record
+		dao!.itemsDeleteRec(currIt)
+		numIt = numIt - 1
+		// Delete ParaCont record
+		let paraContItem = BibItems[currItOfst - 1]
+		dao!.itemsDeleteRec(paraContItem.itID)
+		numIt = numIt - 1
+		// Update currIt and the database Chapter record so that the original VerseItem becomes the current item
+		currIt = prevVersID
+		if dao!.chaptersUpdateRecPub (chID, numIt, prevVersID) {
+//				print ("Chapter:deleteVerseCont updated \(bkInst!.bkName) \(chNum) Chapter record")
+		} else {
+			print ("Chapter:deleteVerseCont ERROR updating \(bkInst!.bkName) \(chNum) Chapter record")
+		}
+	}
+
 	func createSubjHeading() {
 		let vsNum = BibItems[currItOfst].vsNum
+//		let curItType = BibItems[currItOfst].itTyp
 		let newitemID = dao!.verseItemsInsertRec (chID, vsNum, "Heading", vsNum * 100 - 20, "", 0, false, 0)
 		if newitemID != -1 {
 			print ("Subject Heading created")
@@ -563,11 +590,49 @@ public class Chapter: NSObject {
 		}
 	}
 
+	// Creates a Parallel Ref before a Verse or after a Title
+	func createParallelRef() {
+		let vsNum = BibItems[currItOfst].vsNum
+		let newitemID = dao!.verseItemsInsertRec (chID, vsNum, "ParlRef", vsNum * 100 - 15, "", 0, false, 0)
+		if newitemID != -1 {
+			print ("Parallel Ref created")
+			// Increment number of items
+			numIt = numIt + 1
+			// Make the new Parallel Ref the current VerseItem
+			currIt = newitemID
+			// Update the database Chapter record so that the new Parallel Ref item becomes the current item
+			if dao!.chaptersUpdateRecPub (chID, numIt, newitemID) {
+//				print ("Chapter:createParallelRef updated \(bkInst!.bkName) \(chNum) Chapter record")
+			} else {
+				print ("Chapter:createParallelRef ERROR updating \(bkInst!.bkName) \(chNum) Chapter record")
+			}
+		} else {
+			print ("Chapter:createParallelRef ERROR inserting into database")
+		}
+	}
+
+	// Can be called when the current VerseItem is a Parallel Ref
+	func deleteParallelRef () {
+		if dao!.itemsDeleteRec(currIt) {
+			print("Parallel Ref deleted")
+			// Decrement number of items
+			numIt = numIt - 1
+			// Make the next VerseItem the current one
+			currIt = BibItems[currItOfst + 1].itID
+			// Update the database Chapter record so that the following item becomes the current item
+			if dao!.chaptersUpdateRecPub (chID, numIt, currIt) {
+//				print ("Chapter:deleteParallelRef updated \(bkInst!.bkName) \(chNum) Chapter record")
+			} else {
+				print ("Chapter:deleteParallelRef ERROR updating \(bkInst!.bkName) \(chNum) Chapter record")
+			}
+		}
+	}
+
 	// This function uses the current values in BibItems[] but makes changes in
 	// the database via KITDAO. After the database changes have been made,
 	//  BibItems[] will be refreshed from KITDAO.
 	func bridgeNextVerse() {
-		// Get the vsNum and iTxt from  the verse to be added to the bridge
+		// Get the vsNum and itTxt from the verse to be added to the bridge
 		let nexVsNum = BibItems[currItOfst + 1].vsNum
 		let nexVsTxt = BibItems[currItOfst + 1].itTxt
 		// Delete the verse record being added to the bridge

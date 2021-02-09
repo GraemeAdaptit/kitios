@@ -78,21 +78,24 @@ class VIMenu : NSObject {
 			let viMI4 = VIMenuItem("Delete Intro Paragraph", "delInPar", "R")
 			VIMenuItems.append(viMI4)
 		case "Heading":			// Heading/Subject Heading
-			let viMI1 = VIMenuItem("Create Parallel Ref", "crPalRef", "B")
-			VIMenuItems.append(viMI1)
-			if (bibItem.vsNum == 1) && (chNum == 1) {
-				let viMI2 = VIMenuItem("Create Title", "crTitle", "B")
-				VIMenuItems.append(viMI2)
+			if (bibItem.vsNum == 1) && (chNum == 1) && (!chInst!.hasTitle) {
+				let viMI1 = VIMenuItem("Create Title", "crTitle", "B")
+				VIMenuItems.append(viMI1)
 			}
+			let viMI2 = VIMenuItem("Create Parallel Ref", "crPalRef", "B")
+			VIMenuItems.append(viMI2)
 			let viMI3 = VIMenuItem("Delete Heading", "delHead", "R")
 			VIMenuItems.append(viMI3)
 		case "Para":			// Paragraph before a verse
-			let viMI1 = VIMenuItem("Create Heading", "crHdAft", "B")
+			let viMI1 = VIMenuItem("Create Heading", "crHdBef", "B")
 			VIMenuItems.append(viMI1)
 			let viMI2 = VIMenuItem("Delete Paragraph", "delPara", "R")
 			VIMenuItems.append(viMI2)
 		case "ParaCont":		// Paragraph within a verse
 			let viMI1 = VIMenuItem("Delete Paragraph", "delPCon", "R")
+			VIMenuItems.append(viMI1)
+		case "VerseCont":		// Verse continuation after paragraph break
+			let viMI1 = VIMenuItem("Delete Paragraph", "delVCon", "R")
 			VIMenuItems.append(viMI1)
 		case "ParlRef":			// Parallel Reference
 			let viMI1 = VIMenuItem("Delete Parallel Ref", "delPalRef", "R")
@@ -116,15 +119,17 @@ class VIMenu : NSObject {
 				let viMI5 = VIMenuItem("Create Paragraph In", "crParaCont", "B")
 				VIMenuItems.append(viMI5)
 			}
+			let viMI6 = VIMenuItem("Create Parallel Ref", "crPalRef", "B")
+				VIMenuItems.append(viMI6)
 			if (bibItem.vsNum != chInst!.numVs) {
 				if (chInst!.BibItems[curItOfst + 1].itTyp == "Verse") {
-					let viMI6 = VIMenuItem("Bridge Next Verse", "brid", "R")
-					VIMenuItems.append(viMI6)
+					let viMI7 = VIMenuItem("Bridge Next Verse", "brid", "R")
+					VIMenuItems.append(viMI7)
 				}
 			}
 			if bibItem.isBrg {
-				let viMI7 = VIMenuItem("Unbridge Last Verse", "unBrid", "R")
-				VIMenuItems.append(viMI7)
+				let viMI8 = VIMenuItem("Unbridge Last Verse", "unBrid", "R")
+				VIMenuItems.append(viMI8)
 			}
 		default:
 			let viMI1 = VIMenuItem("***MENU ERROR***", "NOOP", "R")

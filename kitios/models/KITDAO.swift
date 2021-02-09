@@ -367,15 +367,11 @@ public class KITDAO {
 		sqlite3_finalize(sqlite3_stmt)
 	}
 
-	// The Chapters record for the current Chapter needs to be read when the user selects that Chapter
-	//	* to find out whether the current Chapter's VerseItems records have been created (on first edit of that Chapter)
-	//	* to find out whether there is a current VerseItem to go to
 	// TODO: Check whether this function is needed; these data items are already there and
-	//	are updated as they change during running of the app?
-
-	func chaptersGetRec() -> Bool {
-		return true
-	}
+	//	are updated as they change during running of the app.
+//	func chaptersGetRec() -> Bool {
+//		return true
+//	}
 
 	// The Chapters record for the current Chapter needs to be updated
 	//	* to set the flag that indicates that the VerseItem records have been created (on first edit of that Chapter)

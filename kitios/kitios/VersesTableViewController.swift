@@ -112,6 +112,8 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 			cell.pubBut.setTitle(vsItem.itTyp, for: .normal)
 		case "Para", "ParaCont":
 			cell.pubBut.setTitle("Paragraph", for: .normal)
+		case "ParlRef":
+			cell.pubBut.setTitle("Parallel Ref", for: .normal)
 		case "VerseCont":
 			cell.pubBut.setTitle("Verse " + String(vsItem.vsNum) + " (cont)", for: .normal)
 		case "Verse":
@@ -121,7 +123,7 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 				cell.pubBut.setTitle("Verse " + String(vsItem.vsNum), for: .normal)
 			}
 		default:
-			cell.pubBut.setTitle(vsItem.itTyp + " " + String(vsItem.vsNum), for: .normal)
+			cell.pubBut.setTitle(vsItem.itTyp, for: .normal)
 		}
 		cell.itText.text = vsItem.itTxt
 		// GDLC 19JAN21 BUG9 Simply setting the background colour of itText to white does not make the text edit
@@ -268,16 +270,6 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 		}
 	}
 	
-	// Dismiss popover TODO: No longer needed as a separate function?
-//	func dismissPopoverMenu() {
-//		dismiss(animated: true, completion:nil)
-//	}
-
-	// Reload data into the TableView  TODO: No longer needed as a separate function?
-//	func reloadVerseItems() {
-//		tableView.reloadData()
-//	}
-	
 /*
 // Action for the Pub button in the Navigation Bar - will soon be removed
 	@IBAction func publItems(_ sender: UIBarButtonItem) {
@@ -293,12 +285,6 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 		present(vc, animated: true, completion:nil)
 	}
 */
-
-	// TODO: Is this needed? It was inserted as part of a tutorial exercise.
-//	@IBAction func refreshVerseItems(_ sender: UIRefreshControl) {
-//		tableView.reloadData()
-//		sender.endRefreshing()
-//	}
 
 	@IBAction func exportThisChapter(_ sender: Any) {
 		saveCurrentItemText ()
