@@ -50,14 +50,16 @@ class VIMenu : NSObject {
 		case "Title":			// Title for a Book
 			let viMI1 = VIMenuItem("Create Heading After", "crHdAft", "B")
 			VIMenuItems.append(viMI1)
-			let viMI2 = VIMenuItem("Create Intro Title", "crInTit", "B")
+			if (bibItem.vsNum == 1) && (chNum == 1) && (!chInst!.hasInTitle) {
+				let viMI2 = VIMenuItem("Create Intro Title", "crInTit", "B")
 			VIMenuItems.append(viMI2)
+			}
 			let viMI3 = VIMenuItem("Delete Title", "delTitle", "R")
 			VIMenuItems.append(viMI3)
 		case "InTitle":			// Title within Book introductory matter
-			let viMI1 = VIMenuItem("Create Intro Paragraph", "crInPar", "B")
+			let viMI1 = VIMenuItem("Create Intro Heading", "crInHed", "B")
 			VIMenuItems.append(viMI1)
-			let viMI2 = VIMenuItem("Create Intro Heading", "crInHed", "B")
+			let viMI2 = VIMenuItem("Create Intro Paragraph", "crInPar", "B")
 			VIMenuItems.append(viMI2)
 			let viMI3 = VIMenuItem("Delete Intro Title", "delInTit", "R")
 			VIMenuItems.append(viMI3)
@@ -71,7 +73,7 @@ class VIMenu : NSObject {
 			VIMenuItems.append(viMI1)
 			let viMI2 = VIMenuItem("Create Intro Heading", "crInHed", "B")
 			VIMenuItems.append(viMI2)
-			if (bibItem.vsNum == 1) && (chNum == 1) {
+			if (bibItem.vsNum == 1) && (chNum == 1) && (!chInst!.hasTitle) {
 				let viMI3 = VIMenuItem("Create Title", "crTitle", "B")
 				VIMenuItems.append(viMI3)
 			}

@@ -96,7 +96,10 @@ public class Chapter: NSObject {
 	var curPoMenu: VIMenu?		// instance in memory of the current popover menu
 	var hasAscription = false	// true if the Psalm has an Ascription
 	var hasTitle = false		// true if Chapter 1 has a Book Title
-	
+	var hasInTitle = false		// true if Chapter 1 has an introductory matter Title
+	var nextIntSeq = 1			// next value to be used for an IntSeq field. Starts at 1 because
+								// InTitle is in effect IntSeq = 0
+
 // When the instance of current Book creates the instance for the current Chapter it supplies the values
 // for the currently selected Chapter from the BibChaps array
 		
@@ -191,13 +194,24 @@ public class Chapter: NSObject {
 		}
 	}
 	
-// dao.readVerseItemRecs() calls appendItemToArray() for each row it reads from the kdb.sqlite database
-
+	// dao.readVerseItemRecs() calls appendItemToArray() for each row it reads from the kdb.sqlite database
+	// in order to append the records read to the array BibItems[]
+	// appendItemToArray() also finds the largest value of intSeq in the VerseItem records read
+	// and sets nextIntSeq to one more than the largest one found.
 	func appendItemToArray(_ itID:Int, _ chID:Int, _ vsNum:Int, _ itTyp:String, _ itOrd:Int, _ itTxt:String, _ intSeq:Int, _ isBrg:Bool, _ lvBrg:Int) {
 		let itRec = BibItem(itID, chID, vsNum, itTyp, itOrd, itTxt, intSeq, isBrg, lvBrg)
 		BibItems.append(itRec)
 		if itTyp == "Ascription" {hasAscription = true}
 		if itTyp == "Title" {hasTitle = true}
+		if itTyp == "InTitle" {hasInTitle = true}
+		// Set nextIntSeq to 1 more than the largest intSeq found in the existing VerseItem records
+		// remembering that the VerseItem records will be read in ascending order of intSeq, but there
+		// may be missing values because of records that were created but later deleted.
+		if intSeq > 0 {
+			if intSeq >= nextIntSeq {
+				nextIntSeq = 1 + intSeq
+			}
+		}
 	}
 
 // Find the offset in BibItems[] to the element having VerseItemID withID
@@ -328,6 +342,18 @@ public class Chapter: NSObject {
 			bridgeNextVerse()
 		case "unBrid":
 			unbridgeLastVerse()
+		case "crInTit":
+			createIntroTitle()
+		case "delInTit":
+			deleteIntroTitle()
+		case "crInHed":
+			createIntroHeading()
+		case "delInSubj":
+			deleteIntroHeading()
+		case "crInPar":
+			createIntroPara()
+		case "delInPar":
+			deleteIntroPara()
 		default:
 			print("BUG! Unknown action code")
 		}
@@ -716,6 +742,125 @@ public class Chapter: NSObject {
 //				print ("Chapter:unbridgeLastVerse updated \(bkInst!.bkName) \(chNum) Chapter record")
 		} else {
 			print ("Chapter:unbridgeLastVerse ERROR updating \(bkInst!.bkName) \(chNum) Chapter record")
+		}
+	}
+
+	// Publication items involved in Introductory Matter
+	
+	// Create Introductory Matter Title
+	func createIntroTitle() {
+		let newitemID = dao!.verseItemsInsertRec (chID, 1, "InTitle", 20, "", 0, false, 0)
+		if newitemID != -1 {
+			print ("InTitle for Book created")
+			// Note that the Book now has an InTitle
+			hasInTitle = true
+			// Increment number of items
+			numIt = numIt + 1
+			// Make the new InTitle the current VerseItem
+			currIt = newitemID
+			// Update the database Chapter record so that the new Title item becomes the current item
+			if dao!.chaptersUpdateRecPub (chID, numIt, newitemID) {
+//				print ("Chapter:createInTitle updated \(bkInst!.bkName) \(chNum) Chapter record")
+			} else {
+				print ("Chapter:createInTitle ERROR updating \(bkInst!.bkName) \(chNum) Chapter record")
+			}
+		} else {
+			print ("Chapter:createInTitle ERROR inserting into database")
+		}
+	}
+
+	// Delete Introductory Matter Title
+	func deleteIntroTitle() {
+		if dao!.itemsDeleteRec(currIt) {
+			print("InTitle deleted")
+			// Note that the Book no longer has an InTitle
+			hasInTitle = false
+			// Decrement number of items
+			numIt = numIt - 1
+			// Make the next VerseItem the current one
+			currIt = BibItems[currItOfst + 1].itID
+			// Update the database Chapter record so that the following item becomes the current item
+			if dao!.chaptersUpdateRecPub (chID, numIt, currIt) {
+//				print ("Chapter:deleteInTitle updated \(bkInst!.bkName) \(chNum) Chapter record")
+			} else {
+				print ("Chapter:deleteInTitle ERROR updating \(bkInst!.bkName) \(chNum) Chapter record")
+			}
+		}
+	}
+
+	// Create Introductory Matter Heading
+	func createIntroHeading() {
+		let newitemID = dao!.verseItemsInsertRec (chID, 1, "InSubj", 20, "", nextIntSeq, false, 0)
+		nextIntSeq = nextIntSeq + 1
+		if newitemID != -1 {
+			print ("InSubj for Book created")
+			// Increment number of items
+			numIt = numIt + 1
+			// Make the new InSubj the current VerseItem
+			currIt = newitemID
+			// Update the database Chapter record so that the new Title item becomes the current item
+			if dao!.chaptersUpdateRecPub (chID, numIt, newitemID) {
+//				print ("Chapter:createIntroHeading updated \(bkInst!.bkName) \(chNum) Chapter record")
+			} else {
+				print ("Chapter:createIntroHeading ERROR updating \(bkInst!.bkName) \(chNum) Chapter record")
+			}
+		} else {
+			print ("Chapter:createIntroHeading ERROR inserting into database")
+		}
+	}
+
+	// Delete Introductory Matter Heading
+	func deleteIntroHeading() {
+		if dao!.itemsDeleteRec(currIt) {
+			print("InSubj deleted")
+			// Decrement number of items
+			numIt = numIt - 1
+			// Make the next VerseItem the current one
+			currIt = BibItems[currItOfst + 1].itID
+			// Update the database Chapter record so that the following item becomes the current item
+			if dao!.chaptersUpdateRecPub (chID, numIt, currIt) {
+//				print ("Chapter:deleteIntroHeading updated \(bkInst!.bkName) \(chNum) Chapter record")
+			} else {
+				print ("Chapter:deleteIntroHeading ERROR updating \(bkInst!.bkName) \(chNum) Chapter record")
+			}
+		}
+	}
+
+	// Create Introductory Matter Paragraph
+	func createIntroPara() {
+		let newitemID = dao!.verseItemsInsertRec (chID, 1, "InPara", 20, "", nextIntSeq, false, 0)
+		nextIntSeq = nextIntSeq + 1
+		if newitemID != -1 {
+			print ("InPara for Book created")
+			// Increment number of items
+			numIt = numIt + 1
+			// Make the new InSubj the current VerseItem
+			currIt = newitemID
+			// Update the database Chapter record so that the new Title item becomes the current item
+			if dao!.chaptersUpdateRecPub (chID, numIt, newitemID) {
+//				print ("Chapter:createIntroPara updated \(bkInst!.bkName) \(chNum) Chapter record")
+			} else {
+				print ("Chapter:createIntroPara ERROR updating \(bkInst!.bkName) \(chNum) Chapter record")
+			}
+		} else {
+			print ("Chapter:createIntroPara ERROR inserting into database")
+		}
+	}
+
+	// Delete Introductory Matter Paragraph
+	func deleteIntroPara() {
+		if dao!.itemsDeleteRec(currIt) {
+			print("InPara deleted")
+			// Decrement number of items
+			numIt = numIt - 1
+			// Make the next VerseItem the current one
+			currIt = BibItems[currItOfst + 1].itID
+			// Update the database Chapter record so that the following item becomes the current item
+			if dao!.chaptersUpdateRecPub (chID, numIt, currIt) {
+//				print ("Chapter:deleteIntroPara updated \(bkInst!.bkName) \(chNum) Chapter record")
+			} else {
+				print ("Chapter:deleteIntroPara ERROR updating \(bkInst!.bkName) \(chNum) Chapter record")
+			}
 		}
 	}
 	
