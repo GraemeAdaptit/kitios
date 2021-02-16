@@ -420,7 +420,7 @@ public class Chapter: NSObject {
 
 	// Create Book title
 	func createTitle() {
-		let newitemID = dao!.verseItemsInsertRec (chID, 1, "Title", 10, "", 0, false, 0)
+		let newitemID = dao!.verseItemsInsertRec (chID, 1, "Title", 70, "", 0, false, 0)
 		if newitemID != -1 {
 			print ("Title for Book created")
 			// Note that the Book now has a Title
@@ -749,7 +749,7 @@ public class Chapter: NSObject {
 	
 	// Create Introductory Matter Title
 	func createIntroTitle() {
-		let newitemID = dao!.verseItemsInsertRec (chID, 1, "InTitle", 20, "", 0, false, 0)
+		let newitemID = dao!.verseItemsInsertRec (chID, 1, "InTitle", 10, "", 0, false, 0)
 		if newitemID != -1 {
 			print ("InTitle for Book created")
 			// Note that the Book now has an InTitle
@@ -790,7 +790,7 @@ public class Chapter: NSObject {
 
 	// Create Introductory Matter Heading
 	func createIntroHeading() {
-		let newitemID = dao!.verseItemsInsertRec (chID, 1, "InSubj", 20, "", nextIntSeq, false, 0)
+		let newitemID = dao!.verseItemsInsertRec (chID, 1, "InSubj", 10 + nextIntSeq, "", nextIntSeq, false, 0)
 		nextIntSeq = nextIntSeq + 1
 		if newitemID != -1 {
 			print ("InSubj for Book created")
@@ -828,7 +828,7 @@ public class Chapter: NSObject {
 
 	// Create Introductory Matter Paragraph
 	func createIntroPara() {
-		let newitemID = dao!.verseItemsInsertRec (chID, 1, "InPara", 20, "", nextIntSeq, false, 0)
+		let newitemID = dao!.verseItemsInsertRec (chID, 1, "InPara", 10 + nextIntSeq, "", nextIntSeq, false, 0)
 		nextIntSeq = nextIntSeq + 1
 		if newitemID != -1 {
 			print ("InPara for Book created")

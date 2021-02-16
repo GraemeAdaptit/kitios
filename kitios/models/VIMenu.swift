@@ -48,12 +48,12 @@ class VIMenu : NSObject {
 			let viMI = VIMenuItem("Delete Ascription", "delAsc", "R")
 			VIMenuItems.append(viMI)
 		case "Title":			// Title for a Book
-			let viMI1 = VIMenuItem("Create Heading After", "crHdAft", "B")
-			VIMenuItems.append(viMI1)
 			if (bibItem.vsNum == 1) && (chNum == 1) && (!chInst!.hasInTitle) {
-				let viMI2 = VIMenuItem("Create Intro Title", "crInTit", "B")
-			VIMenuItems.append(viMI2)
+				let viMI1 = VIMenuItem("Create Intro Title", "crInTit", "B")
+			VIMenuItems.append(viMI1)
 			}
+			let viMI2 = VIMenuItem("Create Heading After", "crHdAft", "B")
+			VIMenuItems.append(viMI2)
 			let viMI3 = VIMenuItem("Delete Title", "delTitle", "R")
 			VIMenuItems.append(viMI3)
 		case "InTitle":			// Title within Book introductory matter
@@ -108,30 +108,36 @@ class VIMenu : NSObject {
 				VIMenuItems.append(viMI1)
 			}
 			if (bibItem.vsNum == 1) {
-				if (chNum == 1) && (!chInst!.hasTitle) {
-					let viMI2 = VIMenuItem("Create Title", "crTitle", "B")
+				if ( (chNum == 1) && (!chInst!.hasInTitle) ) {
+					let viMI2 = VIMenuItem("Create Intro Title", "crInTit", "B")
 					VIMenuItems.append(viMI2)
 				}
 			}
-			let viMI3 = VIMenuItem("Create Heading Before", "crHdBef", "B")
-			VIMenuItems.append(viMI3)
-			let viMI4 = VIMenuItem("Create Paragraph Before", "crParaBef", "B")
-			VIMenuItems.append(viMI4)
-			if !bibItem.isBrg {
-				let viMI5 = VIMenuItem("Create Paragraph In", "crParaCont", "B")
-				VIMenuItems.append(viMI5)
+			if (bibItem.vsNum == 1) {
+				if (chNum == 1) && (!chInst!.hasTitle) {
+					let viMI3 = VIMenuItem("Create Title", "crTitle", "B")
+					VIMenuItems.append(viMI3)
+				}
 			}
-			let viMI6 = VIMenuItem("Create Parallel Ref", "crPalRef", "B")
+			let viMI4 = VIMenuItem("Create Heading Before", "crHdBef", "B")
+			VIMenuItems.append(viMI4)
+			let viMI5 = VIMenuItem("Create Paragraph Before", "crParaBef", "B")
+			VIMenuItems.append(viMI5)
+			if !bibItem.isBrg {
+				let viMI6 = VIMenuItem("Create Paragraph In", "crParaCont", "B")
 				VIMenuItems.append(viMI6)
+			}
+			let viMI7 = VIMenuItem("Create Parallel Ref", "crPalRef", "B")
+				VIMenuItems.append(viMI7)
 			if (bibItem.vsNum != chInst!.numVs) {
 				if (chInst!.BibItems[curItOfst + 1].itTyp == "Verse") {
-					let viMI7 = VIMenuItem("Bridge Next Verse", "brid", "R")
-					VIMenuItems.append(viMI7)
+					let viMI8 = VIMenuItem("Bridge Next Verse", "brid", "R")
+					VIMenuItems.append(viMI8)
 				}
 			}
 			if bibItem.isBrg {
-				let viMI8 = VIMenuItem("Unbridge Last Verse", "unBrid", "R")
-				VIMenuItems.append(viMI8)
+				let viMI9 = VIMenuItem("Unbridge Last Verse", "unBrid", "R")
+				VIMenuItems.append(viMI9)
 			}
 		default:
 			let viMI1 = VIMenuItem("***MENU ERROR***", "NOOP", "R")
