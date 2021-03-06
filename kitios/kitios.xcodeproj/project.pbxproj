@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C801D68025EE474F00C3DF2D /* UIPubItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C801D67F25EE474F00C3DF2D /* UIPubItemCell.swift */; };
 		C81DC9F2246D01A500553D89 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = C81DC9F1246D01A400553D89 /* README.md */; };
 		C857BCE72553B8A900476AB6 /* PubItemsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C857BCE62553B8A900476AB6 /* PubItemsViewController.swift */; };
 		C8AA65DF245FCE0E00B456AE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8AA65DE245FCE0E00B456AE /* AppDelegate.swift */; };
@@ -30,6 +31,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C801D67F25EE474F00C3DF2D /* UIPubItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIPubItemCell.swift; sourceTree = "<group>"; };
 		C81DC9F1246D01A400553D89 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		C857BCE62553B8A900476AB6 /* PubItemsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PubItemsViewController.swift; sourceTree = "<group>"; };
 		C8AA65DB245FCE0E00B456AE /* kitios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = kitios.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -103,6 +105,7 @@
 				C8AA660F245FEBAD00B456AE /* ExportChapterViewController.swift */,
 				C8AA660E245FEBAD00B456AE /* KeyItSetupController.swift */,
 				C8AA6612245FEBAD00B456AE /* UIVerseItemCell.swift */,
+				C801D67F25EE474F00C3DF2D /* UIPubItemCell.swift */,
 				C8AA6611245FEBAD00B456AE /* VersesTableViewController.swift */,
 				C857BCE62553B8A900476AB6 /* PubItemsViewController.swift */,
 				C8AA65DE245FCE0E00B456AE /* AppDelegate.swift */,
@@ -221,6 +224,7 @@
 			files = (
 				C8AA6605245FE78300B456AE /* VItem.swift in Sources */,
 				C8AA6618245FEBAE00B456AE /* UIVerseItemCell.swift in Sources */,
+				C801D68025EE474F00C3DF2D /* UIPubItemCell.swift in Sources */,
 				C8AA6619245FEBAE00B456AE /* BooksTableViewController.swift in Sources */,
 				C8EB83D4256B242300D25EC4 /* VIMenu.swift in Sources */,
 				C8AA6614245FEBAE00B456AE /* KeyItSetupController.swift in Sources */,

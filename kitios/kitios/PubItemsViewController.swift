@@ -53,18 +53,31 @@ class PubItemsViewController: UITableViewController {
 		return popMenu!.numRows
     }
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "popOverCell", for: indexPath)
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UIPubItemCell {
+		let cell = tableView.dequeueReusableCell(withIdentifier: "popOverCell", for: indexPath) as! UIPubItemCell
 		let pMenu = popMenu!.VIMenuItems[indexPath.row]
-		let textLabel = cell.textLabel
-		textLabel?.text = pMenu.VIMenuLabel
-		textLabel?.numberOfLines = 1
-		textLabel?.adjustsFontSizeToFitWidth = true
-		textLabel?.minimumScaleFactor = 9
-		if pMenu.VIMenuHLight == "B" {
-			cell.textLabel?.textColor = .blue
-		} else {
-			cell.textLabel?.textColor = .red
+		let pImage = cell.poImage
+		let textLabel = cell.poLabel
+		textLabel!.text = pMenu.VIMenuLabel
+		textLabel!.numberOfLines = 1
+		textLabel!.textAlignment = .left
+//		textLabel!.minimumScaleFactor = 9
+		switch pMenu.VIMenuHLight {
+		case "C":
+			cell.textLabel!.textColor = .blue
+			pImage?.image = UIImage(named: "CreatePubItem.png")
+		case "D":
+			cell.textLabel!.textColor = .red
+			pImage?.image = UIImage(named: "DeletePubItem.png")
+		case "B":
+			cell.textLabel!.textColor = .purple
+			pImage?.image = UIImage(named: "BridgePubItem.png")
+		case "U":
+			cell.textLabel!.textColor = .purple
+			pImage?.image = UIImage(named: "UnbridgePubItem.png")
+		default:
+			cell.textLabel!.textColor = .blue
+			pImage?.image = UIImage(named: "CreatePubItem.png")
 		}
         return cell
     }

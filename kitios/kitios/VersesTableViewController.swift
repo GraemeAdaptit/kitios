@@ -108,8 +108,8 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 		let cell = tableView.dequeueReusableCell(withIdentifier: "ItemCell", for: indexPath) as! UIVerseItemCell
 		let vsItem = chInst!.BibItems[indexPath.row]
 		switch vsItem.itTyp {
-		case "Ascription":
-			cell.pubBut.setTitle(vsItem.itTyp, for: .normal)
+        case "Title":
+            cell.pubBut.setTitle("Main Title", for: .normal)
 		case "Para", "ParaCont":
 			cell.pubBut.setTitle("Paragraph", for: .normal)
 		case "ParlRef":
@@ -241,20 +241,21 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 		userTappedOnCellLabel(tableRow)
 		var anchorRect    = tableView.convert(showRect, to: tableView)
 		anchorRect        = tableView.convert(anchorRect, to: view)
-//		anchorRect.origin.x += 105
 		let vc: PubItemsViewController = self.storyboard?.instantiateViewController(withIdentifier: "PubItemsViewController") as! PubItemsViewController
 		// Preferred Size
 		let screenWidth = UIScreen.main.bounds.size.width
-		let popoverWidth = Int(screenWidth * 0.85)
-		anchorRect.origin.x = screenWidth - CGFloat(popoverWidth)
+		let popoverWidth = Int(screenWidth * 0.60)
+		anchorRect.origin.x = screenWidth * 0.4	// - CGFloat(popoverWidth)
+		anchorRect.size.height = 20
+		anchorRect.size.width = 20
 		let numRows = chInst?.curPoMenu?.numRows ?? 5
-		let popoverHeight = (numRows * 50)	// + 10
+		let popoverHeight = (numRows * 44)	// Height of popoverCell = 44
 		vc.preferredContentSize = CGSize(width: popoverWidth, height: popoverHeight)
 		vc.modalPresentationStyle = .popover
 		let popover: UIPopoverPresentationController = vc.popoverPresentationController!
 		popover.delegate = self
 		popover.sourceView = view
-		popover.sourceRect = showRect
+		popover.sourceRect = anchorRect
 		popover.permittedArrowDirections = .left
 		present(vc, animated: true, completion:nil)
 	}

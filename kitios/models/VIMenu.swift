@@ -45,102 +45,102 @@ class VIMenu : NSObject {
 		let chNum = chInst!.chNum
 		switch VIType {
 		case "Ascription":		// Ascriptions before verse 1 of some Psalms
-			let viMI = VIMenuItem("Delete Ascription", "delAsc", "R")
+			let viMI = VIMenuItem("Ascription", "delAsc", "D")
 			VIMenuItems.append(viMI)
 		case "Title":			// Title for a Book
 			if (bibItem.vsNum == 1) && (chNum == 1) && (!chInst!.hasInTitle) {
-				let viMI1 = VIMenuItem("Create Intro Title", "crInTit", "B")
-			VIMenuItems.append(viMI1)
+				let viMI1 = VIMenuItem("Intro Title", "crInTit", "C")
+			    VIMenuItems.append(viMI1)
 			}
-			let viMI2 = VIMenuItem("Create Heading After", "crHdAft", "B")
+			let viMI2 = VIMenuItem("Heading After", "crHdAft", "C")
 			VIMenuItems.append(viMI2)
-			let viMI3 = VIMenuItem("Delete Title", "delTitle", "R")
+			let viMI3 = VIMenuItem("Title", "delTitle", "D")
 			VIMenuItems.append(viMI3)
 		case "InTitle":			// Title within Book introductory matter
-			let viMI1 = VIMenuItem("Create Intro Heading", "crInHed", "B")
+			let viMI1 = VIMenuItem("Intro Heading", "crInHed", "C")
 			VIMenuItems.append(viMI1)
-			let viMI2 = VIMenuItem("Create Intro Paragraph", "crInPar", "B")
+			let viMI2 = VIMenuItem("Intro Paragraph", "crInPar", "C")
 			VIMenuItems.append(viMI2)
-			let viMI3 = VIMenuItem("Delete Intro Title", "delInTit", "R")
+			let viMI3 = VIMenuItem("Intro Title", "delInTit", "D")
 			VIMenuItems.append(viMI3)
 		case "InSubj":			// Subject heading within Book introductory matter
-			let viMI1 = VIMenuItem("Create Intro Paragraph", "crInPar", "B")
+			let viMI1 = VIMenuItem("Intro Paragraph", "crInPar", "C")
 			VIMenuItems.append(viMI1)
-			let viMI2 = VIMenuItem("Delete Intro Subject", "delInSubj", "R")
+			let viMI2 = VIMenuItem("Intro Subject", "delInSubj", "D")
 			VIMenuItems.append(viMI2)
 		case "InPara":			// Paragraph within Book introductory matter
-			let viMI1 = VIMenuItem("Create Intro Paragraph", "crInPar", "B")
+			let viMI1 = VIMenuItem("Intro Paragraph", "crInPar", "C")
 			VIMenuItems.append(viMI1)
-			let viMI2 = VIMenuItem("Create Intro Heading", "crInHed", "B")
+			let viMI2 = VIMenuItem("Intro Heading", "crInHed", "C")
 			VIMenuItems.append(viMI2)
 			if (bibItem.vsNum == 1) && (chNum == 1) && (!chInst!.hasTitle) {
-				let viMI3 = VIMenuItem("Create Title", "crTitle", "B")
+				let viMI3 = VIMenuItem("Title", "crTitle", "C")
 				VIMenuItems.append(viMI3)
 			}
-			let viMI4 = VIMenuItem("Delete Intro Paragraph", "delInPar", "R")
+			let viMI4 = VIMenuItem("Intro Paragraph", "delInPar", "D")
 			VIMenuItems.append(viMI4)
 		case "Heading":			// Heading/Subject Heading
 			if (bibItem.vsNum == 1) && (chNum == 1) && (!chInst!.hasTitle) {
-				let viMI1 = VIMenuItem("Create Title", "crTitle", "B")
+				let viMI1 = VIMenuItem("Title", "crTitle", "C")
 				VIMenuItems.append(viMI1)
 			}
-			let viMI2 = VIMenuItem("Create Parallel Ref", "crPalRef", "B")
+			let viMI2 = VIMenuItem("Parallel Ref", "crPalRef", "C")
 			VIMenuItems.append(viMI2)
-			let viMI3 = VIMenuItem("Delete Heading", "delHead", "R")
+			let viMI3 = VIMenuItem("Heading", "delHead", "D")
 			VIMenuItems.append(viMI3)
 		case "Para":			// Paragraph before a verse
-			let viMI1 = VIMenuItem("Create Heading", "crHdBef", "B")
+			let viMI1 = VIMenuItem("Heading", "crHdBef", "C")
 			VIMenuItems.append(viMI1)
-			let viMI2 = VIMenuItem("Delete Paragraph", "delPara", "R")
+			let viMI2 = VIMenuItem("Paragraph", "delPara", "D")
 			VIMenuItems.append(viMI2)
 		case "ParaCont":		// Paragraph within a verse
-			let viMI1 = VIMenuItem("Delete Paragraph", "delPCon", "R")
+			let viMI1 = VIMenuItem("Paragraph", "delPCon", "D")
 			VIMenuItems.append(viMI1)
 		case "VerseCont":		// Verse continuation after paragraph break
-			let viMI1 = VIMenuItem("Delete Paragraph", "delVCon", "R")
+			let viMI1 = VIMenuItem("Paragraph", "delVCon", "D")
 			VIMenuItems.append(viMI1)
 		case "ParlRef":			// Parallel Reference
-			let viMI1 = VIMenuItem("Delete Parallel Ref", "delPalRef", "R")
+			let viMI1 = VIMenuItem("Parallel Ref", "delPalRef", "D")
 			VIMenuItems.append(viMI1)
 		case "Verse":
 			if (chInst!.bkID == 19) && (bibItem.vsNum == 1) && (!chInst!.hasAscription) {
-				let viMI1 = VIMenuItem("Create Ascription", "crAsc", "R")
+				let viMI1 = VIMenuItem("Ascription", "crAsc", "C")
 				VIMenuItems.append(viMI1)
 			}
 			if (bibItem.vsNum == 1) {
 				if ( (chNum == 1) && (!chInst!.hasInTitle) ) {
-					let viMI2 = VIMenuItem("Create Intro Title", "crInTit", "B")
+					let viMI2 = VIMenuItem("Intro Title", "crInTit", "C")
 					VIMenuItems.append(viMI2)
 				}
 			}
 			if (bibItem.vsNum == 1) {
 				if (chNum == 1) && (!chInst!.hasTitle) {
-					let viMI3 = VIMenuItem("Create Title", "crTitle", "B")
+					let viMI3 = VIMenuItem("Title", "crTitle", "C")
 					VIMenuItems.append(viMI3)
 				}
 			}
-			let viMI4 = VIMenuItem("Create Heading Before", "crHdBef", "B")
+			let viMI4 = VIMenuItem("Heading Before", "crHdBef", "C")
 			VIMenuItems.append(viMI4)
-			let viMI5 = VIMenuItem("Create Paragraph Before", "crParaBef", "B")
+			let viMI5 = VIMenuItem("Paragraph Before", "crParaBef", "C")
 			VIMenuItems.append(viMI5)
 			if !bibItem.isBrg {
-				let viMI6 = VIMenuItem("Create Paragraph In", "crParaCont", "B")
+				let viMI6 = VIMenuItem("Paragraph In", "crParaCont", "C")
 				VIMenuItems.append(viMI6)
 			}
-			let viMI7 = VIMenuItem("Create Parallel Ref", "crPalRef", "B")
+			let viMI7 = VIMenuItem("Parallel Ref", "crPalRef", "C")
 				VIMenuItems.append(viMI7)
 			if (bibItem.vsNum != chInst!.numVs) {
 				if (chInst!.BibItems[curItOfst + 1].itTyp == "Verse") {
-					let viMI8 = VIMenuItem("Bridge Next Verse", "brid", "R")
+					let viMI8 = VIMenuItem("Bridge Next", "brid", "B")
 					VIMenuItems.append(viMI8)
 				}
 			}
 			if bibItem.isBrg {
-				let viMI9 = VIMenuItem("Unbridge Last Verse", "unBrid", "R")
+				let viMI9 = VIMenuItem("Unbridge", "unBrid", "U")
 				VIMenuItems.append(viMI9)
 			}
 		default:
-			let viMI1 = VIMenuItem("***MENU ERROR***", "NOOP", "R")
+			let viMI1 = VIMenuItem("***MENU ERROR***", "NOOP", "D")
 			VIMenuItems.append(viMI1)
 		}
 		numRows = VIMenuItems.count
