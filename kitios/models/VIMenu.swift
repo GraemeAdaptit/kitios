@@ -129,7 +129,13 @@ class VIMenu : NSObject {
 			}
 			let viMI7 = VIMenuItem("Parallel Ref", "crPalRef", "C")
 				VIMenuItems.append(viMI7)
-			if (bibItem.vsNum != chInst!.numVs) {
+			var brgPossible:Bool
+			if bibItem.isBrg {
+				brgPossible = (bibItem.lvBrg < chInst!.numVs)
+			} else {
+				brgPossible = (bibItem.vsNum < chInst!.numVs)
+			}
+			if brgPossible {
 				if (chInst!.BibItems[curItOfst + 1].itTyp == "Verse") {
 					let viMI8 = VIMenuItem("Bridge Next", "brid", "B")
 					VIMenuItems.append(viMI8)
