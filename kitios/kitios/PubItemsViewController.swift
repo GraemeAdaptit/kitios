@@ -62,7 +62,7 @@ class PubItemsViewController: UITableViewController {
 		textLabel!.numberOfLines = 1
 		textLabel!.textAlignment = .left
 //		textLabel!.minimumScaleFactor = 9
-		switch pMenu.VIMenuHLight {
+		switch pMenu.VIMenuIcon {
 		case "C":
 			cell.textLabel!.textColor = .blue
 			pImage?.image = UIImage(named: "CreatePubItem.png")
