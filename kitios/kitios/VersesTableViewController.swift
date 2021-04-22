@@ -244,8 +244,9 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 		let vc: PubItemsViewController = self.storyboard?.instantiateViewController(withIdentifier: "PubItemsViewController") as! PubItemsViewController
 		// Preferred Size
 		let screenWidth = UIScreen.main.bounds.size.width
-		let popoverWidth = Int(screenWidth * 0.60)
-		anchorRect.origin.x = screenWidth * 0.4	// - CGFloat(popoverWidth)
+		let poMenuWidth = chInst?.curPoMenu?.menuLabelLength ?? 120
+		let popoverWidth = Int(poMenuWidth + 35)
+		anchorRect.origin.x = screenWidth - CGFloat(popoverWidth) - 50
 		anchorRect.size.height = 20
 		anchorRect.size.width = 20
 		let numRows = chInst?.curPoMenu?.numRows ?? 5
@@ -277,22 +278,6 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 		}
 	}
 	
-/*
-// Action for the Pub button in the Navigation Bar - will soon be removed
-	@IBAction func publItems(_ sender: UIBarButtonItem) {
-		let vc: PubItemsViewController = self.storyboard?.instantiateViewController(withIdentifier: "PubItemsViewController") as! PubItemsViewController
-		// Preferred Size
-		vc.preferredContentSize = CGSize(width: 200, height: 200)
-		vc.modalPresentationStyle = .popover
-		let popover: UIPopoverPresentationController = vc.popoverPresentationController!
-		popover.delegate = self
-		popover.sourceView = self.view
-		// RightBarItem
-		popover.barButtonItem = sender
-		present(vc, animated: true, completion:nil)
-	}
-*/
-
 	@IBAction func exportThisChapter(_ sender: Any) {
 		saveCurrentItemText ()
 		performSegue(withIdentifier: "exportChapter", sender: nil)

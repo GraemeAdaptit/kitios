@@ -17,6 +17,12 @@
 
 import UIKit
 
+extension String {
+	   func size(OfFont font: UIFont) -> CGSize {
+		return (self as NSString).size(withAttributes: [NSAttributedString.Key.font: font])
+	   }
+   }
+
 class VIMenuItem : NSObject {
 	var VIMenuLabel : String	// Menu label displayed to users
 	var VIMenuAction : String	// Menu action to be done if chosen by user
@@ -35,7 +41,10 @@ class VIMenu : NSObject {
 	var VIType = "Verse"				// the type of the VerseItem this menu is for
 	var numRows: Int = 0				// number of rows needed for the popover menu
 	var VIMenuItems: [VIMenuItem] = []	// array of the menu items
-	
+	var menuLabelLength: CGFloat = 50	// Minimum length of the menu label in points
+										// (for calculating popover menu width)
+	let font = UIFont.systemFont(ofSize: 14)
+
 	let appDelegate = UIApplication.shared.delegate as! AppDelegate
 
 	init(_ curItOfst: Int) {
@@ -150,6 +159,10 @@ class VIMenu : NSObject {
 			VIMenuItems.append(viMI1)
 		}
 		numRows = VIMenuItems.count
-
+		// Calculate popover menu label width
+		for v in VIMenuItems {
+			let width = v.VIMenuLabel.size(OfFont: font).width
+			if width > menuLabelLength {menuLabelLength = width}
+		}
 	}
 }
