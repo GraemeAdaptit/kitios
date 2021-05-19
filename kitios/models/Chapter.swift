@@ -379,7 +379,8 @@ public class Chapter: NSObject {
 
 	// Can be called when the current VerseItem is Verse 1 of a Psalm
 	func createAscription () {
-		let newitemID = dao!.verseItemsInsertRec (chID, 1, "Ascription", 70, "", 0, false, 0)
+		//GDLC 4MAY21 Corrected 70 to 75 in creation of the ascription record
+		let newitemID = dao!.verseItemsInsertRec (chID, 1, "Ascription", 75, "", 0, false, 0)
 		if newitemID != -1 {
 			print ("Ascription created")
 			// Note that the Psalm now has an Ascription
