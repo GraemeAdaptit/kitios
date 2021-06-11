@@ -50,7 +50,7 @@ public class Bible:NSObject {
 		var bkName: String	// bookName TEXT
 		var chapRCr: Bool	// chapRecsCreated INTEGER
 		var numCh: Int		// numChaps INTEGER
-		var currChap: Int	// currChapter INTEGER
+		var currChap: Int	// currChapter INTEGER the ChapterID
 		init (_ bkID: Int, _ bibID: Int, _ bkCode: String, _ bkName: String, _ chapRCr: Bool, _ numCh: Int, _ currChap: Int) {
 			self.bkID = bkID
 			self.bibID = bibID
@@ -240,5 +240,12 @@ public class Bible:NSObject {
 		BibBooks[currBookOfst].chapRCr = true
 		BibBooks[currBookOfst].numCh = numChap
 	}
+
+// When a Chapter is selected as the current Chapter (in ChaptersTableViewController), the entry
+// for the current Book in the Bible's BibBooks[] array must be updated.
+
+	 func setBibBooksCurChap(_ curChID: Int) {
+		 BibBooks[currBookOfst].currChap = curChID
+	 }
 
 }

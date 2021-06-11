@@ -70,7 +70,7 @@ class ChaptersTableViewController: UITableViewController {
 		super.viewDidAppear(animated)
 		print("ChaptersTableViewController:viewDidAppear")
 		// Most launches will have a current Chapter and will go straight to it
-		if !letUserChooseChapter && bkInst!.currChap > 0 {
+		if !letUserChooseChapter && bkInst!.currChapID > 0 {
 			bkInst!.goCurrentChapter()
 			// The user is going forwards to the next scene
 			goingForwards = true

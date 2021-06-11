@@ -109,7 +109,19 @@ class BooksTableViewController: UITableViewController {
 		} else {
 			cell.textLabel!.textColor = UIColor.black
 		}
-		let numChText = (book.numCh > 0 ? String(book.numCh) + " ch " : "" )
+		let numCh = book.numCh
+		let curChapID = bInst!.BibBooks[indexPath.row].currChap
+		var curChNum = 0
+		if bInst!.bookInst != nil {
+			curChNum = bInst!.bookInst!.offsetToBibChap(withID: curChapID) + 1
+		}
+		var numChText = ""
+		if book.chapRCr {
+			numChText = String(numCh) + " ch"
+			if curChapID > 0 {
+				numChText += " (Curr " + String(curChNum) + ")"
+			}
+		}
 		cell.detailTextLabel?.text = numChText
 		return cell
 	}
@@ -122,7 +134,18 @@ class BooksTableViewController: UITableViewController {
 		// Update the TableView row for this Book
 		let cell = tableView.cellForRow(at: indexPath)
 		let nChap = bInst!.BibBooks[indexPath.row].numCh
-		let numChText = (nChap > 0 ? String(nChap) + " ch " : "" )
+		let curChapID = bInst!.BibBooks[indexPath.row].currChap
+		var curChNum = 0
+		if bInst!.bookInst != nil {
+			curChNum = bInst!.bookInst!.offsetToBibChap(withID: curChapID) + 1
+		}
+		var numChText = ""
+		if selectedBook.chapRCr {
+			numChText = String(nChap) + " ch"
+			if curChapID > 0 {
+				numChText += " (Curr " + String(curChNum) + ")"
+			}
+		}
 		cell!.detailTextLabel?.text = numChText
 		cell!.textLabel!.textColor = UIColor.blue
 		// Current Book is selected so segue to Select Chapter scene

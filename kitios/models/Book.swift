@@ -30,7 +30,7 @@ public class Book:NSObject {
 	var bkName: String = "Book"	// bookName TEXT
 	var chapRCr: Bool = false	// chapRecsCreated INTEGER
 	var numChap: Int = 0		// numChaps INTEGER
-	var currChap: Int = 0		// currChapter INTEGER (the ID assigned by SQLite when the Chapter was created)
+	var currChapID: Int = 0		// currChapter INTEGER (the ID assigned by SQLite when the Chapter was created)
 	
 	var currChapOfst: Int = -1	// offset to the current Chapter in BibChaps[] array (-1 means not yet set)
 	
@@ -81,7 +81,7 @@ var BibChaps: [BibChap] = []
 		self.bkName = bkName		// bookName TEXT
 		self.chapRCr = chapRCr		// chapRecsCreated INTEGER
 		self.numChap = numChaps		// numChaps INTEGER
-		self.currChap = currChap	// currChapter INTEGER
+		self.currChapID = currChap	// currChapter INTEGER
 		if bkID == 19 {
 			chapName = "psalm"
 		} else {
@@ -169,7 +169,7 @@ var BibChaps: [BibChap] = []
 		
 		// Update kdb.sqlite Books record of current Book to indicate that its Chapter records have been
 		// created, the number of Chapters has been found, but there is not yet a current Chapter
-		if dao!.booksUpdateRec (bibID, bkID, chapRCr, numChap, currChap) {
+		if dao!.booksUpdateRec (bibID, bkID, chapRCr, numChap, currChapID) {
 			print("Book:createChapterRecords updated the record for this Book")
 		} else {
 			print("Book:createChapterRecords updating the record for this Book failed")
@@ -205,7 +205,7 @@ var BibChaps: [BibChap] = []
 // in the current Book is the current Chapter, and to make the Book instance and
 // the Book record remember that selection.
 	func goCurrentChapter() {
-		currChapOfst = offsetToBibChap(withID: currChap)
+		currChapOfst = offsetToBibChap(withID: currChapID)
 		print("Going to the current Chapter \(currChapOfst+1)")
 		
 		// delete any previous in-memory instance of Chapter
@@ -226,14 +226,16 @@ var BibChaps: [BibChap] = []
 		let diffChap = (chapOfst != currChapOfst)
 		let chap = BibChaps[chapOfst]
 		print("Making chapter \(chap.chNum) the current Chapter")
-		currChap = chap.chID
-		currChapOfst = chapOfst
+		currChapID = chap.chID		// ChapterID
+//		currChapOfst = chapOfst		// Chapter offset (1 less than Chapter Number seen by users)
 		// update Book record in kdb.sqlite to show this current Chapter
-		if dao!.booksUpdateRec(bibID, bkID, chapRCr, numChap, currChap) {
+		if dao!.booksUpdateRec(bibID, bkID, chapRCr, numChap, currChapID) {
 			print("The currChap for \(bkName) in kdb.sqlite was updated to \(chap.chNum)")
 			} else {
 				print("ERROR: The currChap for \(bkName) in kdb.sqlite was not updated to \(chap.chNum)")
 			}
+		// Update the currChap for this book in BibBooks[] in bInst
+		bibInst!.setBibBooksCurChap(currChapID)
 
 		// If the user has changed to a different Chapter then
 		// delete any previous in-memory instance of Chapter and create a new one
