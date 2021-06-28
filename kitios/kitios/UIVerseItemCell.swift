@@ -15,7 +15,7 @@
 import UIKit
 
 /* Declare a Delegate Protocol method */
-protocol UIVerseItemCellDelegate:class {
+protocol UIVerseItemCellDelegate:AnyObject {
 	func customCell(cell:UIVerseItemCell, didTapPub button:UIButton)
 }
  

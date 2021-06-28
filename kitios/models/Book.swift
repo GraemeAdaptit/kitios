@@ -227,7 +227,7 @@ var BibChaps: [BibChap] = []
 		let chap = BibChaps[chapOfst]
 		print("Making chapter \(chap.chNum) the current Chapter")
 		currChapID = chap.chID		// ChapterID
-//		currChapOfst = chapOfst		// Chapter offset (1 less than Chapter Number seen by users)
+		currChapOfst = chapOfst		// Chapter offset (1 less than Chapter Number seen by users)
 		// update Book record in kdb.sqlite to show this current Chapter
 		if dao!.booksUpdateRec(bibID, bkID, chapRCr, numChap, currChapID) {
 			print("The currChap for \(bkName) in kdb.sqlite was updated to \(chap.chNum)")
