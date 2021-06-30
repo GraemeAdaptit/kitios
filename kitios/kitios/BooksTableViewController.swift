@@ -60,6 +60,9 @@ class BooksTableViewController: UITableViewController {
 		super.viewWillAppear(animated)
 		print("BooksTableViewController:viewWillAppear")
 		goingForwards = false
+		// Added reloadData() to catch changes to the current Chapter in a book
+		// TODO: Call this only when a flag on the Bible instance says is is needed?
+		tableView.reloadData()
 	}
 	
 	override func viewDidAppear(_ animated: Bool) {
@@ -116,11 +119,17 @@ class BooksTableViewController: UITableViewController {
 			curChNum = bInst!.bookInst!.offsetToBibChap(withID: curChapID) + 1
 		}
 		var numChText = ""
+//		if book.chapRCr {
+//			numChText = String(numCh) + " ch"
+//			if curChapID > 0 {
+//				numChText += " (Curr " + String(curChNum) + ")"
+//			}
+//		}
 		if book.chapRCr {
-			numChText = String(numCh) + " ch"
 			if curChapID > 0 {
-				numChText += " (Curr " + String(curChNum) + ")"
+				numChText = "Ch " + String(curChNum) + " "
 			}
+			numChText += "(" + String(numCh) + " chs)"
 		}
 		cell.detailTextLabel?.text = numChText
 		return cell
@@ -141,10 +150,10 @@ class BooksTableViewController: UITableViewController {
 		}
 		var numChText = ""
 		if selectedBook.chapRCr {
-			numChText = String(nChap) + " ch"
 			if curChapID > 0 {
-				numChText += " (Curr " + String(curChNum) + ")"
+				numChText = "Ch " + String(curChNum) + " "
 			}
+			numChText += "(" + String(nChap) + " chs)"
 		}
 		cell!.detailTextLabel?.text = numChText
 		cell!.textLabel!.textColor = UIColor.blue

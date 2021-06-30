@@ -199,7 +199,7 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 			if currCell!.dirty {
 				let textSrc = currCell!.itText.text as String
 				chInst!.copyAndSaveVItem(currItOfst, textSrc)
-				print("VersesTableViewController:saveCurrentItemText Saved current verse \(currCell!.tableRow + 1)")
+				print("VersesTableViewController:saveCurrentItemText Saved current VerseItem in row \(currCell!.tableRow + 1)")
 				currCell!.dirty = false
 			}
 		}
