@@ -1,6 +1,8 @@
 //
 //  Book.swift
 //
+// GDLC 1JUL21 Added currVsNum to Chapter records
+//
 //  Created by Graeme Costin on 25/10/19.
 // The author disclaims copyright to this source code.  In place of
 // a legal notice, here is a blessing:
@@ -49,8 +51,9 @@ public class Book:NSObject {
 		var itRCr: Bool		// itemRecsCreated INTEGER
 		var numVs: Int		// numVerses INTEGER
 		var numIt: Int		// numItems INTEGER
-		var curIt: Int		// currItem INTEGER
-		init (_ chID:Int, _ bibID:Int, _ bkID:Int, _ chNum:Int, _ itRCr:Bool, _ numVs:Int, _ numIt:Int, _ curIt:Int) {
+		var curIt: Int		// currItem INTEGER (ID of current VerseItem
+		var curVN: Int		// currVsNum INTEGER (verse number for curIt)
+		init (_ chID:Int, _ bibID:Int, _ bkID:Int, _ chNum:Int, _ itRCr:Bool, _ numVs:Int, _ numIt:Int, _ curIt:Int, _ curVN:Int) {
 			self.chID = chID
 			self.bibID = bibID
 			self.bkID = bkID
@@ -59,6 +62,7 @@ public class Book:NSObject {
 			self.numVs = numVs
 			self.numIt = numIt
 			self.curIt = curIt
+			self.curVN = curVN
 		}
 	}
 
@@ -147,6 +151,7 @@ var BibChaps: [BibChap] = []
 		// Create a Chapters record in kdb.sqlite for each Chapter in this Book
 		var chNum = 1	// Start at Chapter 1
 		let currIt = 0	// No current VerseItem yet
+		let currVN = 0	// No current verse number yet
 		for elem in elements {
 			var numIt = 0
 			var elemTr = elem		// for some Psalms a preceding "A" will be removed
@@ -156,7 +161,7 @@ var BibChaps: [BibChap] = []
 			}
 			let numVs = Int(elemTr)!
 			numIt = numIt + numVs	// for some Psalms numIt will include the ascription VerseItem
-			if dao!.chaptersInsertRec (bib, book, chNum, false, numVs, numIt, currIt) {
+			if dao!.chaptersInsertRec (bib, book, chNum, false, numVs, numIt, currIt, currVN) {
 				print("Book:createChapterRecords Created Chapter record for \(String(describing: bkName)) chapter \(chNum)")
 			} else {
 				print("Book:createChapterRecords: Creating Chapter record failed for \(String(describing: bkName)) chapter \(chNum)")
@@ -182,8 +187,8 @@ var BibChaps: [BibChap] = []
 
 // dao.readChaptersRecs() calls appendChapterToArray() for each row it reads from the kdb.sqlite database
 	func appendChapterToArray(_ chapID:Int, _ bibID:Int, _ bookID:Int,
-							  _ chNum:Int, _ itRCr:Bool, _ numVs:Int, _ numIt:Int, _ curIt:Int) {
-		let chRec = BibChap(chapID, bibID, bookID, chNum, itRCr, numVs, numIt, curIt)
+							  _ chNum:Int, _ itRCr:Bool, _ numVs:Int, _ numIt:Int, _ curIt:Int, _ curVNm:Int) {
+		let chRec = BibChap(chapID, bibID, bookID, chNum, itRCr, numVs, numIt, curIt, curVNm)
 		BibChaps.append(chRec)
 	}
 
@@ -213,7 +218,7 @@ var BibChaps: [BibChap] = []
 
 		// create a Chapter instance for the current Chapter of the current Book
 		let chap = BibChaps[currChapOfst]
-		chapInst = Chapter(chap.chID, chap.bibID, chap.bkID, chap.chNum, chap.itRCr, chap.numVs, chap.numIt, chap.curIt)
+		chapInst = Chapter(chap.chID, chap.bibID, chap.bkID, chap.chNum, chap.itRCr, chap.numVs, chap.numIt, chap.curIt, chap.curVN)
 		// Keep a reference in the AppDelegate
 		appDelegate.chapInst = self.chapInst
 		print("KIT has created an instance of class Chapter for the old current Chapter \(currChapOfst+1)")
@@ -243,7 +248,7 @@ var BibChaps: [BibChap] = []
 			chapInst = nil
 
 			// create a Chapter instance for the current Chapter of the current Book
-			chapInst = Chapter(chap.chID, chap.bibID, chap.bkID, chap.chNum, chap.itRCr, chap.numVs, chap.numIt, chap.curIt)
+			chapInst = Chapter(chap.chID, chap.bibID, chap.bkID, chap.chNum, chap.itRCr, chap.numVs, chap.numIt, chap.curIt, chap.curVN)
 		}
 		// Keep a reference in the AppDelegate
 		appDelegate.chapInst = self.chapInst

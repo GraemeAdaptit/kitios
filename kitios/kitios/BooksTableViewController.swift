@@ -119,12 +119,6 @@ class BooksTableViewController: UITableViewController {
 			curChNum = bInst!.bookInst!.offsetToBibChap(withID: curChapID) + 1
 		}
 		var numChText = ""
-//		if book.chapRCr {
-//			numChText = String(numCh) + " ch"
-//			if curChapID > 0 {
-//				numChText += " (Curr " + String(curChNum) + ")"
-//			}
-//		}
 		if book.chapRCr {
 			if curChapID > 0 {
 				numChText = "Ch " + String(curChNum) + " "

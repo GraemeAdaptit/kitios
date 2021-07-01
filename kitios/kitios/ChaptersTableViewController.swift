@@ -19,8 +19,10 @@ import UIKit
 class ChaptersTableViewController: UITableViewController {
 
 	let appDelegate = UIApplication.shared.delegate as! AppDelegate
-	var bInst: Bible?
-	var bkInst: Book?
+	var bInst: Bible?		// Current instance of Bible
+	var bkInst: Book?		// Current instance of Book
+							// When ChaptersTableViewController is active the user will have selected a Book
+							// and it will be the current Book
 	var chapName: String?
 	
 	// Boolean for detecting when Back button has been pressed
@@ -64,6 +66,9 @@ class ChaptersTableViewController: UITableViewController {
 		super.viewWillAppear(animated)
 		print("ChaptersTableViewController:viewWillAppear")
 		goingForwards = false
+		// Added reloadData() to catch changes to the current VerseItem in a book
+		// TODO: Call this only when a flag on the Book instance says is is needed?
+		tableView.reloadData()
 	}
 	
 	override func viewDidAppear(_ animated: Bool) {
@@ -116,8 +121,10 @@ class ChaptersTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ChapterCell", for: indexPath)
 		let chapter = bkInst!.BibChaps[indexPath.row]
-		cell.textLabel?.text = "\(chapName!.capitalized) " + String(chapter.chNum)
-		let numVsItText = (chapter.numVs > 0 ? String(chapter.numVs) + " verses" : "" )
+		let txtLabel = "\(chapName!.capitalized) " + String(chapter.chNum)
+		cell.textLabel!.text = txtLabel
+//		let curVsItemID = chapter.curIt
+		let numVsItText = (chapter.itRCr ? "(" + String(chapter.numVs) + " vs)" : "" )
 		cell.detailTextLabel?.text = numVsItText
 		if chapter.itRCr {
 			cell.textLabel!.textColor = UIColor.blue
