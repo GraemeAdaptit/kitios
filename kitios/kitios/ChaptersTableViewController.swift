@@ -123,8 +123,14 @@ class ChaptersTableViewController: UITableViewController {
 		let chapter = bkInst!.BibChaps[indexPath.row]
 		let txtLabel = "\(chapName!.capitalized) " + String(chapter.chNum)
 		cell.textLabel!.text = txtLabel
-//		let curVsItemID = chapter.curIt
-		let numVsItText = (chapter.itRCr ? "(" + String(chapter.numVs) + " vs)" : "" )
+		var numVsItText = ""
+		let curVsNum = chapter.curVN
+		if chapter.itRCr {
+			if curVsNum > 0 {
+				numVsItText = "Vs " + String(curVsNum) + " "
+			}
+			numVsItText += "(" + String(chapter.numVs) + " vs)"
+		}
 		cell.detailTextLabel?.text = numVsItText
 		if chapter.itRCr {
 			cell.textLabel!.textColor = UIColor.blue

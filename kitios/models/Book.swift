@@ -256,8 +256,9 @@ var BibChaps: [BibChap] = []
 	}
 
 	// Set the new value for the current VerseItem
-	// called when the user selects a Chapter of the current Book
-	func setCurVItem (_ curIt: Int) {
+	// called when the user selects a VerseItem of the current Chapter
+	func setCurVItem (_ curIt:Int, _ curVN:Int) {
 		BibChaps[currChapOfst].curIt = curIt
+		BibChaps[currChapOfst].curVN = curVN
 	}
 }

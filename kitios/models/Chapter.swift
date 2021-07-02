@@ -271,10 +271,10 @@ public class Chapter: NSObject {
 	func setupCurrentItem(_ currIt:Int) {
 		self.currIt = currIt
 		currItOfst = offsetToBibItem(withID: currIt)
+		self.currVN = BibItems[currItOfst].vsNum
 		// Setting currItOfst ensures that there is a VIMenu for the current VerseItem
-//		createPopoverMenu (currItOfst)
 		// Update the BibChap record for this Chapter
-		bkInst!.setCurVItem (currIt)
+		bkInst!.setCurVItem (currIt, currVN)
 		// Update the database Chapter record
 		if dao!.chaptersUpdateRec (chID, itRCr, currIt, currVN) {
 //			print ("Chapter:goCurrentItem updated \(bkInst!.bkName) \(chNum) Chapter record")
