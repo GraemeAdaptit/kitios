@@ -32,8 +32,8 @@ public class Book:NSObject {
 	var bkName: String = "Book"	// bookName TEXT
 	var chapRCr: Bool = false	// chapRecsCreated INTEGER
 	var numChap: Int = 0		// numChaps INTEGER
-	var currChapID: Int = 0		// currChapter INTEGER (the ID assigned by SQLite when the Chapter was created)
-	
+	var curChID: Int = 0		// currChID INTEGER (the ID assigned by SQLite when the Chapter was created)
+	var curChNum: Int = 0		// currChNum INTEGER
 	var currChapOfst: Int = -1	// offset to the current Chapter in BibChaps[] array (-1 means not yet set)
 	
 	// TODO: Eliminate the need for bibInst by using a setter function in Bible?
@@ -75,7 +75,7 @@ var BibChaps: [BibChap] = []
 	// action needs to be avoided until after there is a current Book. Thus Book.init() must
 	// not be called before a current Book is chosen or has been read from kdb.sqlite.
 
-	init(_ bkID: Int, _ bibID: Int, _ bkCode: String, _ bkName: String, _ chapRCr: Bool, _ numChaps: Int, _ currChap: Int) {
+	init(_ bkID: Int, _ bibID: Int, _ bkCode: String, _ bkName: String, _ chapRCr: Bool, _ numChaps: Int, _ curChID: Int, _ curChNum:Int) {
 		super.init()
 		print("start of Book.init() for \(bkName)")
 		
@@ -85,7 +85,8 @@ var BibChaps: [BibChap] = []
 		self.bkName = bkName		// bookName TEXT
 		self.chapRCr = chapRCr		// chapRecsCreated INTEGER
 		self.numChap = numChaps		// numChaps INTEGER
-		self.currChapID = currChap	// currChapter INTEGER
+		self.curChID = curChID		// currChID INTEGER
+		self.curChNum = curChNum	// currChNum INTEGER
 		if bkID == 19 {
 			chapName = "psalm"
 		} else {
@@ -170,11 +171,10 @@ var BibChaps: [BibChap] = []
 		}
 		// Update in-memory record of current Book to indicate that its Chapter records have been created
 		chapRCr = true
-		// numChap = numChap This was done when the count of elements in the chapters string was found
 		
 		// Update kdb.sqlite Books record of current Book to indicate that its Chapter records have been
 		// created, the number of Chapters has been found, but there is not yet a current Chapter
-		if dao!.booksUpdateRec (bibID, bkID, chapRCr, numChap, currChapID) {
+		if dao!.booksUpdateRec (bibID, bkID, chapRCr, numChap, 0, 0) {
 			print("Book:createChapterRecords updated the record for this Book")
 		} else {
 			print("Book:createChapterRecords updating the record for this Book failed")
@@ -210,7 +210,7 @@ var BibChaps: [BibChap] = []
 // in the current Book is the current Chapter, and to make the Book instance and
 // the Book record remember that selection.
 	func goCurrentChapter() {
-		currChapOfst = offsetToBibChap(withID: currChapID)
+		currChapOfst = offsetToBibChap(withID: curChID)
 		print("Going to the current Chapter \(currChapOfst+1)")
 		
 		// delete any previous in-memory instance of Chapter
@@ -230,17 +230,18 @@ var BibChaps: [BibChap] = []
 	func setupCurrentChapter(withOffset chapOfst: Int) {
 		let diffChap = (chapOfst != currChapOfst)
 		let chap = BibChaps[chapOfst]
-		print("Making chapter \(chap.chNum) the current Chapter")
-		currChapID = chap.chID		// ChapterID
+		curChNum = chap.chNum
+		print("Making chapter \(curChNum) the current Chapter")
+		curChID = chap.chID		// ChapterID
 		currChapOfst = chapOfst		// Chapter offset (1 less than Chapter Number seen by users)
 		// update Book record in kdb.sqlite to show this current Chapter
-		if dao!.booksUpdateRec(bibID, bkID, chapRCr, numChap, currChapID) {
-			print("The currChap for \(bkName) in kdb.sqlite was updated to \(chap.chNum)")
+		if dao!.booksUpdateRec(bibID, bkID, chapRCr, numChap, curChID, curChNum) {
+			print("The currChap for \(bkName) in kdb.sqlite was updated to \(curChNum)")
 			} else {
-				print("ERROR: The currChap for \(bkName) in kdb.sqlite was not updated to \(chap.chNum)")
+				print("ERROR: The currChap for \(bkName) in kdb.sqlite was not updated to \(curChNum)")
 			}
-		// Update the currChap for this book in BibBooks[] in bInst
-		bibInst!.setBibBooksCurChap(currChapID)
+		// Update the curChID and curChNum for this book in BibBooks[] in bInst
+		bibInst!.setBibBooksCurChap(curChID, curChNum)
 
 		// If the user has changed to a different Chapter then
 		// delete any previous in-memory instance of Chapter and create a new one

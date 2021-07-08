@@ -50,15 +50,17 @@ public class Bible:NSObject {
 		var bkName: String	// bookName TEXT
 		var chapRCr: Bool	// chapRecsCreated INTEGER
 		var numCh: Int		// numChaps INTEGER
-		var currChap: Int	// currChapter INTEGER the ChapterID
-		init (_ bkID: Int, _ bibID: Int, _ bkCode: String, _ bkName: String, _ chapRCr: Bool, _ numCh: Int, _ currChap: Int) {
+		var curChID: Int	// currChID INTEGER  the ChapterID
+		var curChNum: Int	// currChNum INTEGER  the Chapter number
+		init (_ bkID: Int, _ bibID: Int, _ bkCode: String, _ bkName: String, _ chapRCr: Bool, _ numCh: Int, _ curChID: Int, _ curChNum: Int) {
 			self.bkID = bkID
 			self.bibID = bibID
 			self.bkCode = bkCode
 			self.bkName = bkName
 			self.chapRCr = chapRCr
 			self.numCh = numCh
-			self.currChap = currChap
+			self.curChID = curChID
+			self.curChNum = curChNum
 		}
 	}
 
@@ -147,10 +149,11 @@ public class Bible:NSObject {
 				let bkName = bookNames[bkID]!
 				let chRCr = false
 				let numCh = 0
-				let currCh = 0
-				print("BookID = \(bkID), BibleID = \(bibID), Book Code = \(bkCode), BookName = \(bkName), ChapRecsCreated is \(chRCr), numChaps = \(numCh), CurrentChap = \(currCh)")
+				let curChID = 0
+				let curChNum = 0
+//				print("BookID = \(bkID), BibleID = \(bibID), Book Code = \(bkCode), BookName = \(bkName), ChapRecsCreated is \(chRCr), numChaps = \(numCh), CurrentChap = \(curChNum)")
 				// Write Books record to kdb.sqlite
-				if dao!.booksInsertRec (bkID, bibID, bkCode, bkName, chRCr, numCh, currCh) {
+				if dao!.booksInsertRec (bkID, bibID, bkCode, bkName, chRCr, numCh, curChID, curChNum) {
 					print ("The Books record for \(bkName) was created")
 				} else {
 					print ("The Books record for \(bkName) was not created")
@@ -172,8 +175,8 @@ public class Bible:NSObject {
 // dao.readBooksRecs() calls appendBibBookToArray() for each row it reads from the kdb.sqlite database
 	
 	func appendBibBookToArray (_ bkID:Int,_ bibID:Int, _ bkCode:String, _ bkName:String,
-							   _ chapRCr:Bool, _ numCh:Int, _ currChap:Int) {
-		let bkRec = BibBook(bkID, bibID, bkCode, bkName, chapRCr, numCh, currChap)
+							   _ chapRCr:Bool, _ numCh:Int, _ curChID:Int, _ curChNum:Int) {
+		let bkRec = BibBook(bkID, bibID, bkCode, bkName, chapRCr, numCh, curChID, curChNum)
 		BibBooks.append(bkRec)
 	}
 
@@ -201,7 +204,7 @@ public class Bible:NSObject {
 		bookInst = nil
 		
 		// create a Book instance for the currently selected book
-		bookInst = Book(book.bkID, book.bibID, book.bkCode, book.bkName, book.chapRCr, book.numCh, book.currChap)
+		bookInst = Book(book.bkID, book.bibID, book.bkCode, book.bkName, book.chapRCr, book.numCh, book.curChID, book.curChNum)
 		// Keep a reference in the AppDelegate
 		appDelegate.bookInst = self.bookInst
 		print("KIT has created an instance of class Book for the old current Book \(book.bkName)")
@@ -224,7 +227,7 @@ public class Bible:NSObject {
 		bookInst = nil
 		
 		// create a Book instance for the currently selected book
-		bookInst = Book(book.bkID, book.bibID, book.bkCode, book.bkName, book.chapRCr, book.numCh, book.currChap)
+		bookInst = Book(book.bkID, book.bibID, book.bkCode, book.bkName, book.chapRCr, book.numCh, book.curChID, book.curChNum)
 		// Keep a reference in the AppDelegate
 		appDelegate.bookInst = self.bookInst
 		print("KIT has created an instance of class Book for the new current Book \(book.bkName)")
@@ -241,11 +244,16 @@ public class Bible:NSObject {
 		BibBooks[currBookOfst].numCh = numChap
 	}
 
+	func getCurrBookOfst() -> Int {
+		return (currBook > 39 ? currBook - 2 : currBook - 1 )
+	}
+
 // When a Chapter is selected as the current Chapter (in ChaptersTableViewController), the entry
 // for the current Book in the Bible's BibBooks[] array must be updated.
 
-	 func setBibBooksCurChap(_ curChID: Int) {
-		 BibBooks[currBookOfst].currChap = curChID
+	func setBibBooksCurChap(_ curChID: Int, _ curChNum: Int) {
+		BibBooks[currBookOfst].curChID = curChID
+		BibBooks[currBookOfst].curChNum = curChNum
 	 }
 
 }

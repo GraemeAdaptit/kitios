@@ -31,6 +31,8 @@ class ChaptersTableViewController: UITableViewController {
 	var letUserChooseChapter = false
 	// tableRow of the selected Chapter
 	var chRow = 0	// safe value in case a Chapter has not yet been selected
+	// Chapter number of the selected Chapter
+	var chNum = 0	// safe value in case a Chapter has not yet been selected
 
 	required init?(coder aDecoder: NSCoder) {
 		print("ChaptersTableViewController:init")
@@ -66,8 +68,13 @@ class ChaptersTableViewController: UITableViewController {
 		super.viewWillAppear(animated)
 		print("ChaptersTableViewController:viewWillAppear")
 		goingForwards = false
+		// Retrieve current Chapter if one had been selected
+		if bkInst!.curChID > 0 {
+			chNum = bkInst!.curChNum
+			chRow = chNum - 1
+		}
 		// Added reloadData() to catch changes to the current VerseItem in a book
-		// TODO: Call this only when a flag on the Book instance says is is needed?
+		// TODO: Perhaps call this only when a flag on the Book instance says is is needed?
 		tableView.reloadData()
 	}
 	
@@ -75,7 +82,7 @@ class ChaptersTableViewController: UITableViewController {
 		super.viewDidAppear(animated)
 		print("ChaptersTableViewController:viewDidAppear")
 		// Most launches will have a current Chapter and will go straight to it
-		if !letUserChooseChapter && bkInst!.currChapID > 0 {
+		if !letUserChooseChapter && bkInst!.curChID > 0 {
 			bkInst!.goCurrentChapter()
 			// The user is going forwards to the next scene
 			goingForwards = true
@@ -86,6 +93,7 @@ class ChaptersTableViewController: UITableViewController {
 		// On first launch, do nothing and wait for the user to choose a Chapter.
 		// When user wants to choose another chapter, scroll so that the previously chosen chapter
 		// is near the middle of the TableView
+		// CRASH occurs here because chRow ia -1
 		tableView.scrollToRow(at: IndexPath(row: chRow, section: 0), at: UITableView.ScrollPosition.middle, animated: true)
 	}
 	
@@ -143,9 +151,9 @@ class ChaptersTableViewController: UITableViewController {
 	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		// Set up the selected Chapter as the current Chapter
 		let chRowNew = indexPath.row
-//		let diffChap = chRowNew != chRow
-		bkInst!.setupCurrentChapter(withOffset: chRowNew/*, diffChap*/)
-		chRow = chRowNew
+		bkInst!.setupCurrentChapter(withOffset: chRowNew)
+		chRow = chRowNew	// First Chapter in list is row zero
+		chNum = chRow + 1	// Only items in TableView are Chapters starting at 1
 		let cell = tableView.cellForRow(at: indexPath)
 		cell!.textLabel!.textColor = UIColor.blue
 		// Current Chapter is selected so segue to Edit Chapter scene

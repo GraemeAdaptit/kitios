@@ -97,7 +97,7 @@ public class KITDAO {
 		}
 		// Create the Books table
 		sqlite3_stmt = nil
-		sql = "CREATE TABLE Books(bookID INTEGER, bibleID INTEGER, bookCode TEXT, bookName TEXT, chapRecsCreated INTEGER, numChaps INTEGER, currChapter  INTEGER, USFMText TEXT);"
+		sql = "CREATE TABLE Books(bookID INTEGER, bibleID INTEGER, bookCode TEXT, bookName TEXT, chapRecsCreated INTEGER, numChaps INTEGER, currChID  INTEGER, currChNum INTEGER, USFMText TEXT);"
 		nByte = Int32(sql.utf8.count)
 		sqlite3_prepare_v2(db, sql, nByte, &sqlite3_stmt, nil)
 		sqlite3_step(sqlite3_stmt)
@@ -235,9 +235,9 @@ public class KITDAO {
 	// The 66 records for the Books table need to be created and populated on the initial launch of the app
 	// This function will be called 66 times by the KIT software
 	
-	func booksInsertRec (_ bkID:Int,_ bibID:Int, _ bkCode:String, _ bkName:String, _ chRCr:Bool, _ numCh:Int, _ currCh:Int) -> Bool {
+	func booksInsertRec (_ bkID:Int,_ bibID:Int, _ bkCode:String, _ bkName:String, _ chRCr:Bool, _ numCh:Int, _ curChID:Int, _ curChNum:Int) -> Bool {
 		var sqlite3_stmt:OpaquePointer?=nil
-		let sql:String = "INSERT INTO Books(bookID, bibleID, bookCode, bookName, chapRecsCreated, numChaps, currChapter) VALUES(?, ?, ?, ?, ?, ?, ?);"
+		let sql:String = "INSERT INTO Books(bookID, bibleID, bookCode, bookName, chapRecsCreated, numChaps, currChID, currChNum) VALUES(?, ?, ?, ?, ?, ?, ?, ?);"
 		let nByte:Int32 = Int32(sql.utf8.count)
 		
 		sqlite3_prepare_v2(db, sql, nByte, &sqlite3_stmt, nil)
@@ -247,7 +247,8 @@ public class KITDAO {
 		sqlite3_bind_text(sqlite3_stmt, 4, bkName.cString(using:String.Encoding.utf8)!, -1, SQLITE_TRANSIENT)
 		sqlite3_bind_int(sqlite3_stmt, 5, Int32((chRCr ? 1 : 0)))
 		sqlite3_bind_int(sqlite3_stmt, 6, Int32(numCh))
-		sqlite3_bind_int(sqlite3_stmt, 7, Int32(currCh))
+		sqlite3_bind_int(sqlite3_stmt, 7, Int32(curChID))
+		sqlite3_bind_int(sqlite3_stmt, 8, Int32(curChNum))
 		sqlite3_step(sqlite3_stmt)
 		let result = sqlite3_finalize(sqlite3_stmt)
 		return (result == 0)
@@ -258,7 +259,7 @@ public class KITDAO {
 	// assigned bookID.
 	func readBooksRecs (bibInst: Bible) {
 		var sqlite3_stmt:OpaquePointer?=nil
-		let sql:String = "SELECT bookID, bibleID, bookCode, bookName, chapRecsCreated, numChaps, currChapter FROM Books ORDER BY bookID;"
+		let sql:String = "SELECT bookID, bibleID, bookCode, bookName, chapRecsCreated, numChaps, currChID, currChNum FROM Books ORDER BY bookID;"
 		let nByte:Int32 = Int32(sql.utf8.count)
 
 		sqlite3_prepare_v2(db, sql, nByte, &sqlite3_stmt, nil)
@@ -277,9 +278,10 @@ public class KITDAO {
 			let cRC = Int(sqlite3_column_int(sqlite3_stmt, 4))
 			let chRCr = (cRC == 0 ? false : true)
 			let numCh = Int(sqlite3_column_int(sqlite3_stmt, 5))
-			let curCh = Int(sqlite3_column_int(sqlite3_stmt, 6))
+			let curChID = Int(sqlite3_column_int(sqlite3_stmt, 6))
+			let curChNum = Int(sqlite3_column_int(sqlite3_stmt, 7))
 
-			bibInst.appendBibBookToArray(bkID, bibID, sCode!, sName!, chRCr, numCh, curCh)
+			bibInst.appendBibBookToArray(bkID, bibID, sCode!, sName!, chRCr, numCh, curChID, curChNum)
 		}
 		sqlite3_finalize(sqlite3_stmt)
 	}
@@ -290,18 +292,18 @@ public class KITDAO {
 	// TODO: Check whether this function is needed; these data items are already there and
 	//	are updated as they change during running of the app?
 	
-	func booksGetRec () -> Bool {
-		return true
-	}
+//	func booksGetRec () -> Bool {
+//		return true
+//	}
 
 	// The Books record for the current Book needs to be updated
 	//	* to set the flag that indicates that the Chapter records have been created (on first edit of that Book)
 	//	* to set the number of Chapters in the Book (on first edit of that Book)
 	//	* to change the current Chapter when the user selects a different Chapter to work on
 
-	func booksUpdateRec (_ bibID:Int, _ bkID:Int, _ chRCr:Bool, _ numCh:Int, _ currCh:Int) -> Bool {
+	func booksUpdateRec (_ bibID:Int, _ bkID:Int, _ chRCr:Bool, _ numCh:Int, _ curChID:Int, _ curChNum:Int) -> Bool {
 		var sqlite3_stmt:OpaquePointer?=nil
-		let sql:String = "UPDATE Books SET chapRecsCreated = ?3, numChaps = ?4, currChapter = ?5 WHERE bibleID = ?1 AND bookID = ?2;"
+		let sql:String = "UPDATE Books SET chapRecsCreated = ?3, numChaps = ?4, currChID = ?5, currChNum = ?6 WHERE bibleID = ?1 AND bookID = ?2;"
 		let nByte:Int32 = Int32(sql.utf8.count)
 
 		sqlite3_prepare_v2(db, sql, nByte, &sqlite3_stmt, nil)
@@ -309,7 +311,8 @@ public class KITDAO {
 		sqlite3_bind_int(sqlite3_stmt, 2, Int32(bkID))
 		sqlite3_bind_int(sqlite3_stmt, 3, Int32((chRCr ? 1 : 0)))
 		sqlite3_bind_int(sqlite3_stmt, 4, Int32(numCh))
-		sqlite3_bind_int(sqlite3_stmt, 5, Int32(currCh))
+		sqlite3_bind_int(sqlite3_stmt, 5, Int32(curChID))
+		sqlite3_bind_int(sqlite3_stmt, 6, Int32(curChNum))
 		sqlite3_step(sqlite3_stmt)
 		let result = sqlite3_finalize(sqlite3_stmt)
 		return (result == 0)

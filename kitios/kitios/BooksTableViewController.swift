@@ -79,6 +79,12 @@ class BooksTableViewController: UITableViewController {
 		}
 		// On first launch, and when user wants to choose another book,
 		// do nothing and wait for the user to choose a Book.
+		// When user wants to choose another Book, scroll so that the previously chosen Book
+		// is near the middle of the TableView
+		let curBkOfst = bInst!.getCurrBookOfst()
+		if curBkOfst > 0 {
+			tableView.scrollToRow(at: IndexPath(row: curBkOfst, section: 0), at: UITableView.ScrollPosition.middle, animated: true)
+		}
 	}
 	
 	override func viewWillDisappear(_ animated: Bool) {
@@ -113,11 +119,11 @@ class BooksTableViewController: UITableViewController {
 			cell.textLabel!.textColor = UIColor.black
 		}
 		let numCh = book.numCh
-		let curChapID = bInst!.BibBooks[indexPath.row].currChap
-		var curChNum = 0
-		if bInst!.bookInst != nil {
-			curChNum = bInst!.bookInst!.offsetToBibChap(withID: curChapID) + 1
-		}
+		let curChapID = bInst!.BibBooks[indexPath.row].curChID
+		let curChNum = bInst!.BibBooks[indexPath.row].curChNum
+//		if bInst!.bookInst != nil {
+//			curChNum = bInst!.bookInst!.offsetToBibChap(withID: curChapID) + 1
+//		}
 		var numChText = ""
 		if book.chapRCr {
 			if curChapID > 0 {
@@ -134,10 +140,11 @@ class BooksTableViewController: UITableViewController {
 		print("BooksTableViewController:tableView:didSelectRowAt Tap selected \(selectedBook.bkName)")
 		// Set up the selected Book as the current Book (this updates kdb.sqlite with the currBook)
 		bInst!.setupCurrentBook(selectedBook)
+		bkRow = indexPath.row
 		// Update the TableView row for this Book
 		let cell = tableView.cellForRow(at: indexPath)
 		let nChap = bInst!.BibBooks[indexPath.row].numCh
-		let curChapID = bInst!.BibBooks[indexPath.row].currChap
+		let curChapID = bInst!.BibBooks[indexPath.row].curChID
 		var curChNum = 0
 		if bInst!.bookInst != nil {
 			curChNum = bInst!.bookInst!.offsetToBibChap(withID: curChapID) + 1
