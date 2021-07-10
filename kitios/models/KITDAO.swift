@@ -147,8 +147,9 @@ public class KITDAO {
 	//	Bibles data table
 
 	// The single record in the Bibles table needs to be inserted when the app first launches.
-	// The default values are provided as parameters.
-	
+	// A future extension of KIT may allow more than one Bible, so this function
+	// may be called more than once.
+
 	func bibleInsertRec (_ bibID:Int, _ bibName:String, _ bkRCr:Bool, _ currBook:Int) -> Bool {
 		var sqlite3_stmt:OpaquePointer?=nil
 		let sql:String = "INSERT INTO Bibles(bibleID, name, bookRecsCreated, currBook) VALUES(?, ?, ?, ?);"
@@ -190,7 +191,7 @@ public class KITDAO {
 	//	* to set the flag that indicates that the Books records have been created (on first launch)
 	//	* to change the current Book whenever the user selects a different Book to work on
 
-	// This function needs a String parameter for the revised Bible name
+	// This function needs a String parameter for the possibly edited Bible name
 	func bibleUpdateName (_ bibName:String) -> Bool {
 		var sqlite3_stmt:OpaquePointer?=nil
 		let sql:String = "UPDATE Bibles SET name = ?1 WHERE bibleID = 1;"
@@ -285,16 +286,6 @@ public class KITDAO {
 		}
 		sqlite3_finalize(sqlite3_stmt)
 	}
-	
-	// The Books record for the current Book needs to be read when the user selects that Book
-	//	* to find out whether the current Book's Chapters records have been created
-	//	* to find out whether there is a current Chapter to go to
-	// TODO: Check whether this function is needed; these data items are already there and
-	//	are updated as they change during running of the app?
-	
-//	func booksGetRec () -> Bool {
-//		return true
-//	}
 
 	// The Books record for the current Book needs to be updated
 	//	* to set the flag that indicates that the Chapter records have been created (on first edit of that Book)
@@ -324,6 +315,10 @@ public class KITDAO {
 	// The Chapters records for the current Book need to be created when the user first selects that Book to edit
 	// This function will be called once by the KIT software for every Chapter in the current Book; it will be
 	// called before any VerseItem Records have been created for the Chapter
+	// Each Chapters record has an INTEGER PRIMARY KEY, chapterID, that is assigned automatically
+	// by SQLite; this is not included in the insert record SQL.
+	// The field for USFM is left empty until the user taps the "Export" button after
+	// keyboarding enough to export.
 
 	func chaptersInsertRec (_ bibID:Int, _ bkID:Int, _ chNum:Int, _ itRCr:Bool, _ numVs:Int, _ numIt:Int, _ currIt:Int, _ currVsNum:Int ) -> Bool {
 		var sqlite3_stmt:OpaquePointer?=nil
@@ -373,12 +368,6 @@ public class KITDAO {
 		}
 		sqlite3_finalize(sqlite3_stmt)
 	}
-
-	// TODO: Check whether this function is needed; these data items are already there and
-	//	are updated as they change during running of the app.
-//	func chaptersGetRec() -> Bool {
-//		return true
-//	}
 
 	// The Chapters record for the current Chapter needs to be updated
 	//	* to set the flag that indicates that the VerseItem records have been created (on first edit of that Chapter)
@@ -502,9 +491,11 @@ public class KITDAO {
 		return (result == 0)
 	}
 
-	// The text of a VerseItem record in the UITableView needs to be updated
+	// The text of a VerseItem record in the UITableView needs to be saved to kdb.sqlite
 	//	* when the user selects a different VerseItem to work on
 	//	* when the VerseItem cell scrolls outside the visible range
+	//	* when various life cycle stages of the View or App are reached
+	// returns true if successful
 
 	func itemsUpdateRecText (_ itID:Int, _ itTxt:String) -> Bool {
 		var sqlite3_stmt:OpaquePointer?=nil
@@ -546,6 +537,7 @@ public class KITDAO {
 	//	re-created and the BridgeItem is deleted.
 	// This function will also be called when the user deletes a Psalm Ascription because
 	//	the translation being keyboarded does not include Ascriptions.
+	// returns true if successful
 
 	func itemsDeleteRec (_ itID:Int) -> Bool {
 		var sqlite3_stmt:OpaquePointer?=nil
