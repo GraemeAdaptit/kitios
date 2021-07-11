@@ -63,9 +63,6 @@ public class Chapter: NSObject {
 	var bibInst: Bible? 	// access to the instance of Bible for updating BibBooks[]
 	var bkInst: Book?		// access to the instance for the current Book
 
-//	Probably don't need this
-//	var USFMText:String = ""
-
 // This struct and the BibItems array are used for letting the user select the
 // VerseItem to edit in the current Chapter of the current Book.
 
@@ -255,7 +252,6 @@ public class Chapter: NSObject {
 			currItOfst = offsetToBibItem(withID: currIt)
 			// Setting currItOfst ensures that there is a VIMenu for the current VerseItem
 		}
-//		createPopoverMenu (currItOfst)
 		// Update the database Chapter record
 		if dao!.chaptersUpdateRec (chID, itRCr, currIt, currVN) {
 			print ("Chapter:goCurrentItem updated \(bkInst!.bkName) \(chNum) Chapter record")

@@ -85,6 +85,8 @@ class PubItemsViewController: UITableViewController {
 	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		let popRow = indexPath.row
 		let menuItem = popMenu!.VIMenuItems[popRow]
+		// Ensure that the current BibItem is saved prior to changing which one is the current one.
+		VTVCtrl!.saveCurrentItemText()
 		// Perform the necessary actions, including adjusting the kdb.sqlite database
 		// and the BibItems[] array
 		chInst!.popMenuAction(menuItem.VIMenuAction)
