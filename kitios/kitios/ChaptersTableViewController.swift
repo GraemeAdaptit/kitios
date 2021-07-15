@@ -93,7 +93,6 @@ class ChaptersTableViewController: UITableViewController {
 		// On first launch, do nothing and wait for the user to choose a Chapter.
 		// When user wants to choose another chapter, scroll so that the previously chosen chapter
 		// is near the middle of the TableView
-		// CRASH occurs here because chRow ia -1
 		tableView.scrollToRow(at: IndexPath(row: chRow, section: 0), at: UITableView.ScrollPosition.middle, animated: true)
 	}
 	

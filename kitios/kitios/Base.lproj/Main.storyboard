@@ -360,7 +360,7 @@
             <objects>
                 <navigationController title="KeyIt Navigation" automaticallyAdjustsScrollViewInsets="NO" id="ep7-s1-4F9" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" id="CpA-US-wko"/>
+                    <navigationItem key="navigationItem" largeTitleDisplayMode="always" id="CpA-US-wko"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" id="6YZ-yJ-ECZ">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>

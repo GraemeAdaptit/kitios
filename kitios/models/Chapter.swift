@@ -263,28 +263,29 @@ public class Chapter: NSObject {
 
 	// Set up the new current BibItem given the VerseItem's ID
 	// (as assigned by SQLite when the database's VerseItem record was created)
-
-	func setupCurrentItem(_ currIt:Int) {
-		self.currIt = currIt
-		currItOfst = offsetToBibItem(withID: currIt)
-		self.currVN = BibItems[currItOfst].vsNum
-		// Setting currItOfst ensures that there is a VIMenu for the current VerseItem
-		// Update the BibChap record for this Chapter
-		bkInst!.setCurVItem (currIt, currVN)
-		// Update the database Chapter record
-		if dao!.chaptersUpdateRec (chID, itRCr, currIt, currVN) {
-//			print ("Chapter:goCurrentItem updated \(bkInst!.bkName) \(chNum) Chapter record")
-		} else {
-			print ("Chapter:goCurrentItem ERROR updating \(bkInst!.bkName) \(chNum) Chapter record")
-		}
-	}
-
 	// TODO: This function is not currently used - delete it???
+
+//	func setupCurrentItem(_ currIt:Int) {
+//		self.currIt = currIt
+//		currItOfst = offsetToBibItem(withID: currIt)
+//		// Setting currItOfst ensures that there is a VIMenu for the current VerseItem
+//		self.currVN = BibItems[currItOfst].vsNum
+//		// Update the BibChap record for this Chapter
+//		bkInst!.setCurVItem (currIt, currVN)
+//		// Update the database Chapter record
+//		if dao!.chaptersUpdateRec (chID, itRCr, currIt, currVN) {
+//			print ("Chapter:goCurrentItem updated \(bkInst!.bkName) \(chNum) Chapter record")
+//		} else {
+//			print ("Chapter:goCurrentItem ERROR updating \(bkInst!.bkName) \(chNum) Chapter record")
+//		}
+//	}
+
 	func setupCurrentItemFromTableRow(_ tableRow: Int) {
 		currItOfst = tableRow
-		currIt = BibItems[tableRow].itID
 		// Setting currItOfst ensures that there is a VIMenu for the current VerseItem
-//		createPopoverMenu (currItOfst)
+		currIt = BibItems[tableRow].itID
+		// Update the BibChap record for this Chapter
+		bkInst!.setCurVItem (currIt, currVN)
 		// Update the database Chapter record
 		if dao!.chaptersUpdateRec (chID, itRCr, currIt, currVN) {
 //			print ("Chapter:goCurrentItem updated \(bkInst!.bkName) \(chNum) Chapter record")
