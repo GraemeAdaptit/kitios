@@ -2,7 +2,8 @@
 //  KeyItSetupController.swift
 //	kitios
 //
-//	GDLC 21SEP20	Removed redundant @IBOutlet for saveBibleName
+//	GDLC 23JUL21 Cleaned out print commands (were used in early stages of development)
+//	GDLC 21SEP20 Removed redundant @IBOutlet for saveBibleName
 //
 //	The KeyItSetupController allows the user to edit the name of the Bible and then
 //	starts the creation of the Bible -> curr Book -> curr Chapter -> curr VerseItem
@@ -41,11 +42,6 @@ class KeyItSetupController: UIViewController, UITextFieldDelegate {
 	@IBOutlet weak var bibleName: UITextField!
 	@IBOutlet weak var goButton: UIButton!
 
-//	required init?(coder aDecoder: NSCoder) {
-//		super.init(coder: aDecoder)
-//		print("KeyItSetupController:init")
-//	}
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -56,9 +52,6 @@ class KeyItSetupController: UIViewController, UITextFieldDelegate {
 		bibName = bibRec.bibName
 		bkRCr = bibRec.bkRCr
 		currBook = bibRec.currBk
-
-		print("The Bible record for \(bibName) has been read from kdb.sqlite")
-		print("The currBook read from kdb.sqlite is \(currBook)")
 	}
 
 	override func viewDidAppear(_ animated: Bool) {
@@ -86,38 +79,25 @@ class KeyItSetupController: UIViewController, UITextFieldDelegate {
 		performSegue (withIdentifier: "keyItNav", sender: self)
 	}
 
-//	Don't need a button for this; when the user taps "Go" segueToNavController() automatically saves the edited name
+	// Don't need a button for this; when the user taps "Go"
+	// goNavController() automatically saves the edited name
 	func saveBibleName () {
 		// Remove the insertion point from the Name of Bible text field
 		self.view.endEditing(true)
 		bibName = bibleName.text!
 		if !dao!.bibleUpdateName (bibName) {
+			// TODO: Make a better way of handling such failures
 			print("KeyItSetupController:saveBibleName failed")
-		} else {
-			print("KeyItSetupController:saveBibleName \(bibName) succeeded")
 		}
-		
 	}
 
 	func createBibleInstance () {
-		print("KeyItSetupController:segueToNavController create Bible instance")
 		// Create an instance of the class Bible whose initialisation will create the array
 		// of Bible books and start building the partial in-memory data structures for
 		//		Bible -> curr Book -> curr Chapter -> curr VerseItem.
 		bInst = Bible(bibID, bibName, bkRCr, currBook)
 		// Ensure rest of app has access to the Bible instance
 		appDelegate.bibInst = bInst
-		print("KeyItSetupController:createBibleInstance KIT has created an instance of class Bible")
 	}
-
-	/*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

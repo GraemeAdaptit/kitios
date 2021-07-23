@@ -1,6 +1,7 @@
 //
 //  Bible.swift
 //
+//	GDLC 23JUL21 Cleaned out print commands (were used in early stages of development)
 //	GDLC 12MAR20 Updated for KIT05
 //
 //  Created by Graeme Costin on 9OCT19.
@@ -80,13 +81,11 @@ public class Bible:NSObject {
 		self.bkRCr = bkRCr
 		self.currBook = currBk
 		currBookOfst = (currBook > 39 ? currBook - 2 : currBook - 1 )
-		print("The Bible instance has been created")
 
 		// First launch: the Books records will not have been created so create them
 		if !bkRCr {
 			// Create the 66 Book records for this Bible
 			createBooksRecords(bID)
-			print("First launch: the 66 Books records have been created")
 		}
 
 		// Every launch: the Books records will have been created at this point,
@@ -98,11 +97,10 @@ public class Bible:NSObject {
 		dao!.readBooksRecs (bibInst: self)
 		// calls readBooksRecs() in KITDAO.swift to read the kdb.sqlite database Books table
 		// readBooksRecs() calls appendBibBookToArray() in this file for each ROW read from kdb.sqlite
-		print("Every launch: the BibBooks array of 66 Books records has been populated from kdb.sqlite")
 	}
 	
-// createBooksRecords creates the Books records for every Bible book from the text files in the app's resources
-// and stores these records in the database kdb.sqlite
+// createBooksRecords creates the Books records for every Bible book from the text files in the
+// app's resources and stores these records in the database kdb.sqlite
 	
 	func createBooksRecords (_ bID: Int) {
 		// Open KIT_BooksSpec.txt and read its data
@@ -151,11 +149,9 @@ public class Bible:NSObject {
 				let numCh = 0
 				let curChID = 0
 				let curChNum = 0
-//				print("BookID = \(bkID), BibleID = \(bibID), Book Code = \(bkCode), BookName = \(bkName), ChapRecsCreated is \(chRCr), numChaps = \(numCh), CurrentChap = \(curChNum)")
 				// Write Books record to kdb.sqlite
-				if dao!.booksInsertRec (bkID, bibID, bkCode, bkName, chRCr, numCh, curChID, curChNum) {
-					print ("The Books record for \(bkName) was created")
-				} else {
+				if !dao!.booksInsertRec (bkID, bibID, bkCode, bkName, chRCr, numCh, curChID, curChNum) {
+					// TODO: Make a better way of handling errors like this
 					print ("The Books record for \(bkName) was not created")
 				}
 			}
@@ -165,9 +161,8 @@ public class Bible:NSObject {
 		bkRCr = true
 		
 		// Update the kdb.sqlite Bible record to note that Books recs have been created
-		if dao!.bibleUpdateRecsCreated() {
-			print("bookRecsCreated in the Bible rec was set to true")
-		} else {
+		if !dao!.bibleUpdateRecsCreated() {
+			// TODO: Make a better way of handling errors like this
 			print("bookRecsCreated in the Bible rec was not set to true")
 		}
 	}
@@ -185,20 +180,17 @@ public class Bible:NSObject {
 	deinit {
 		// Also delete the instance of the SQLite data access object
 		dao = nil
-		print("Bible instance has been deleted")
 	}
 
 // Refresh display of the Bible Books table on return to foreground
 	
 	func refreshUIAfterReturnToForeground () {
 		// TODO: Check whether there anything to do here?
-		print ("KIT user interface has been refreshed.")
 	}
 
 // If there is a current Book (as read from kdb.sqlite) then instantiate that Book.
 	func goCurrentBook () {
 		let book = BibBooks[currBookOfst]
-		print("Going to \(book.bkName) as the current Book")
 
 		// delete any previous in-memory instance of Book
 		bookInst = nil
@@ -207,19 +199,15 @@ public class Bible:NSObject {
 		bookInst = Book(book.bkID, book.bibID, book.bkCode, book.bkName, book.chapRCr, book.numCh, book.curChID, book.curChNum)
 		// Keep a reference in the AppDelegate
 		appDelegate.bookInst = self.bookInst
-		print("KIT has created an instance of class Book for the old current Book \(book.bkName)")
 	}
 	
 // When the user selects a book from the UITableView of books it needs to be recorded as the
 // current book and initialisation of data structures in a new Book instance must happen.
 	func setupCurrentBook(_ book: BibBook) {
-		print("Making \(book.bkName) the current Book")
 		currBook = book.bkID
 		currBookOfst = (currBook > 39 ? currBook - 2 : currBook - 1 )
 		// update Bible record in kdb.sqlite to show this current book
-		if dao!.bibleUpdateCurrBook(currBook) {
-			print("The currBook in kdb.sqlite was updated to \(currBook)")
-		} else {
+		if !dao!.bibleUpdateCurrBook(currBook) {
 			print("The currBook in kdb.sqlite was not updated to \(currBook)")
 		}
 
@@ -230,7 +218,6 @@ public class Bible:NSObject {
 		bookInst = Book(book.bkID, book.bibID, book.bkCode, book.bkName, book.chapRCr, book.numCh, book.curChID, book.curChNum)
 		// Keep a reference in the AppDelegate
 		appDelegate.bookInst = self.bookInst
-		print("KIT has created an instance of class Book for the new current Book \(book.bkName)")
 
 	}
 

@@ -134,7 +134,6 @@
                                                 <constraint firstAttribute="height" priority="250" constant="100" id="2l1-bN-uqR"/>
                                                 <constraint firstAttribute="width" priority="250" constant="300" id="Y61-PB-jIg"/>
                                             </constraints>
-                                            <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                             <color key="textColor" systemColor="labelColor"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
@@ -331,9 +330,8 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="BuF-Eh-6fZ">
-                                <rect key="frame" x="15" y="30" width="384" height="610"/>
+                                <rect key="frame" x="4" y="4" width="406" height="732"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                 <color key="textColor" systemColor="labelColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
@@ -342,10 +340,10 @@
                         <viewLayoutGuide key="safeArea" id="1DF-EU-m1c"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="BuF-Eh-6fZ" firstAttribute="top" secondItem="1DF-EU-m1c" secondAttribute="top" constant="30" id="EAq-2R-Pii"/>
-                            <constraint firstItem="BuF-Eh-6fZ" firstAttribute="leading" secondItem="1DF-EU-m1c" secondAttribute="leading" constant="15" id="Ksu-fF-Rmf"/>
-                            <constraint firstItem="1DF-EU-m1c" firstAttribute="trailing" secondItem="BuF-Eh-6fZ" secondAttribute="trailing" constant="15" id="M7y-qj-iCQ"/>
-                            <constraint firstItem="1DF-EU-m1c" firstAttribute="bottom" secondItem="BuF-Eh-6fZ" secondAttribute="bottom" constant="100" id="u6E-j1-rI8"/>
+                            <constraint firstItem="BuF-Eh-6fZ" firstAttribute="top" secondItem="1DF-EU-m1c" secondAttribute="top" constant="4" id="EAq-2R-Pii"/>
+                            <constraint firstItem="BuF-Eh-6fZ" firstAttribute="leading" secondItem="1DF-EU-m1c" secondAttribute="leading" constant="4" id="Ksu-fF-Rmf"/>
+                            <constraint firstItem="1DF-EU-m1c" firstAttribute="trailing" secondItem="BuF-Eh-6fZ" secondAttribute="trailing" constant="4" id="M7y-qj-iCQ"/>
+                            <constraint firstItem="1DF-EU-m1c" firstAttribute="bottom" secondItem="BuF-Eh-6fZ" secondAttribute="bottom" constant="4" id="u6E-j1-rI8"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Export Chapter" prompt="Export Chapter X of Y" id="Osw-Ww-gsG"/>

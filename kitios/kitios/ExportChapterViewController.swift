@@ -2,6 +2,8 @@
 //  ExportChapterViewController.swift
 //  kitios
 //
+//	GDLC 23JUL21 Cleaned out print commands (were used in early stages of development)
+//
 //  Created by Graeme Costin on 2/5/20.
 // The author disclaims copyright to this source code.  In place of
 // a legal notice, here is a blessing:
@@ -38,22 +40,10 @@ class ExportChapterViewController: UIViewController {
 		// Display it to the user
 		ExportUSFM.text = USFMexp
 		// Save it into the current Chapter record of kdb.sqlite
-		if chInst!.saveUSFMText (chInst!.chID, USFMexp) {
-			print("ExportChapterViewController:viewDidLoad saved USFM text to kdb.sqlite")
-		} else {
+		if !chInst!.saveUSFMText (chInst!.chID, USFMexp) {
+			// TODO: Make a better way of handling errors like this
 			print("ExportChapterViewController:viewDidLoad save to kdb.sqlite FAILED")
 		}
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

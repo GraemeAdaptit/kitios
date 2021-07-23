@@ -1,7 +1,8 @@
 //
 //  Book.swift
 //
-// GDLC 1JUL21 Added currVsNum to Chapter records
+//	GDLC 23JUL21 Cleaned out print commands (were used in early stages of development)
+//	GDLC 1JUL21 Added currVsNum to Chapter records
 //
 //  Created by Graeme Costin on 25/10/19.
 // The author disclaims copyright to this source code.  In place of
@@ -77,7 +78,6 @@ var BibChaps: [BibChap] = []
 
 	init(_ bkID: Int, _ bibID: Int, _ bkCode: String, _ bkName: String, _ chapRCr: Bool, _ numChaps: Int, _ curChID: Int, _ curChNum:Int) {
 		super.init()
-		print("start of Book.init() for \(bkName)")
 		
 		self.bkID = bkID			// bookID INTEGER
 		self.bibID = bibID			// bibleID INTEGER
@@ -116,14 +116,6 @@ var BibChaps: [BibChap] = []
 		dao!.readChaptersRecs (bibID, self)
 		// calls readChaptersRecs() in KITDAO.swift to read the kdb.sqlite database Books table
 		// readChaptersRecs() calls appendChapterToArray() in this file for each ROW read from kdb.sqlite
-		print("Chapter records for \(bkName) have been read from kdb.sqlite")
-	}
-
-// When the user chooses a different Book, the in-memory instance of the previous current Book and
-// any instances owned by it need to be deleted
-	deinit {
-		// TODO: deinit any owned class instances - Chapters and VerseItems ??
-		print("Book deinit() The previous current Book and its Chapters and VerseItems have been deleted from memory")
 	}
 
 	func createChapterRecords (_ book:Int, _ bib:Int, _ code:String) {
@@ -162,9 +154,8 @@ var BibChaps: [BibChap] = []
 			}
 			let numVs = Int(elemTr)!
 			numIt = numIt + numVs	// for some Psalms numIt will include the ascription VerseItem
-			if dao!.chaptersInsertRec (bib, book, chNum, false, numVs, numIt, currIt, currVN) {
-				print("Book:createChapterRecords Created Chapter record for \(String(describing: bkName)) chapter \(chNum)")
-			} else {
+			if !dao!.chaptersInsertRec (bib, book, chNum, false, numVs, numIt, currIt, currVN) {
+				// TODO: Make a better way of handling errors like this
 				print("Book:createChapterRecords: Creating Chapter record failed for \(String(describing: bkName)) chapter \(chNum)")
 			}
 			chNum = chNum + 1
@@ -174,9 +165,8 @@ var BibChaps: [BibChap] = []
 		
 		// Update kdb.sqlite Books record of current Book to indicate that its Chapter records have been
 		// created, the number of Chapters has been found, but there is not yet a current Chapter
-		if dao!.booksUpdateRec (bibID, bkID, chapRCr, numChap, 0, 0) {
-			print("Book:createChapterRecords updated the record for this Book")
-		} else {
+		if !dao!.booksUpdateRec (bibID, bkID, chapRCr, numChap, 0, 0) {
+			// TODO: Make a better way of handling errors like this
 			print("Book:createChapterRecords updating the record for this Book failed")
 		}
 	
@@ -211,7 +201,6 @@ var BibChaps: [BibChap] = []
 // the Book record remember that selection.
 	func goCurrentChapter() {
 		currChapOfst = offsetToBibChap(withID: curChID)
-		print("Going to the current Chapter \(currChapOfst+1)")
 		
 		// delete any previous in-memory instance of Chapter
 		chapInst = nil
@@ -221,7 +210,6 @@ var BibChaps: [BibChap] = []
 		chapInst = Chapter(chap.chID, chap.bibID, chap.bkID, chap.chNum, chap.itRCr, chap.numVs, chap.numIt, chap.curIt, chap.curVN)
 		// Keep a reference in the AppDelegate
 		appDelegate.chapInst = self.chapInst
-		print("KIT has created an instance of class Chapter for the old current Chapter \(currChapOfst+1)")
 	}
 
 // When the user selects a Chapter from the UITableView of Chapters it needs to be recorded as the
@@ -231,15 +219,13 @@ var BibChaps: [BibChap] = []
 		let diffChap = (chapOfst != currChapOfst)
 		let chap = BibChaps[chapOfst]
 		curChNum = chap.chNum
-		print("Making chapter \(curChNum) the current Chapter")
 		curChID = chap.chID		// ChapterID
 		currChapOfst = chapOfst		// Chapter offset (1 less than Chapter Number seen by users)
 		// update Book record in kdb.sqlite to show this current Chapter
-		if dao!.booksUpdateRec(bibID, bkID, chapRCr, numChap, curChID, curChNum) {
-			print("The currChap for \(bkName) in kdb.sqlite was updated to \(curChNum)")
-			} else {
-				print("ERROR: The currChap for \(bkName) in kdb.sqlite was not updated to \(curChNum)")
-			}
+		if !dao!.booksUpdateRec(bibID, bkID, chapRCr, numChap, curChID, curChNum) {
+			// TODO: Make a better way of handling errors like this
+			print("ERROR: The currChap for \(bkName) in kdb.sqlite was not updated to \(curChNum)")
+		}
 		// Update the curChID and curChNum for this book in BibBooks[] in bInst
 		bibInst!.setBibBooksCurChap(curChID, curChNum)
 
@@ -253,7 +239,6 @@ var BibChaps: [BibChap] = []
 		}
 		// Keep a reference in the AppDelegate
 		appDelegate.chapInst = self.chapInst
-		print("KIT has created an instance of class Chapter for the new current Chapter \(chap.chNum)")
 	}
 
 	// Set the new value for the current VerseItem

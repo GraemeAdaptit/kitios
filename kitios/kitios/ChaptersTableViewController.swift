@@ -2,6 +2,8 @@
 //  ChaptersTableViewController.swift
 //  kitios
 //
+//	GDLC 23JUL21 Cleaned out print commands (were used in early stages of development)
+//
 //	This is the UITableViewController for the Select Chapter scene. This scene will be entered
 //	after the current Book is selected and set up, and so it will have available the array of
 //	Chapters for the current Book.
@@ -34,19 +36,9 @@ class ChaptersTableViewController: UITableViewController {
 	// Chapter number of the selected Chapter
 	var chNum = 0	// safe value in case a Chapter has not yet been selected
 
-	required init?(coder aDecoder: NSCoder) {
-		print("ChaptersTableViewController:init")
-		super.init(coder: aDecoder)
-	}
-
-	deinit {
-		print("ChaptersTableViewController:deinit")
-	}
-
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		// Get access to the array Book.BibChaps
-		print("ChaptersTableViewController:viewDidLoad")
 		bInst = appDelegate.bibInst
 		bkInst = bInst!.bookInst	// Get access to the instance of the current Book
 		navigationItem.title = bInst!.bibName
@@ -57,16 +49,10 @@ class ChaptersTableViewController: UITableViewController {
 			navigationItem.prompt = "Choose \(chapName?.capitalized ?? "Chapter") of " + bkInst!.bkName
 		}
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
-		print("ChaptersTableViewController:viewWillAppear")
 		goingForwards = false
 		// Retrieve current Chapter if one had been selected
 		if bkInst!.curChID > 0 {
@@ -80,7 +66,6 @@ class ChaptersTableViewController: UITableViewController {
 	
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
-		print("ChaptersTableViewController:viewDidAppear")
 		// Most launches will have a current Chapter and will go straight to it
 		if !letUserChooseChapter && bkInst!.curChID > 0 {
 			bkInst!.goCurrentChapter()
@@ -98,17 +83,10 @@ class ChaptersTableViewController: UITableViewController {
 	
 	override func viewWillDisappear(_ animated: Bool) {
 		super.viewWillDisappear(animated)
-		print("ChaptersTableViewController:viewWillDisappear")
 		if !goingForwards {
 			chRow = 0	// Assume a different book & avoid an out-of-range row
 		}
 	}
-	
-	override func viewDidDisappear(_ animated: Bool) {
-		super.viewDidDisappear(animated)
-		print("ChaptersTableViewController:viewDidDisappear")
-	}
-
 	
 	// MARK: - Table view data source
 
@@ -118,7 +96,6 @@ class ChaptersTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
  		if section == 0 {
-			print("ChaptersTableViewController:tableView:numberOfRowsInSection")
 			return bkInst!.BibChaps.count
 		} else {
 			return 0
@@ -162,51 +139,6 @@ class ChaptersTableViewController: UITableViewController {
 		letUserChooseChapter = true
 		performSegue(withIdentifier: "editChapter", sender: self)
 	}
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 	@IBAction func unwindToEditChapter(_ segue: UIStoryboardSegue) {
 	}

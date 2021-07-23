@@ -1,7 +1,7 @@
 //
 //  Chapter.swift
-//  kitios
 //
+//	GDLC 23JUL21 Cleaned out some print commands (were used in early stages of development)
 //	GDLC 1JUL21 Added currVN for verse number associated with the currIt
 //
 //  Created by Graeme Costin on 8/1/20.
@@ -105,7 +105,6 @@ public class Chapter: NSObject {
 		
 	init(_ chID: Int, _ bibID: Int, _ bkID: Int, _ chNum: Int, _ itRCr: Bool, _ numVs:Int, _ numIt: Int, _ currIt: Int, _ currVN: Int) {
 		super.init()
-		print("Chapter:init instantiating current Chapter instance")
 		self.chID = chID		// chapterID INTEGER PRIMARY KEY
 		self.bibID = bibID		// bibleID INTEGER
 		self.bkID = bkID		// bookID INTEGER,
@@ -138,15 +137,15 @@ public class Chapter: NSObject {
 		// Calls readVerseItemsRecs() in KITDAO.swift to read the kdb.sqlite database VerseItems table
 		// readVerseItemsRecs() calls appendItemToArray() in this file for each ROW read from kdb.sqlite
 		let result = dao!.readVerseItemsRecs (self)
-		if result {
-			print("VerseItems records for chapter \(chNum) have been read from kdb.sqlite")
-		} else {
+		if !result {
+			// TODO: Make better way of handling errors like this
 			print("ERROR: VerseItems records for chapter \(chNum) have not been read from kdb.sqlite")
 		}
 		// Ensure that numIt is correct (to guard against any accumulated data errors)
 		self.numIt = BibItems.count
-		if dao!.chaptersUpdateRecPub (chID, self.numIt, self.currIt, self.currVN) {
-			print("Chapter init(): numIt updated in kdb.sqlite")
+		if !dao!.chaptersUpdateRecPub (chID, self.numIt, self.currIt, self.currVN) {
+			// TODO: Make better way of handling errors like this
+			print("ERROR: Chapter init(): numIt not updated in kdb.sqlite")
 		}
 	}
 	
@@ -164,9 +163,8 @@ public class Chapter: NSObject {
 			let intSeq = 0
 			let isBrid = false
 			let lastVsBridge = 0
-			if dao!.verseItemsInsertRec (chID, vsNum, itTyp, itOrd, itText, intSeq, isBrid, lastVsBridge) != -1 {
-//				print("Chapter:createItemRecords Created Ascription record for Psalm \(chNum)")
-			} else {
+			if dao!.verseItemsInsertRec (chID, vsNum, itTyp, itOrd, itText, intSeq, isBrid, lastVsBridge) == -1 {
+				// TODO: Make better way of handling errors like this
 				print("ERROR: Book:createItemRecords: Creating Ascription record failed for Psalm \(chNum)")
 			}
 		}
@@ -177,9 +175,8 @@ public class Chapter: NSObject {
 			let intSeq = 0
 			let isBrid = false
 			let lastVsBridge = 0
-			if dao!.verseItemsInsertRec (chID, vsNum, itTyp, itOrd, itText, intSeq, isBrid, lastVsBridge) != -1 {
-//				print("Chapter:createItemRecords Created Verse record for chap \(chNum) vs \(vsNum)")
-			} else {
+			if dao!.verseItemsInsertRec (chID, vsNum, itTyp, itOrd, itText, intSeq, isBrid, lastVsBridge) == -1 {
+				// TODO: Make better way of handling errors like this
 				print("ERROR: Book:createItemRecords: Creating Verse record failed for chap \(chNum) vs \(vsNum)")
 			}
 		}
@@ -188,9 +185,8 @@ public class Chapter: NSObject {
 		// Also update the BibChap struct to show itRCr true
 		bibInst!.bookInst!.BibChaps[chNum - 1].itRCr = true
 		// Update Chapter record to show that VerseItems have been created
-		if dao!.chaptersUpdateRec (chID, itRCr, currIt, currVN) {
-//			print("Chapter:createItemRecords update Chapter record for chap \(chNum) succeeded")
-		} else {
+		if !dao!.chaptersUpdateRec (chID, itRCr, currIt, currVN) {
+			// TODO: Make better way of handling errors like this
 			print("Chapter:createItemRecords update Chapter record for chap \(chNum) failed")
 		}
 	}
@@ -253,43 +249,23 @@ public class Chapter: NSObject {
 			// Setting currItOfst ensures that there is a VIMenu for the current VerseItem
 		}
 		// Update the database Chapter record
-		if dao!.chaptersUpdateRec (chID, itRCr, currIt, currVN) {
-			print ("Chapter:goCurrentItem updated \(bkInst!.bkName) \(chNum) Chapter record")
-		} else {
-			print ("Chapter:goCurrentItem ERROR updating \(bkInst!.bkName) \(chNum) Chapter record")
+		if !dao!.chaptersUpdateRec (chID, itRCr, currIt, currVN) {
+			// TODO: Make better way of handling errors like this
+			print ("ERROR: Chapter:goCurrentItem ERROR updating \(bkInst!.bkName) \(chNum) Chapter record")
 		}
 		return currItOfst
 	}
-
-	// Set up the new current BibItem given the VerseItem's ID
-	// (as assigned by SQLite when the database's VerseItem record was created)
-	// TODO: This function is not currently used - delete it???
-
-//	func setupCurrentItem(_ currIt:Int) {
-//		self.currIt = currIt
-//		currItOfst = offsetToBibItem(withID: currIt)
-//		// Setting currItOfst ensures that there is a VIMenu for the current VerseItem
-//		self.currVN = BibItems[currItOfst].vsNum
-//		// Update the BibChap record for this Chapter
-//		bkInst!.setCurVItem (currIt, currVN)
-//		// Update the database Chapter record
-//		if dao!.chaptersUpdateRec (chID, itRCr, currIt, currVN) {
-//			print ("Chapter:goCurrentItem updated \(bkInst!.bkName) \(chNum) Chapter record")
-//		} else {
-//			print ("Chapter:goCurrentItem ERROR updating \(bkInst!.bkName) \(chNum) Chapter record")
-//		}
-//	}
 
 	func setupCurrentItemFromTableRow(_ tableRow: Int) {
 		currItOfst = tableRow
 		// Setting currItOfst ensures that there is a VIMenu for the current VerseItem
 		currIt = BibItems[tableRow].itID
+		currVN = BibItems[tableRow].vsNum
 		// Update the BibChap record for this Chapter
 		bkInst!.setCurVItem (currIt, currVN)
 		// Update the database Chapter record
-		if dao!.chaptersUpdateRec (chID, itRCr, currIt, currVN) {
-//			print ("Chapter:goCurrentItem updated \(bkInst!.bkName) \(chNum) Chapter record")
-		} else {
+		if !dao!.chaptersUpdateRec (chID, itRCr, currIt, currVN) {
+			// TODO: Make better way of handling errors like this
 			print ("Chapter:goCurrentItem ERROR updating \(bkInst!.bkName) \(chNum) Chapter record")
 		}
 	}
@@ -297,12 +273,10 @@ public class Chapter: NSObject {
 	// Copy and save the current VerseItem's text
 	func copyAndSaveVItem(_ ofSt: Int, _ text: String) {
 		BibItems[ofSt].itTxt = text
-		if dao!.itemsUpdateRecText (BibItems[currItOfst].itID, BibItems[currItOfst].itTxt) {
-//			print ("Chapter:saveCurrentItemText text of current item saved to kdb.sqlite")
-		} else {
-			print ("Chapter:saveCurrentItemText save of current item text to kdb.sqlite FAILED")
+		if !dao!.itemsUpdateRecText (BibItems[currItOfst].itID, BibItems[currItOfst].itTxt) {
+			// TODO: Make better way of handling errors like this
+			print ("ERROR: Chapter:saveCurrentItemText save of current item text to kdb.sqlite FAILED")
 		}
-//		chDirty = true	// An item in this chapter has been edited (used in UI)
 	}
 
 	// Function to carry out on the data model the actions required for the popover menu items

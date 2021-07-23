@@ -2,6 +2,8 @@
 //  VersesTableViewController.swift
 //	kitios
 //
+//	GDLC 23JUL21 Cleaned out print commands (were used in early stages of development)
+//
 //	This is the UITableViewController for the Edit Chapter scene. This scene will be entered
 //	only when a current Book and current Chapter have been chosen.
 //
@@ -20,9 +22,6 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 	var bInst: Bible?
 	var bkInst: Book?
 	var chInst: Chapter?
-	// TODO: Check whether currIt is needed by VersesTableViewController?
-//	var currIt = 0		// Zero until one of the VerseItems is chosen for editing;
-						// then it is the ItemID of the VerseItem that is the current one.
 	var currItOfst = -1	// -1 until one of the VerseItems is chosen for editing;
 						// then it is the offset into the BibItems[] array which equals
 						// the offset into the list of cells in the TableView.
@@ -35,10 +34,8 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 
 	// The only time that the VersesTableViewController will be loaded is
 	// after a Book and Chapter have been selected for editing.
-
     override func viewDidLoad() {
         super.viewDidLoad()
-		print("VersesTableViewController:viewDidLoad")
 		// Get access to the current Book and the current Chapter
 		bInst = appDelegate.bibInst	// Get access to the instance of the Bible
 		bkInst = appDelegate.bookInst	// Get access to the instance of the current Book
@@ -52,43 +49,27 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 		}
 		navigationItem.largeTitleDisplayMode = .always
 
-		// Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
-		print("VersesTableViewController:viewWillAppear")
 		// Get the offset and ID of the current VerseItem
 		currItOfst = chInst!.goCurrentItem()
-//		currIt = chInst!.BibItems[currItOfst].itID
 		// Select this VerseItem and scroll to make it visible
 		tableView.selectRow(at: IndexPath(row: currItOfst, section: 0), animated: animated, scrollPosition: UITableView.ScrollPosition.middle)
 	}
 	
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
-		print("VersesTableViewController:viewDidAppear")
 		if let cell = tableView.cellForRow(at: IndexPath(row: currItOfst, section: 0)) as! UIVerseItemCell? {
 			cell.itText.becomeFirstResponder()
-		} else {
-			print("Selected current cell not visible")
 		}
 	}
 	
 	override func viewWillDisappear(_ animated: Bool) {
 		super.viewWillDisappear(animated)
-		print("VersesTableViewController:viewWillDisappear")
 		// Save the current verse if necessary
 		saveCurrentItemText()
-	}
-	
-	override func viewDidDisappear(_ animated: Bool) {
-		super.viewDidDisappear(animated)
-		print("VersesTableViewController:viewDidDisappear")
 	}
 
     // MARK: - Table view data source
@@ -145,7 +126,6 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 				tableView?.endUpdates()
 			}
 		}
-		print("VersesTableViewController:tableView:cellForRowAt Fetched verse \(vsItem.vsNum)")
         return cell
     }
 
@@ -181,12 +161,9 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 			saveCurrentItemText()
 
 			// Go to the newly selected VerseItem
-			let bibItem = chInst!.getBibItem(at: newOfst)
-			print("VersesTableViewController:tableView:didSelectRowAt Tap selected verse \(bibItem.vsNum)")
 
 			// Set up the selected Item as the current VerseItem
 			chInst!.setupCurrentItemFromTableRow(newOfst)
-//			currIt = bibItem.itID
 			currItOfst = newOfst
 			// Select this VerseItem and ensure that it is visible
 			tableView.selectRow(at: IndexPath(row: currItOfst, section: 0), animated: true, scrollPosition: UITableView.ScrollPosition.middle)
@@ -194,13 +171,11 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 	}
 	
 	func saveCurrentItemText() {
-		print("Current VerseItem Offset: \(currItOfst)")
 		let currCell = tableView.cellForRow(at: IndexPath(row: currItOfst, section: 0)) as! UIVerseItemCell?
 		if currCell != nil {
 			if currCell!.dirty {
 				let textSrc = currCell!.itText.text as String
 				chInst!.copyAndSaveVItem(currItOfst, textSrc)
-				print("VersesTableViewController:saveCurrentItemText Saved current VerseItem in row \(currCell!.tableRow + 1)")
 				currCell!.dirty = false
 			}
 		}
@@ -231,14 +206,12 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
  		if savCell.dirty {
 			let textSrc = savCell.itText.text! as String
 			saveCellText(savCell.tableRow, textSrc)
-			print("VersesTableViewController:saveCurrentItemText Saved current item \(savCell.tableRow)")
 			savCell.dirty = false
 		}
 	}
 
 	// Action for the itType button in the VerseItem cell
 	func pubItemsPopoverAction(_ button: UIButton, _ tableRow:Int, _ showRect:CGRect) {
-		print ("\(String(describing: button.title(for: .normal))) pressed")
 		userTappedOnCellLabel(tableRow)
 		var anchorRect    = tableView.convert(showRect, to: tableView)
 		anchorRect        = tableView.convert(anchorRect, to: view)
@@ -268,7 +241,6 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 		tableView.reloadData()
 		// Get current VerseItem from Chapter instance
 		currItOfst = chInst!.goCurrentItem()
-//		currIt = chInst!.BibItems[currItOfst].itID
 		// Select this VerseItem and scroll to make it visible
 		tableView.selectRow(at: IndexPath(row: currItOfst, section: 0), animated: true, scrollPosition: UITableView.ScrollPosition.middle)
 		// Activate it for text input

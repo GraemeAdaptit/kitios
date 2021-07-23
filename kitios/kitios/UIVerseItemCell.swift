@@ -1,6 +1,7 @@
 //
 //  UIVerseItemCell.swift
-//  kitios
+//
+//	GDLC 23JUL21 Cleaned out print commands (were used in early stages of development)
 //
 //	A custom class for UITableView cells presenting VerseItems for editing.
 //
@@ -30,7 +31,7 @@ class UIVerseItemCell: UITableViewCell, UITextViewDelegate {
 
 	var textChanged: ((String) -> Void)?
 	
-	var tableRow = 0			// As each instance of UIVerseItemCell is created its tableRow is set
+	var tableRow = 0	// As each instance of UIVerseItemCell is created its tableRow is set
 	var VTVCtrl: VersesTableViewController?	// Link to the ViewController that owns this cell
 	var dirty = false
 
@@ -54,9 +55,9 @@ class UIVerseItemCell: UITableViewCell, UITextViewDelegate {
 		VTVCtrl!.userTappedInTextOfCell(tableRow)
 	}
 
-	func cellWentOutOfVisibleRange() {
+//	func cellWentOutOfVisibleRange() {
 //		VTVCtrl!.tableView(didEndDisplayingCell: self)
-	}
+//	}
 	
 	// Called by iOS when the UIKit wants to reuse a cell for a different table row
 	override func prepareForReuse() {
@@ -70,26 +71,10 @@ class UIVerseItemCell: UITableViewCell, UITextViewDelegate {
 
 	// Action for the itType button in the VerseItem cell
 	@IBAction func pubPopover(_ button: UIButton) {
-		print ("\(String(describing: button.title(for: .normal))) pressed")
 		let buttonFrame = button.frame
 		let showRect    = self.convert(buttonFrame, to: VTVCtrl!.tableView)
 		VTVCtrl!.pubItemsPopoverAction(button, tableRow, showRect)
 	}
-	
-//	This function introduces behaviour that looks a little like mutual recursion
-//	between parts of the UIKit - looks logical to me, but causes a crash!
-//	override func setSelected(_ selected: Bool, animated: Bool) {
-//		super.setSelected(selected, animated: animated)
-//
-//		// Configure the view for the selected state
-//		if selected {
-//			itText.backgroundColor = .white
-//			itText.becomeFirstResponder()
-//		} else {
-//			itText.backgroundColor = .clear
-//		}
-//	}
-
 }
 
 extension UIVerseItemCell: UIPopoverPresentationControllerDelegate {

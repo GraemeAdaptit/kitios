@@ -1,6 +1,5 @@
 //
 //  UIPubItemCell.swift
-//  kitios
 //
 //	A custom class for UITableView cells presenting popover menu items.
 //

@@ -2,6 +2,7 @@
 //  BooksTableViewController.swift
 //  kitios
 //
+//	GDLC 23JUL21 Cleaned out print commands (were used in early stages of development)
 //	GDLC 12MAR20 Updated for KIT05
 //
 //	This is the UITableViewController for the Select Book scene. This scene will be entered
@@ -48,7 +49,6 @@ class BooksTableViewController: UITableViewController {
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
-		print("BooksTableViewController:viewWillAppear")
 		goingForwards = false
 		// Added reloadData() to catch changes to the current Chapter in a book
 		// TODO: Call this only when a flag on the Bible instance says is is needed?
@@ -57,7 +57,6 @@ class BooksTableViewController: UITableViewController {
 	
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
-		print("BooksTableViewController:viewDidAppear")
 		// Most launches will have a current Book and will go straight to it
 		if !letUserChooseBook && bInst!.currBook > 0 {
 			bInst!.goCurrentBook()	// Creates an instance for the current Book (from kdb.sqlite)
@@ -75,16 +74,6 @@ class BooksTableViewController: UITableViewController {
 		if curBkOfst > 0 {
 			tableView.scrollToRow(at: IndexPath(row: curBkOfst, section: 0), at: UITableView.ScrollPosition.middle, animated: true)
 		}
-	}
-	
-	override func viewWillDisappear(_ animated: Bool) {
-		super.viewWillDisappear(animated)
-		print("BooksTableViewController:viewWillDisappear")
-	}
-	
-	override func viewDidDisappear(_ animated: Bool) {
-		super.viewDidDisappear(animated)
-		print("BooksTableViewController:viewDidDisappear")
 	}
 
 	override func numberOfSections(in tableView: UITableView) -> Int {
@@ -111,9 +100,6 @@ class BooksTableViewController: UITableViewController {
 		let numCh = book.numCh
 		let curChapID = bInst!.BibBooks[indexPath.row].curChID
 		let curChNum = bInst!.BibBooks[indexPath.row].curChNum
-//		if bInst!.bookInst != nil {
-//			curChNum = bInst!.bookInst!.offsetToBibChap(withID: curChapID) + 1
-//		}
 		var numChText = ""
 		if book.chapRCr {
 			if curChapID > 0 {
@@ -127,7 +113,6 @@ class BooksTableViewController: UITableViewController {
 
 	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		let selectedBook = bInst!.BibBooks[indexPath.row]
-		print("BooksTableViewController:tableView:didSelectRowAt Tap selected \(selectedBook.bkName)")
 		// Set up the selected Book as the current Book (this updates kdb.sqlite with the currBook)
 		bInst!.setupCurrentBook(selectedBook)
 		bkRow = indexPath.row
@@ -155,50 +140,5 @@ class BooksTableViewController: UITableViewController {
 		letUserChooseBook = true
 		performSegue(withIdentifier: "selectChapter", sender: self)
 	}
-	
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
