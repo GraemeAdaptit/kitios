@@ -13,10 +13,11 @@
         <scene sceneID="s6T-e1-fNx">
             <objects>
                 <tableViewController storyboardIdentifier="SelectBook" title="Select Book" id="XA6-hc-AsZ" customClass="BooksTableViewController" customModule="kitios" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="Qes-Oa-F25" userLabel="bookTView">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Qes-Oa-F25" userLabel="bookTView">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="774"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <edgeInsets key="layoutMargins" top="100" left="20" bottom="0.0" right="20"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="BookCell" textLabel="a2W-tw-lfU" detailTextLabel="wUm-nN-Ayi" rowHeight="50" style="IBUITableViewCellStyleValue1" id="oCw-us-deb">
                                 <rect key="frame" x="0.0" y="24.5" width="414" height="50"/>
@@ -48,7 +49,7 @@
                             <outlet property="delegate" destination="XA6-hc-AsZ" id="jnv-vq-LlX"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Books" prompt="Select Bible Book" largeTitleDisplayMode="always" id="MNH-Xf-pk2">
+                    <navigationItem key="navigationItem" title="Books" prompt="Choose Book" largeTitleDisplayMode="never" id="MNH-Xf-pk2">
                         <barButtonItem key="backBarButtonItem" title="Books" id="ozY-1T-xD8"/>
                     </navigationItem>
                     <connections>
@@ -99,7 +100,7 @@
                             <outlet property="delegate" destination="0tX-1T-6fC" id="w7M-iN-0jH"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Chapters" prompt=" Select Chapter of Current Book" largeTitleDisplayMode="always" id="cZn-Rt-I63">
+                    <navigationItem key="navigationItem" title="Chapters" prompt=" Select Chapter of Current Book" largeTitleDisplayMode="never" id="cZn-Rt-I63">
                         <barButtonItem key="backBarButtonItem" title="Chapters" id="ocw-1f-9vP"/>
                     </navigationItem>
                     <connections>
@@ -118,6 +119,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="774"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <edgeInsets key="layoutMargins" top="0.0" left="20" bottom="0.0" right="20"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ItemCell" id="tYa-vs-uO4" customClass="UIVerseItemCell" customModule="kitios" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="24.5" width="414" height="70.5"/>
@@ -137,8 +139,8 @@
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                         </textView>
-                                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K9t-CU-7rM" userLabel="pubBut">
-                                            <rect key="frame" x="3" y="3" width="100" height="20"/>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K9t-CU-7rM" userLabel="pubBut">
+                                            <rect key="frame" x="3" y="3" width="33" height="20"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" priority="250" constant="100" id="L4Z-tj-xKM"/>
                                                 <constraint firstAttribute="height" constant="20" id="wlQ-Mz-Ty9"/>
@@ -171,7 +173,7 @@
                             <outlet property="delegate" destination="3Gc-YA-fTx" id="ycm-x1-llF"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Verses" prompt="Edit Chapter X of Y" id="5d7-3A-F7h">
+                    <navigationItem key="navigationItem" title="Verses" prompt="Edit Chapter X of Y" largeTitleDisplayMode="never" id="5d7-3A-F7h">
                         <barButtonItem key="backBarButtonItem" title="Verses" id="N2e-gi-xGW"/>
                         <barButtonItem key="rightBarButtonItem" title="Export" id="vxd-3g-ktB">
                             <color key="tintColor" systemColor="systemPurpleColor"/>
@@ -218,8 +220,8 @@
                                                 <constraint firstAttribute="height" constant="20" id="atl-GT-Sf3"/>
                                             </constraints>
                                         </imageView>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iOq-h2-mrh" userLabel="poLabel">
-                                            <rect key="frame" x="47" y="4" width="350" height="35"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iOq-h2-mrh" userLabel="poLabel">
+                                            <rect key="frame" x="28" y="4" width="382" height="35"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="35" id="70v-VM-zkT"/>
                                             </constraints>
@@ -328,8 +330,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="774"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="BuF-Eh-6fZ">
-                                <rect key="frame" x="15" y="30" width="383" height="622"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="BuF-Eh-6fZ">
+                                <rect key="frame" x="15" y="30" width="384" height="610"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                 <color key="textColor" systemColor="labelColor"/>
@@ -360,14 +362,18 @@
             <objects>
                 <navigationController title="KeyIt Navigation" automaticallyAdjustsScrollViewInsets="NO" id="ep7-s1-4F9" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" largeTitleDisplayMode="always" id="CpA-US-wko"/>
+                    <navigationItem key="navigationItem" largeTitleDisplayMode="never" id="CpA-US-wko"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" id="6YZ-yJ-ECZ">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" systemColor="systemGreenColor"/>
+                        <color key="tintColor" systemColor="systemPurpleColor"/>
+                        <color key="barTintColor" red="0.92156862745098034" green="0.92156862745098034" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <textAttributes key="titleTextAttributes">
-                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                             <color key="textColor" systemColor="systemRedColor"/>
+                        </textAttributes>
+                        <textAttributes key="largeTitleTextAttributes">
+                            <fontDescription key="fontDescription" type="system" pointSize="28"/>
                         </textAttributes>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -388,9 +394,6 @@
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemGreenColor">
-            <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemPurpleColor">
             <color red="0.68627450980392157" green="0.32156862745098042" blue="0.87058823529411766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

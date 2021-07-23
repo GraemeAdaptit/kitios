@@ -46,9 +46,9 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 		appDelegate.VTVCtrl = self		// Allow the AppDelegate to access this controller
 		navigationItem.title = bInst!.bibName
 		if bkInst!.bkID == 19 {
-			navigationItem.prompt = "\(bkInst!.chapName?.capitalized ?? "Psalm") " + String(chInst!.chNum)
+			navigationItem.prompt = "Edit \(bkInst!.chapName?.capitalized ?? "Psalm") " + String(chInst!.chNum)
 		} else {
-			navigationItem.prompt = "\(bkInst!.chapName?.capitalized ?? "Chapter") " + String(chInst!.chNum) + " of " + bkInst!.bkName
+			navigationItem.prompt = "Edit \(bkInst!.chapName?.capitalized ?? "Chapter") " + String(chInst!.chNum) + " of " + bkInst!.bkName
 		}
 		navigationItem.largeTitleDisplayMode = .always
 

@@ -36,16 +36,6 @@ class BooksTableViewController: UITableViewController {
 	var letUserChooseBook = false
 	// tableRow of the selected Book
 	var bkRow = 0
-
-
-//	required init?(coder aDecoder: NSCoder) {
-//		super.init(coder: aDecoder)
-//		print("BooksTableViewController:init")
-//	}
-//
-//	deinit {
-//		print("BooksTableViewController:deinit")
-//	}
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
