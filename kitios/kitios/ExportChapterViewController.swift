@@ -17,13 +17,22 @@ import UIKit
 class ExportChapterViewController: UIViewController {
 
 	var bInst: Bible?
-	var bkInst: Book?
-	var chInst: Chapter?
+	weak var bkInst: Book?
+	weak var chInst: Chapter?
 	
 	// Get access to the AppDelegate
 	let appDelegate = UIApplication.shared.delegate as! AppDelegate
 
 	@IBOutlet weak var ExportUSFM: UITextView!
+
+	required init?(coder aDecoder: NSCoder) {
+		super.init(coder: aDecoder)
+		print("ExportChapterViewController is being initialised")
+	}
+
+	deinit {
+		print("ExportChapterViewController is being de-initialised")
+	}
 
     override func viewDidLoad() {
         super.viewDidLoad()

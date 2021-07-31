@@ -1,6 +1,7 @@
 //
 //  AppDelegate.swift
 //
+//	GDLC 27JUL21 Started adding ReportError()
 //	GDLC 23JUL21 Cleaned out print commands (were used in early stages of development)
 //
 //  Created by Graeme Costin on 4/5/20.
@@ -16,15 +17,27 @@ import UIKit
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-	var window: UIWindow?
-	// A pointer to the one and only KITDAO instance is kept in the AppDelegate
-	// so that all parts of the app can use it
-	public var dao: KITDAO?
+	var window: UIWindow?		// This UIWindow property must be implemented for AppDelegate
+								// to use a storyboard file.
+
+	// A reference to the one and only KITDAO instance is kept in the AppDelegate
+	// so that all parts of the app can use it. The KITDAO instance is needed for
+	// the entire duration of the run of kitios. It is used in the instances of
+	// Bible, Book, and Chapter - only these modules interact with the SQLite database.
+	var dao: KITDAO?
 		
-	public var bibInst: Bible?			// During the launch of KIT an instance of the class Bible will be created
-	public var bookInst: Book?			// Once launching is complete there will be an instance of the current Book
-	public var chapInst: Chapter?		// Once launching is complete there will be an instance of the current Chapter
-	public var VTVCtrl: VersesTableViewController?	// Once a Chapter of a Book is opened there will be a VersesTableViewController
+	var bibInst: Bible?				// During the launch of KIT an instance of the class Bible will be created
+									// This is the strong ref to bibInst which lasts for the entire run of the app
+	weak var bookInst: Book?		// Once launching is complete there will be an instance of the current Book
+									// Weak ref; the strong ref is in Bible instance
+	weak var chapInst: Chapter?		// Once launching is complete there will be an instance of the current Chapter
+									// Weak ref; the strong ref is in Book instance
+	weak var VTVCtrl: VersesTableViewController?
+									// Once a Chapter of a Book is opened there will be a VersesTableViewController
+									// Weak ref; the strong ref is in ???
+
+	// May be used by the function ReportError()
+	var errorNum: Int = 0		// Error number to report to the developers; see list in ErrorNumbers.swift
 
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 		// Override point for customization after application launch.
@@ -68,4 +81,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		bibInst = nil
 	}
 
+	// Function for reporting error conditions to the user
+	func ReportError (_ errNo:Int) {
+		// TODO: Write this function!
+		print ("Error number \(errNo) reported")
+	}
 }

@@ -15,7 +15,6 @@
 		C8AA65E8245FCE2F00B456AE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C8AA65E7245FCE2F00B456AE /* Assets.xcassets */; };
 		C8AA65EB245FCE2F00B456AE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C8AA65E9245FCE2F00B456AE /* LaunchScreen.storyboard */; };
 		C8AA6604245FE78300B456AE /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8AA6600245FE78200B456AE /* Book.swift */; };
-		C8AA6605245FE78300B456AE /* VItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8AA6601245FE78200B456AE /* VItem.swift */; };
 		C8AA6606245FE78300B456AE /* Bible.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8AA6602245FE78200B456AE /* Bible.swift */; };
 		C8AA6607245FE78300B456AE /* Chapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8AA6603245FE78300B456AE /* Chapter.swift */; };
 		C8AA660B245FE7DE00B456AE /* KITDAO.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8AA6608245FE7DD00B456AE /* KITDAO.swift */; };
@@ -27,6 +26,7 @@
 		C8AA6617245FEBAE00B456AE /* VersesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8AA6611245FEBAD00B456AE /* VersesTableViewController.swift */; };
 		C8AA6618245FEBAE00B456AE /* UIVerseItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8AA6612245FEBAD00B456AE /* UIVerseItemCell.swift */; };
 		C8AA6619245FEBAE00B456AE /* BooksTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8AA6613245FEBAE00B456AE /* BooksTableViewController.swift */; };
+		C8D02EE826AFC480003DAA80 /* ErrorNumbers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D02EE726AFC480003DAA80 /* ErrorNumbers.swift */; };
 		C8EB83D4256B242300D25EC4 /* VIMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8EB83D3256B242300D25EC4 /* VIMenu.swift */; };
 /* End PBXBuildFile section */
 
@@ -47,7 +47,6 @@
 		C8AA65F8245FE36000B456AE /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		C8AA65FE245FE52B00B456AE /* SQLite3Bridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQLite3Bridge.h; sourceTree = "<group>"; };
 		C8AA6600245FE78200B456AE /* Book.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Book.swift; sourceTree = "<group>"; };
-		C8AA6601245FE78200B456AE /* VItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VItem.swift; sourceTree = "<group>"; };
 		C8AA6602245FE78200B456AE /* Bible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bible.swift; sourceTree = "<group>"; };
 		C8AA6603245FE78300B456AE /* Chapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Chapter.swift; sourceTree = "<group>"; };
 		C8AA6608245FE7DD00B456AE /* KITDAO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KITDAO.swift; sourceTree = "<group>"; };
@@ -59,6 +58,7 @@
 		C8AA6611245FEBAD00B456AE /* VersesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VersesTableViewController.swift; sourceTree = "<group>"; };
 		C8AA6612245FEBAD00B456AE /* UIVerseItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIVerseItemCell.swift; sourceTree = "<group>"; };
 		C8AA6613245FEBAE00B456AE /* BooksTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BooksTableViewController.swift; sourceTree = "<group>"; };
+		C8D02EE726AFC480003DAA80 /* ErrorNumbers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorNumbers.swift; sourceTree = "<group>"; };
 		C8EB83D3256B242300D25EC4 /* VIMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VIMenu.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -143,10 +143,10 @@
 				C8AA6609245FE7DD00B456AE /* KIT_BooksNames.txt */,
 				C8AA660A245FE7DE00B456AE /* KIT_BooksSpec.txt */,
 				C8AA6608245FE7DD00B456AE /* KITDAO.swift */,
+				C8D02EE726AFC480003DAA80 /* ErrorNumbers.swift */,
 				C8AA6602245FE78200B456AE /* Bible.swift */,
 				C8AA6600245FE78200B456AE /* Book.swift */,
 				C8AA6603245FE78300B456AE /* Chapter.swift */,
-				C8AA6601245FE78200B456AE /* VItem.swift */,
 				C8EB83D3256B242300D25EC4 /* VIMenu.swift */,
 			);
 			path = models;
@@ -228,9 +228,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C8AA6605245FE78300B456AE /* VItem.swift in Sources */,
 				C8AA6618245FEBAE00B456AE /* UIVerseItemCell.swift in Sources */,
 				C801D68025EE474F00C3DF2D /* UIPubItemCell.swift in Sources */,
+				C8D02EE826AFC480003DAA80 /* ErrorNumbers.swift in Sources */,
 				C8AA6619245FEBAE00B456AE /* BooksTableViewController.swift in Sources */,
 				C8EB83D4256B242300D25EC4 /* VIMenu.swift in Sources */,
 				C8AA6614245FEBAE00B456AE /* KeyItSetupController.swift in Sources */,

@@ -37,7 +37,16 @@ class BooksTableViewController: UITableViewController {
 	var letUserChooseBook = false
 	// tableRow of the selected Book
 	var bkRow = 0
-	
+
+	required init?(coder aDecoder: NSCoder) {
+		super.init(coder: aDecoder)
+		print("BooksTableViewController is being initialised")
+	}
+
+	deinit {
+		print("BooksTableViewController is being de-initialised")
+	}
+
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		// Get access to the instance of Bible

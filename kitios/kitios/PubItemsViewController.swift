@@ -17,15 +17,18 @@ import UIKit
 
 class PubItemsViewController: UITableViewController {
 
-//	let appDelegate = UIApplication.shared.delegate as! AppDelegate
-	var chInst: Chapter?
+	weak var chInst: Chapter?
 	var VTVCtrl: VersesTableViewController?
 	var popMenu: VIMenu?
 
-//	required init?(coder aDecoder: NSCoder) {
-//		super.init(coder: aDecoder)
-//		print("KeyItSetupController:init")
-//	}
+	required init?(coder aDecoder: NSCoder) {
+		super.init(coder: aDecoder)
+		print("PubItemsViewController is being initialised")
+	}
+
+	deinit {
+		print("PubItemsViewController is being de-initialised")
+	}
 
     override func viewDidLoad() {
         super.viewDidLoad()

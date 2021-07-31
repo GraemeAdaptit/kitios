@@ -22,7 +22,8 @@ import UIKit
 public class Book:NSObject {
 	
 	var dao: KITDAO?		// access to the KITDAO instance for using kdb.sqlite
-	var bibInst: Bible?		// access to the instance of Bible for updating BibBooks[]
+	weak var bibInst: Bible?		// access to the instance of Bible for updating BibBooks[]
+									// Passed as a parameter to Book's init()
 	// Get access to the AppDelegate
 	let appDelegate = UIApplication.shared.delegate as! AppDelegate
 
@@ -37,7 +38,6 @@ public class Book:NSObject {
 	var curChNum: Int = 0		// currChNum INTEGER
 	var currChapOfst: Int = -1	// offset to the current Chapter in BibChaps[] array (-1 means not yet set)
 	
-	// TODO: Eliminate the need for bibInst by using a setter function in Bible?
 	var chapInst: Chapter?	// instance in memory of the current Chapter
 	var chapName: String?	// Name used for chapters (most books have "chapter", Psalms have "psalm")
 
@@ -76,9 +76,11 @@ var BibChaps: [BibChap] = []
 	// action needs to be avoided until after there is a current Book. Thus Book.init() must
 	// not be called before a current Book is chosen or has been read from kdb.sqlite.
 
-	init(_ bkID: Int, _ bibID: Int, _ bkCode: String, _ bkName: String, _ chapRCr: Bool, _ numChaps: Int, _ curChID: Int, _ curChNum:Int) {
+	init(_ bInst: Bible, _ bkID: Int, _ bibID: Int, _ bkCode: String, _ bkName: String, _ chapRCr: Bool, _ numChaps: Int, _ curChID: Int, _ curChNum:Int) {
 		super.init()
 		
+		print ("Book instance for \(bkName) is being initialised")
+		self.bibInst = bInst
 		self.bkID = bkID			// bookID INTEGER
 		self.bibID = bibID			// bibleID INTEGER
 		self.bkCode = bkCode		// bookCode TEXT
@@ -92,7 +94,6 @@ var BibChaps: [BibChap] = []
 		} else {
 			chapName = "chapter"
 		}
-
 		// Access to the KITDAO instance for dealing with kdb.sqlite
 		dao = appDelegate.dao
 		// Access to the instance of Bible for dealing with BibInst[]
@@ -116,6 +117,10 @@ var BibChaps: [BibChap] = []
 		dao!.readChaptersRecs (bibID, self)
 		// calls readChaptersRecs() in KITDAO.swift to read the kdb.sqlite database Books table
 		// readChaptersRecs() calls appendChapterToArray() in this file for each ROW read from kdb.sqlite
+	}
+
+	deinit {
+		print ("Book instance for \(self.bkName) is being de-initialised")
 	}
 
 	func createChapterRecords (_ book:Int, _ bib:Int, _ code:String) {
@@ -155,8 +160,7 @@ var BibChaps: [BibChap] = []
 			let numVs = Int(elemTr)!
 			numIt = numIt + numVs	// for some Psalms numIt will include the ascription VerseItem
 			if !dao!.chaptersInsertRec (bib, book, chNum, false, numVs, numIt, currIt, currVN) {
-				// TODO: Make a better way of handling errors like this
-				print("Book:createChapterRecords: Creating Chapter record failed for \(String(describing: bkName)) chapter \(chNum)")
+				appDelegate.ReportError(DBC_ChaErr)
 			}
 			chNum = chNum + 1
 		}
@@ -166,8 +170,7 @@ var BibChaps: [BibChap] = []
 		// Update kdb.sqlite Books record of current Book to indicate that its Chapter records have been
 		// created, the number of Chapters has been found, but there is not yet a current Chapter
 		if !dao!.booksUpdateRec (bibID, bkID, chapRCr, numChap, 0, 0) {
-			// TODO: Make a better way of handling errors like this
-			print("Book:createChapterRecords updating the record for this Book failed")
+			appDelegate.ReportError(DBU_BooErr)
 		}
 	
 		// Update the entry in BibBooks[] for the current Book to show that its Chapter records have
@@ -204,12 +207,14 @@ var BibChaps: [BibChap] = []
 		
 		// delete any previous in-memory instance of Chapter
 		chapInst = nil
+		// TODO: Does this fix the memory leak?
+		appDelegate.chapInst = nil
 
 		// create a Chapter instance for the current Chapter of the current Book
 		let chap = BibChaps[currChapOfst]
-		chapInst = Chapter(chap.chID, chap.bibID, chap.bkID, chap.chNum, chap.itRCr, chap.numVs, chap.numIt, chap.curIt, chap.curVN)
+		chapInst = Chapter(self, chap.chID, chap.bibID, chap.bkID, chap.chNum, chap.itRCr, chap.numVs, chap.numIt, chap.curIt, chap.curVN)
 		// Keep a reference in the AppDelegate
-		appDelegate.chapInst = self.chapInst
+		appDelegate.chapInst = chapInst
 	}
 
 // When the user selects a Chapter from the UITableView of Chapters it needs to be recorded as the
@@ -223,8 +228,7 @@ var BibChaps: [BibChap] = []
 		currChapOfst = chapOfst		// Chapter offset (1 less than Chapter Number seen by users)
 		// update Book record in kdb.sqlite to show this current Chapter
 		if !dao!.booksUpdateRec(bibID, bkID, chapRCr, numChap, curChID, curChNum) {
-			// TODO: Make a better way of handling errors like this
-			print("ERROR: The currChap for \(bkName) in kdb.sqlite was not updated to \(curChNum)")
+			appDelegate.ReportError(DBU_BooErr)
 		}
 		// Update the curChID and curChNum for this book in BibBooks[] in bInst
 		bibInst!.setBibBooksCurChap(curChID, curChNum)
@@ -233,16 +237,18 @@ var BibChaps: [BibChap] = []
 		// delete any previous in-memory instance of Chapter and create a new one
 		if diffChap {
 			chapInst = nil
+			// TODO: Does this fix the memory leak?
+			appDelegate.chapInst = nil
 
 			// create a Chapter instance for the current Chapter of the current Book
-			chapInst = Chapter(chap.chID, chap.bibID, chap.bkID, chap.chNum, chap.itRCr, chap.numVs, chap.numIt, chap.curIt, chap.curVN)
+			chapInst = Chapter(self, chap.chID, chap.bibID, chap.bkID, chap.chNum, chap.itRCr, chap.numVs, chap.numIt, chap.curIt, chap.curVN)
 		}
 		// Keep a reference in the AppDelegate
 		appDelegate.chapInst = self.chapInst
 	}
 
-	// Set the new value for the current VerseItem
-	// called when the user selects a VerseItem of the current Chapter
+	// Set into Book's BibChaps[] the new value for the current VerseItem
+	// Called when the user selects a VerseItem of the current Chapter
 	func setCurVItem (_ curIt:Int, _ curVN:Int) {
 		BibChaps[currChapOfst].curIt = curIt
 		BibChaps[currChapOfst].curVN = curVN

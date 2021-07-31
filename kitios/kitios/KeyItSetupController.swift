@@ -2,6 +2,8 @@
 //  KeyItSetupController.swift
 //	kitios
 //
+//	GDLC 30JUL21 No need for local var bInst
+//	GDLC 27JUL21 Added better error reporting
 //	GDLC 23JUL21 Cleaned out print commands (were used in early stages of development)
 //	GDLC 21SEP20 Removed redundant @IBOutlet for saveBibleName
 //
@@ -25,7 +27,7 @@ import UIKit
 class KeyItSetupController: UIViewController, UITextFieldDelegate {
 
 	var dao: KITDAO?
-	var bInst: Bible?
+//	var bInst: Bible?
 
 	// Get access to the AppDelegate
 	let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -42,6 +44,15 @@ class KeyItSetupController: UIViewController, UITextFieldDelegate {
 	@IBOutlet weak var bibleName: UITextField!
 	@IBOutlet weak var goButton: UIButton!
 
+	required init?(coder aDecoder: NSCoder) {
+		super.init(coder: aDecoder)
+		print("KeyItSetupController is being initialised")
+	}
+
+	deinit {
+		print("KeyItSetupController is being de-initialised")
+	}
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -49,6 +60,7 @@ class KeyItSetupController: UIViewController, UITextFieldDelegate {
 		dao = appDelegate.dao
 		let bibRec = dao!.bibleGetRec()
 		bibID = bibRec.bibID
+		if bibID == 0 { appDelegate.ReportError(DBR_BibErr) }	// Bible record could not be read
 		bibName = bibRec.bibName
 		bkRCr = bibRec.bkRCr
 		currBook = bibRec.currBk
@@ -68,6 +80,7 @@ class KeyItSetupController: UIViewController, UITextFieldDelegate {
     
 	// MARK: Actions
 
+	// TODO: Check whether this function is still needed.
 	override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
 		view.endEditing(true)
 		super.touchesBegan(touches, with: event)
@@ -79,6 +92,17 @@ class KeyItSetupController: UIViewController, UITextFieldDelegate {
 		performSegue (withIdentifier: "keyItNav", sender: self)
 	}
 
+	func createBibleInstance () {
+		// Create an instance of the class Bible whose initialisation will create the array
+		// of Bible books and start building the partial in-memory data structures for
+		//		Bible -> curr Book -> curr Chapter -> curr VerseItem
+		// and save a reference to it in the appDelegate so the rest of the app has access to it.
+		appDelegate.bibInst = Bible(bibID, bibName, bkRCr, currBook)
+// GDLC 30JUL21 No need for local var bInst
+//		// Ensure rest of app has access to the Bible instance
+//		appDelegate.bibInst = bInst
+	}
+
 	// Don't need a button for this; when the user taps "Go"
 	// goNavController() automatically saves the edited name
 	func saveBibleName () {
@@ -86,18 +110,8 @@ class KeyItSetupController: UIViewController, UITextFieldDelegate {
 		self.view.endEditing(true)
 		bibName = bibleName.text!
 		if !dao!.bibleUpdateName (bibName) {
-			// TODO: Make a better way of handling such failures
-			print("KeyItSetupController:saveBibleName failed")
+			appDelegate.ReportError(DBU_BibNErr)
 		}
-	}
-
-	func createBibleInstance () {
-		// Create an instance of the class Bible whose initialisation will create the array
-		// of Bible books and start building the partial in-memory data structures for
-		//		Bible -> curr Book -> curr Chapter -> curr VerseItem.
-		bInst = Bible(bibID, bibName, bkRCr, currBook)
-		// Ensure rest of app has access to the Bible instance
-		appDelegate.bibInst = bInst
 	}
 
 }

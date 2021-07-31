@@ -41,7 +41,7 @@ public class Bible:NSObject {
 	var currBook: Int = 0	// current Book ID (defined by the Bible Societies 1 to 39 OT and 41 to 67 NT)
 
 	var currBookOfst = -1	// Offset in BibBooks[] to the current book 0 to 38 (OT) 39 to 65 (NT)
-	var bookInst: Book?		// instance in memory of the current Book
+	var bookInst: Book?		// Instance in memory of the current Book - this is the strong ref that owns it
 	
 // BibBooks array (for listing the Books so the user can choose one)
 	struct BibBook {
@@ -151,8 +151,7 @@ public class Bible:NSObject {
 				let curChNum = 0
 				// Write Books record to kdb.sqlite
 				if !dao!.booksInsertRec (bkID, bibID, bkCode, bkName, chRCr, numCh, curChID, curChNum) {
-					// TODO: Make a better way of handling errors like this
-					print ("The Books record for \(bkName) was not created")
+					appDelegate.ReportError(DBC_BooErr)
 				}
 			}
 		}
@@ -162,8 +161,7 @@ public class Bible:NSObject {
 		
 		// Update the kdb.sqlite Bible record to note that Books recs have been created
 		if !dao!.bibleUpdateRecsCreated() {
-			// TODO: Make a better way of handling errors like this
-			print("bookRecsCreated in the Bible rec was not set to true")
+			appDelegate.ReportError(DBU_BibRErr)
 		}
 	}
 
@@ -176,6 +174,8 @@ public class Bible:NSObject {
 	}
 
 // Deinitialise (delete) the instance of class Bible
+// In v1 of KIT there will be only one Bible instance and it will be needed for the entire
+// duration of the run of the app; thus deinit will not be used in v1.0 of KIT.
 	
 	deinit {
 		// Also delete the instance of the SQLite data access object
@@ -194,9 +194,11 @@ public class Bible:NSObject {
 
 		// delete any previous in-memory instance of Book
 		bookInst = nil
-		
+		// TODO: Does this fix the memory leak?
+		appDelegate.bookInst = nil
+
 		// create a Book instance for the currently selected book
-		bookInst = Book(book.bkID, book.bibID, book.bkCode, book.bkName, book.chapRCr, book.numCh, book.curChID, book.curChNum)
+		bookInst = Book(self, book.bkID, book.bibID, book.bkCode, book.bkName, book.chapRCr, book.numCh, book.curChID, book.curChNum)
 		// Keep a reference in the AppDelegate
 		appDelegate.bookInst = self.bookInst
 	}
@@ -208,16 +210,18 @@ public class Bible:NSObject {
 		currBookOfst = (currBook > 39 ? currBook - 2 : currBook - 1 )
 		// update Bible record in kdb.sqlite to show this current book
 		if !dao!.bibleUpdateCurrBook(currBook) {
-			print("The currBook in kdb.sqlite was not updated to \(currBook)")
+			appDelegate.ReportError(DBU_BibCErr)
 		}
 
 		// delete any previous in-memory instance of Book
 		bookInst = nil
-		
+		// TODO: Does this fix the memory leak?
+		appDelegate.bookInst = nil
+
 		// create a Book instance for the currently selected book
-		bookInst = Book(book.bkID, book.bibID, book.bkCode, book.bkName, book.chapRCr, book.numCh, book.curChID, book.curChNum)
+		bookInst = Book(self, book.bkID, book.bibID, book.bkCode, book.bkName, book.chapRCr, book.numCh, book.curChID, book.curChNum)
 		// Keep a reference in the AppDelegate
-		appDelegate.bookInst = self.bookInst
+		appDelegate.bookInst = bookInst
 
 	}
 

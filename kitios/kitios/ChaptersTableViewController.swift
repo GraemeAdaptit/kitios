@@ -22,7 +22,7 @@ class ChaptersTableViewController: UITableViewController {
 
 	let appDelegate = UIApplication.shared.delegate as! AppDelegate
 	var bInst: Bible?		// Current instance of Bible
-	var bkInst: Book?		// Current instance of Book
+	weak var bkInst: Book?		// Current instance of Book
 							// When ChaptersTableViewController is active the user will have selected a Book
 							// and it will be the current Book
 	var chapName: String?
@@ -35,6 +35,15 @@ class ChaptersTableViewController: UITableViewController {
 	var chRow = 0	// safe value in case a Chapter has not yet been selected
 	// Chapter number of the selected Chapter
 	var chNum = 0	// safe value in case a Chapter has not yet been selected
+
+	required init?(coder aDecoder: NSCoder) {
+		super.init(coder: aDecoder)
+		print("ChaptersTableViewController is being initialised")
+	}
+
+	deinit {
+		print("ChaptersTableViewController is being de-initialised")
+	}
 
 	override func viewDidLoad() {
 		super.viewDidLoad()

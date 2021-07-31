@@ -20,8 +20,8 @@ import UIKit
 class VersesTableViewController: UITableViewController, UITextViewDelegate {
 
 	var bInst: Bible?
-	var bkInst: Book?
-	var chInst: Chapter?
+	weak var bkInst: Book?
+	weak var chInst: Chapter?
 	var currItOfst = -1	// -1 until one of the VerseItems is chosen for editing;
 						// then it is the offset into the BibItems[] array which equals
 						// the offset into the list of cells in the TableView.
@@ -31,6 +31,15 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 
 	// Boolean for detecting when Back button has been pressed
 	var goingForwards = false
+
+	required init?(coder aDecoder: NSCoder) {
+		super.init(coder: aDecoder)
+		print("VersesTableViewController is being initialised")
+	}
+
+	deinit {
+		print("VersesTableViewController is being de-initialised")
+	}
 
 	// The only time that the VersesTableViewController will be loaded is
 	// after a Book and Chapter have been selected for editing.

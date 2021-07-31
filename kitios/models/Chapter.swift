@@ -52,7 +52,9 @@ public class Chapter: NSObject {
 				curPoMenu = VIMenu(ofst)
 			}
 			field = ofst
-			currIt = BibItems[ofst].itID
+//			currIt = BibItems[ofst].itID
+//			// GDLC 30JUL21
+//			currVN = BibItems[ofst].vsNum
 		}
 	}
 	
@@ -61,7 +63,7 @@ public class Chapter: NSObject {
 	
 	var dao: KITDAO?		// access to the KITDAO instance for using kdb.sqlite
 	var bibInst: Bible? 	// access to the instance of Bible for updating BibBooks[]
-	var bkInst: Book?		// access to the instance for the current Book
+	weak var bkInst: Book?		// access to the instance for the current Book
 
 // This struct and the BibItems array are used for letting the user select the
 // VerseItem to edit in the current Chapter of the current Book.
@@ -103,8 +105,11 @@ public class Chapter: NSObject {
 // When the instance of current Book creates the instance for the current Chapter it supplies the values
 // for the currently selected Chapter from the BibChaps array
 		
-	init(_ chID: Int, _ bibID: Int, _ bkID: Int, _ chNum: Int, _ itRCr: Bool, _ numVs:Int, _ numIt: Int, _ currIt: Int, _ currVN: Int) {
+	init(_ parent: Book, _ chID: Int, _ bibID: Int, _ bkID: Int, _ chNum: Int, _ itRCr: Bool, _ numVs:Int, _ numIt: Int, _ currIt: Int, _ currVN: Int) {
 		super.init()
+
+		print ("Chapter instance for chap \(chNum) of book \(bkID) is being initialised")
+		self.bkInst = parent	// access to current Book
 		self.chID = chID		// chapterID INTEGER PRIMARY KEY
 		self.bibID = bibID		// bibleID INTEGER
 		self.bkID = bkID		// bookID INTEGER,
@@ -117,7 +122,6 @@ public class Chapter: NSObject {
 
 		self.dao = appDelegate.dao			// access to the KITDAO instance for using kdb.sqlite
 		self.bibInst = appDelegate.bibInst 	// access to the instance of Bible for updating BibBooks[]
-		self.bkInst = appDelegate.bookInst
 		
 		// First time this Chapter has been selected the Item records must be created
 		if !itRCr {
@@ -136,19 +140,19 @@ public class Chapter: NSObject {
 		
 		// Calls readVerseItemsRecs() in KITDAO.swift to read the kdb.sqlite database VerseItems table
 		// readVerseItemsRecs() calls appendItemToArray() in this file for each ROW read from kdb.sqlite
-		let result = dao!.readVerseItemsRecs (self)
-		if !result {
-			// TODO: Make better way of handling errors like this
-			print("ERROR: VerseItems records for chapter \(chNum) have not been read from kdb.sqlite")
-		}
+		dao!.readVerseItemsRecs (self)
+
 		// Ensure that numIt is correct (to guard against any accumulated data errors)
 		self.numIt = BibItems.count
 		if !dao!.chaptersUpdateRecPub (chID, self.numIt, self.currIt, self.currVN) {
-			// TODO: Make better way of handling errors like this
-			print("ERROR: Chapter init(): numIt not updated in kdb.sqlite")
+			appDelegate.ReportError(DBU_ChaNItErr)
 		}
 	}
-	
+
+	deinit {
+		print ("Chapter instance for chap \(self.chNum) of book \(self.bkID) is being de-initialised")
+	}
+
 // Create a VerseItem record in kdb.sqlite for each VerseItem in this Chapter
 // If this is a Psalm and it has an ascription then numIt will be 1 greater than numVs.
 // For all other VerseItems numIt will equal numVs at this early stage of building the app's data
@@ -164,8 +168,7 @@ public class Chapter: NSObject {
 			let isBrid = false
 			let lastVsBridge = 0
 			if dao!.verseItemsInsertRec (chID, vsNum, itTyp, itOrd, itText, intSeq, isBrid, lastVsBridge) == -1 {
-				// TODO: Make better way of handling errors like this
-				print("ERROR: Book:createItemRecords: Creating Ascription record failed for Psalm \(chNum)")
+				appDelegate.ReportError(DBC_VItErr)
 			}
 		}
 		for vsNum in 1...numVs {
@@ -176,18 +179,16 @@ public class Chapter: NSObject {
 			let isBrid = false
 			let lastVsBridge = 0
 			if dao!.verseItemsInsertRec (chID, vsNum, itTyp, itOrd, itText, intSeq, isBrid, lastVsBridge) == -1 {
-				// TODO: Make better way of handling errors like this
-				print("ERROR: Book:createItemRecords: Creating Verse record failed for chap \(chNum) vs \(vsNum)")
+				appDelegate.ReportError(DBC_VItErr)
 			}
 		}
 		// Update in-memory record of current Chapter to indicate that its VerseItem records have been created
 		itRCr = true
 		// Also update the BibChap struct to show itRCr true
-		bibInst!.bookInst!.BibChaps[chNum - 1].itRCr = true
+		bkInst!.BibChaps[chNum - 1].itRCr = true
 		// Update Chapter record to show that VerseItems have been created
 		if !dao!.chaptersUpdateRec (chID, itRCr, currIt, currVN) {
-			// TODO: Make better way of handling errors like this
-			print("Chapter:createItemRecords update Chapter record for chap \(chNum) failed")
+			appDelegate.ReportError(DBU_ChaRcrErr)
 		}
 	}
 	
@@ -242,16 +243,19 @@ public class Chapter: NSObject {
 			// Make the first VerseItem the current one
 			currItOfst = 0		// Take first item in BibItems[] array
 			currIt = BibItems[currItOfst].itID	// Get its itemID
+			//GDLC 31JUL21 Added setting of currVN
+			currVN = BibItems[currItOfst].vsNum	// Get its verse number
 		} else {
 			// Already have the itemID of the current item so need to get
 			// the offset into the BibItems[] array
 			currItOfst = offsetToBibItem(withID: currIt)
+			//GDLC 31JUL21 Added setting of currVN
+			currVN = BibItems[currItOfst].vsNum	// Get its verse number
 			// Setting currItOfst ensures that there is a VIMenu for the current VerseItem
 		}
 		// Update the database Chapter record
 		if !dao!.chaptersUpdateRec (chID, itRCr, currIt, currVN) {
-			// TODO: Make better way of handling errors like this
-			print ("ERROR: Chapter:goCurrentItem ERROR updating \(bkInst!.bkName) \(chNum) Chapter record")
+			appDelegate.ReportError(DBU_ChaCItGoErr)
 		}
 		return currItOfst
 	}
@@ -265,8 +269,7 @@ public class Chapter: NSObject {
 		bkInst!.setCurVItem (currIt, currVN)
 		// Update the database Chapter record
 		if !dao!.chaptersUpdateRec (chID, itRCr, currIt, currVN) {
-			// TODO: Make better way of handling errors like this
-			print ("Chapter:goCurrentItem ERROR updating \(bkInst!.bkName) \(chNum) Chapter record")
+			appDelegate.ReportError(DBU_ChaCItSeErr)
 		}
 	}
 
@@ -274,8 +277,7 @@ public class Chapter: NSObject {
 	func copyAndSaveVItem(_ ofSt: Int, _ text: String) {
 		BibItems[ofSt].itTxt = text
 		if !dao!.itemsUpdateRecText (BibItems[currItOfst].itID, BibItems[currItOfst].itTxt) {
-			// TODO: Make better way of handling errors like this
-			print ("ERROR: Chapter:saveCurrentItemText save of current item text to kdb.sqlite FAILED")
+			appDelegate.ReportError(DBU_VItTxtErr)
 		}
 	}
 
@@ -344,21 +346,15 @@ public class Chapter: NSObject {
 		// Clear the current BibItems[] array
 		BibItems.removeAll()
 		// Reload the BibItems[] array of VerseItems
-		let result = dao!.readVerseItemsRecs (self)
-		if result {
-			print("VerseItems records for chapter \(chNum) have been read from kdb.sqlite")
-		} else {
-			print("ERROR: VerseItems records for chapter \(chNum) have not been read from kdb.sqlite")
-		}
+		dao!.readVerseItemsRecs (self)
 	}
 
 	// Can be called when the current VerseItem is Verse 1 of a Psalm
 	func createAscription () {
 		//GDLC 4MAY21 Corrected 70 to 75 in creation of the ascription record
-		let vsNum = 1
-		let newitemID = dao!.verseItemsInsertRec (chID, vsNum, "Ascription", 75, "", 0, false, 0)
+//		let vsNum = 1
+		let newitemID = dao!.verseItemsInsertRec (chID, currVN, "Ascription", 75, "", 0, false, 0)
 		if newitemID != -1 {
-			print ("Ascription created")
 			// Note that the Psalm now has an Ascription
 			hasAscription = true
 			// Increment number of items
@@ -366,13 +362,11 @@ public class Chapter: NSObject {
 			// Make the new Ascription the current VerseItem
 			currIt = newitemID
 			// Update the database Chapter record so that the new Ascription item becomes the current item
-			if dao!.chaptersUpdateRecPub (chID, numIt, newitemID, vsNum) {
-//				print ("Chapter:createAscription updated \(bkInst!.bkName) \(chNum) Chapter record")
-			} else {
-				print ("Chapter:createAscription ERROR updating \(bkInst!.bkName) \(chNum) Chapter record")
+			if !dao!.chaptersUpdateRecPub (chID, numIt, newitemID, currVN) {
+				appDelegate.ReportError(DBU_ChaCAscrErr)
 			}
 		} else {
-			print ("Chapter:createAscription ERROR inserting into database")
+			appDelegate.ReportError(DBC_VItCAscrErr)
 		}
 	}
 
@@ -380,7 +374,6 @@ public class Chapter: NSObject {
 	func deleteAscription () {
 		let vsNum = 1
 		if dao!.itemsDeleteRec(currIt) {
-			print("Ascription deleted")
 			// Note that the Psalm no longer has an Ascription
 			hasAscription = false
 			// Decrement number of items
@@ -388,20 +381,17 @@ public class Chapter: NSObject {
 			// Make the next VerseItem the current one
 			currIt = BibItems[currItOfst + 1].itID
 			// Update the database Chapter record so that the following item becomes the current item
-			if dao!.chaptersUpdateRecPub (chID, numIt, currIt, vsNum) {
-//				print ("Chapter:deleteAscription updated \(bkInst!.bkName) \(chNum) Chapter record")
-			} else {
-				print ("Chapter:deleteAscription ERROR updating \(bkInst!.bkName) \(chNum) Chapter record")
+			if !dao!.chaptersUpdateRecPub (chID, numIt, currIt, vsNum) {
+				appDelegate.ReportError(DBU_ChaPubErr)
 			}
 		}
 	}
 
 	// Create Book title
 	func createTitle() {
-		let vsNum = 1
-		let newitemID = dao!.verseItemsInsertRec (chID, vsNum, "Title", 70, "", 0, false, 0)
+//		let vsNum = 1
+		let newitemID = dao!.verseItemsInsertRec (chID, currVN, "Title", 70, "", 0, false, 0)
 		if newitemID != -1 {
-			print ("Title for Book created")
 			// Note that the Book now has a Title
 			hasTitle = true
 			// Increment number of items
@@ -409,13 +399,11 @@ public class Chapter: NSObject {
 			// Make the new Title the current VerseItem
 			currIt = newitemID
 			// Update the database Chapter record so that the new Title item becomes the current item
-			if dao!.chaptersUpdateRecPub (chID, numIt, newitemID, vsNum) {
-//				print ("Chapter:createTitle updated \(bkInst!.bkName) \(chNum) Chapter record")
-			} else {
-				print ("Chapter:createTitle ERROR updating \(bkInst!.bkName) \(chNum) Chapter record")
+			if !dao!.chaptersUpdateRecPub (chID, numIt, newitemID, currVN) {
+				appDelegate.ReportError(DBU_ChaPubErr)
 			}
 		} else {
-			print ("Chapter:createTitle ERROR inserting into database")
+			appDelegate.ReportError(DBC_VItTitErr)
 		}
 	}
 
@@ -423,7 +411,6 @@ public class Chapter: NSObject {
 	func deleteTitle () {
 		let vsNum = 1
 		if dao!.itemsDeleteRec(currIt) {
-			print("Title deleted")
 			// Note that the Psalm no longer has a Title
 			hasTitle = false
 			// Decrement number of items
@@ -431,31 +418,28 @@ public class Chapter: NSObject {
 			// Make the next VerseItem the current one
 			currIt = BibItems[currItOfst + 1].itID
 			// Update the database Chapter record so that the following item becomes the current item
-			if dao!.chaptersUpdateRecPub (chID, numIt, currIt, vsNum) {
-//				print ("Chapter:deleteTitle updated \(bkInst!.bkName) \(chNum) Chapter record")
-			} else {
-				print ("Chapter:deleteTitle ERROR updating \(bkInst!.bkName) \(chNum) Chapter record")
+			if !dao!.chaptersUpdateRecPub (chID, numIt, currIt, vsNum) {
+				appDelegate.ReportError(DBU_ChaPubErr)
 			}
+		} else {
+			appDelegate.ReportError(DBD_VItTitErr)
 		}
 	}
 
 	// Create a paragraph break before a verse.
 	func createParagraphBefore () {
-		let vsNum = BibItems[currItOfst].vsNum
-		let newitemID = dao!.verseItemsInsertRec (chID, vsNum, "Para", vsNum * 100 - 10, "", 0, false, 0)
+//		let vsNum = BibItems[currItOfst].vsNum
+		let newitemID = dao!.verseItemsInsertRec (chID, currVN, "Para", currVN * 100 - 10, "", 0, false, 0)
 		if newitemID != -1 {
-			print ("Para Before created")
 			// Increment number of items
 			numIt = numIt + 1
 			// Leave the Verse as the current VerseItem (there is nothing to keyboard in the Para record)
 			// but increment the number of VerseItems
-			if dao!.chaptersUpdateRecPub (chID, numIt, currIt, vsNum) {
-//				print ("Chapter:createParagraphBefore updated \(bkInst!.bkName) \(chNum) Chapter record")
-			} else {
-				print ("Chapter:createParagraphBefore ERROR updating \(bkInst!.bkName) \(chNum) Chapter record")
+			if !dao!.chaptersUpdateRecPub (chID, numIt, currIt, currVN) {
+				appDelegate.ReportError(DBU_ChaPubErr)
 			}
 		} else {
-			print ("Chapter:createParagraphBefore ERROR inserting into database")
+			appDelegate.ReportError(DBC_VItPBfErr)
 		}
 	}
 
@@ -463,17 +447,16 @@ public class Chapter: NSObject {
 	func deleteParagraphBefore () {
 		let vsNum = BibItems[currItOfst].vsNum
 		if dao!.itemsDeleteRec(currIt) {
-			print("Para deleted")
 			// Decrement number of items
 			numIt = numIt - 1
 			// Make the next VerseItem the current one
 			currIt = BibItems[currItOfst + 1].itID
 			// Update the database Chapter record so that the following item becomes the current item
-			if dao!.chaptersUpdateRecPub (chID, numIt, currIt, vsNum) {
-//				print ("Chapter:deleteParagraphBefore updated \(bkInst!.bkName) \(chNum) Chapter record")
-			} else {
-				print ("Chapter:deleteParagraphBefore ERROR updating \(bkInst!.bkName) \(chNum) Chapter record")
+			if !dao!.chaptersUpdateRecPub (chID, numIt, currIt, vsNum) {
+				appDelegate.ReportError(DBU_ChaPubErr)
 			}
+		} else {
+			appDelegate.ReportError(DBD_VItPBfErr)
 		}
 	}
 
@@ -482,33 +465,31 @@ public class Chapter: NSObject {
 		let result = appDelegate.VTVCtrl!.currTextSplit()
 		let txtBef = result.txtBef
 		let txtAft = result.txtAft
-		let vsNum = BibItems[currItOfst].vsNum
+//		let vsNum = BibItems[currItOfst].vsNum
 		// Remove text after cursor from Verse
-		dao!.itemsUpdateRecText(BibItems[currItOfst].itID, txtBef)
+		if !dao!.itemsUpdateRecText(BibItems[currItOfst].itID, txtBef) {
+			appDelegate.ReportError(DBU_VItTxtErr)
+		}
 		// Create the ParaCont record
-		let newPContID = dao!.verseItemsInsertRec (chID, vsNum, "ParaCont", vsNum * 100 + 10, "", 0, false, 0)
+		let newPContID = dao!.verseItemsInsertRec (chID, currVN, "ParaCont", currVN * 100 + 10, "", 0, false, 0)
 		if newPContID != -1 {
-			print ("ParaCont created")
 			// Increment number of items
 			numIt = numIt + 1
 		} else {
-			print ("Chapter:createParagraphCont ERROR inserting ParaCont into database")
+			appDelegate.ReportError(DBC_VItPInErr)
 		}
 		// Create the VerseCont record and insert the txtAft from the original Verse
-		let newVCont = dao!.verseItemsInsertRec (chID, vsNum, "VerseCont", vsNum * 100 + 20, txtAft, 0, false, 0)
+		let newVCont = dao!.verseItemsInsertRec (chID, currVN, "VerseCont", currVN * 100 + 20, txtAft, 0, false, 0)
 		if newVCont != -1 {
-			print ("VerseCont created")
 			// Increment number of items
 			numIt = numIt + 1
 			// Update currIt and the database Chapter record so that the new VerseCont becomes the current item
 			currIt = newVCont
-			if dao!.chaptersUpdateRecPub (chID, numIt, newVCont, vsNum) {
-//				print ("Chapter:createParagraphCont updated \(bkInst!.bkName) \(chNum) Chapter record")
-			} else {
-				print ("Chapter:createParagraphCont ERROR updating \(bkInst!.bkName) \(chNum) Chapter record")
+			if !dao!.chaptersUpdateRecPub (chID, numIt, newVCont, currVN) {
+				appDelegate.ReportError(DBU_ChaPubErr)
 			}
 		} else {
-			print ("Chapter:createParagraphCont ERROR inserting VerseCont into database")
+			appDelegate.ReportError(DBC_VItVcoErr)
 		}
 	}
 
@@ -523,16 +504,16 @@ public class Chapter: NSObject {
 		// Append continuation text to original Verse
 		let txtBef = prevItem.itTxt
 		let txtAft = nextItem.itTxt
-		dao!.itemsUpdateRecText(prevItem.itID, txtBef + txtAft)
+		if !dao!.itemsUpdateRecText(prevItem.itID, txtBef + txtAft) {
+			appDelegate.ReportError(DBU_VItTxtErr)
+		}
 		// Delete VerseCont record
 		dao!.itemsDeleteRec(nextItem.itID)
 		numIt = numIt - 1
 		// Update currIt and the database Chapter record so that the original VerseItem becomes the current item
 		currIt = prevItID
-		if dao!.chaptersUpdateRecPub (chID, numIt, prevItID, vsNum) {
-//				print ("Chapter:deleteParagraphCont updated \(bkInst!.bkName) \(chNum) Chapter record")
-		} else {
-			print ("Chapter:deleteParagraphCont ERROR updating \(bkInst!.bkName) \(chNum) Chapter record")
+		if !dao!.chaptersUpdateRecPub (chID, numIt, prevItID, vsNum) {
+			appDelegate.ReportError(DBU_ChaPubErr)
 		}
 	}
 
@@ -544,7 +525,9 @@ public class Chapter: NSObject {
 		let txtAft = contItem.itTxt
 		let vsNum = BibItems[currItOfst].vsNum
 		// Append continuation text to original Verse
-		dao!.itemsUpdateRecText(prevItem.itID, txtBef + txtAft)
+		if !dao!.itemsUpdateRecText(prevItem.itID, txtBef + txtAft) {
+			appDelegate.ReportError(DBU_VItTxtErr)
+		}
 		// Delete VerseCont record
 		dao!.itemsDeleteRec(currIt)
 		numIt = numIt - 1
@@ -554,31 +537,26 @@ public class Chapter: NSObject {
 		numIt = numIt - 1
 		// Update currIt and the database Chapter record so that the original VerseItem becomes the current item
 		currIt = prevVersID
-		if dao!.chaptersUpdateRecPub (chID, numIt, prevVersID, vsNum) {
-//				print ("Chapter:deleteVerseCont updated \(bkInst!.bkName) \(chNum) Chapter record")
-		} else {
-			print ("Chapter:deleteVerseCont ERROR updating \(bkInst!.bkName) \(chNum) Chapter record")
+		if !dao!.chaptersUpdateRecPub (chID, numIt, prevVersID, vsNum) {
+			appDelegate.ReportError(DBU_ChaPubErr)
 		}
 	}
 
 	func createSubjHeading() {
-		let vsNum = BibItems[currItOfst].vsNum
+//		let vsNum = BibItems[currItOfst].vsNum
 //		let curItType = BibItems[currItOfst].itTyp
-		let newitemID = dao!.verseItemsInsertRec (chID, vsNum, "Heading", vsNum * 100 - 20, "", 0, false, 0)
+		let newitemID = dao!.verseItemsInsertRec (chID, currVN, "Heading", currVN * 100 - 20, "", 0, false, 0)
 		if newitemID != -1 {
-			print ("Subject Heading created")
 			// Increment number of items
 			numIt = numIt + 1
 			// Make the new Subject Heading the current VerseItem
 			currIt = newitemID
 			// Update the database Chapter record so that the new Subject Heading item becomes the current item
-			if dao!.chaptersUpdateRecPub (chID, numIt, newitemID, vsNum) {
-//				print ("Chapter:createSubjHeading updated \(bkInst!.bkName) \(chNum) Chapter record")
-			} else {
-				print ("Chapter:createSubjHeading ERROR updating \(bkInst!.bkName) \(chNum) Chapter record")
+			if !dao!.chaptersUpdateRecPub (chID, numIt, newitemID, currVN) {
+				appDelegate.ReportError(DBU_ChaPubErr)
 			}
 		} else {
-			print ("Chapter:createSubjHeading ERROR inserting into database")
+			appDelegate.ReportError(DBC_VItSHdErr)
 		}
 	}
 
@@ -592,32 +570,29 @@ public class Chapter: NSObject {
 			// Make the next VerseItem the current one
 			currIt = BibItems[currItOfst + 1].itID
 			// Update the database Chapter record so that the following item becomes the current item
-			if dao!.chaptersUpdateRecPub (chID, numIt, currIt, vsNum) {
-//				print ("Chapter:deleteSubjHeading updated \(bkInst!.bkName) \(chNum) Chapter record")
-			} else {
-				print ("Chapter:deleteSubjHeading ERROR updating \(bkInst!.bkName) \(chNum) Chapter record")
+			if !dao!.chaptersUpdateRecPub (chID, numIt, currIt, vsNum) {
+				appDelegate.ReportError(DBU_ChaPubErr)
 			}
+		} else {
+			appDelegate.ReportError(DBD_VItSHdErr)
 		}
 	}
 
 	// Creates a Parallel Ref before a Verse or after a Title
 	func createParallelRef() {
-		let vsNum = BibItems[currItOfst].vsNum
-		let newitemID = dao!.verseItemsInsertRec (chID, vsNum, "ParlRef", vsNum * 100 - 15, "", 0, false, 0)
+//		let vsNum = BibItems[currItOfst].vsNum
+		let newitemID = dao!.verseItemsInsertRec (chID, currVN, "ParlRef", currVN * 100 - 15, "", 0, false, 0)
 		if newitemID != -1 {
-			print ("Parallel Ref created")
 			// Increment number of items
 			numIt = numIt + 1
 			// Make the new Parallel Ref the current VerseItem
 			currIt = newitemID
 			// Update the database Chapter record so that the new Parallel Ref item becomes the current item
-			if dao!.chaptersUpdateRecPub (chID, numIt, newitemID, vsNum) {
-//				print ("Chapter:createParallelRef updated \(bkInst!.bkName) \(chNum) Chapter record")
-			} else {
-				print ("Chapter:createParallelRef ERROR updating \(bkInst!.bkName) \(chNum) Chapter record")
+			if !dao!.chaptersUpdateRecPub (chID, numIt, newitemID, currVN) {
+				appDelegate.ReportError(DBU_ChaPubErr)
 			}
 		} else {
-			print ("Chapter:createParallelRef ERROR inserting into database")
+			appDelegate.ReportError(DBC_VItPRfErr)
 		}
 	}
 
@@ -625,25 +600,25 @@ public class Chapter: NSObject {
 	func deleteParallelRef () {
 		let vsNum = BibItems[currItOfst].vsNum
 		if dao!.itemsDeleteRec(currIt) {
-			print("Parallel Ref deleted")
 			// Decrement number of items
 			numIt = numIt - 1
 			// Make the next VerseItem the current one
 			currIt = BibItems[currItOfst + 1].itID
 			// Update the database Chapter record so that the following item becomes the current item
-			if dao!.chaptersUpdateRecPub (chID, numIt, currIt, vsNum) {
-//				print ("Chapter:deleteParallelRef updated \(bkInst!.bkName) \(chNum) Chapter record")
-			} else {
-				print ("Chapter:deleteParallelRef ERROR updating \(bkInst!.bkName) \(chNum) Chapter record")
+			if !dao!.chaptersUpdateRecPub (chID, numIt, currIt, vsNum) {
+				appDelegate.ReportError(DBU_ChaPubErr)
 			}
+		} else {
+			appDelegate.ReportError(DBD_VItPRfErr)
 		}
+
 	}
 
 	// This function uses the current values in BibItems[] but makes changes in
 	// the database via KITDAO. After the database changes have been made,
 	//  BibItems[] will be refreshed from KITDAO.
 	func bridgeNextVerse() {
-		let vsNum = BibItems[currItOfst].vsNum
+//		let vsNum = BibItems[currItOfst].vsNum
 		// Get the vsNum and itTxt from the verse to be added to the bridge
 		let nexVsNum = BibItems[currItOfst + 1].vsNum
 		let nexVsTxt = BibItems[currItOfst + 1].itTxt
@@ -651,18 +626,16 @@ public class Chapter: NSObject {
 		dao!.itemsDeleteRec(BibItems[currItOfst + 1].itID)
 		numIt = numIt - 1
 		// Create related BridgeItems record
-		let curVsItID = BibItems[currItOfst].itID
+//		let curVsItID = BibItems[currItOfst].itID
 		let curVsTxt = BibItems[currItOfst].itTxt
-		let bridID = dao!.bridgeInsertRec(curVsItID, curVsTxt, nexVsTxt)
+		_ = dao!.bridgeInsertRec(currIt, curVsTxt, nexVsTxt)
 		// Copy text of next verse into the bridge head verse
 		let newBridHdTxt = curVsTxt + " " + nexVsTxt
-		dao!.itemsUpdateForBridge(curVsItID, newBridHdTxt, true, nexVsNum)
+		dao!.itemsUpdateForBridge(currIt, newBridHdTxt, true, nexVsNum)
 		// Update the database Chapter record so that the bridge head VerseItem remains the current item
 		// and the number of items is updated
-		if dao!.chaptersUpdateRecPub (chID, numIt, curVsItID, vsNum) {
-//				print ("Chapter:bridgeNextVerse updated \(bkInst!.bkName) \(chNum) Chapter record")
-		} else {
-			print ("Chapter:bridgeNextVerse ERROR updating \(bkInst!.bkName) \(chNum) Chapter record")
+		if !dao!.chaptersUpdateRecPub (chID, numIt, currIt, currVN) {
+			appDelegate.ReportError(DBU_ChaPubErr)
 		}
 	}
 
@@ -692,7 +665,7 @@ public class Chapter: NSObject {
 	// the database via KITDAO. After the database changes have been made,
 	//  BibItems[] will be refreshed from KITDAO.
 	func unbridgeLastVerse() {
-		let vsNum = BibItems[currItOfst].vsNum
+//		let vsNum = BibItems[currItOfst].vsNum
 		// Get the most recent BridgeItems record for this verse
 		let result = dao!.bridgeGetRecs(BibItems[currItOfst].itID, self)
 		if result {
@@ -704,10 +677,8 @@ public class Chapter: NSObject {
 		let curBridItem = BridItems.last
 		// Create the verse record being removed from the bridge
 		let nextVsNum = BibItems[currItOfst].lvBrg
-		if dao!.verseItemsInsertRec (chID, nextVsNum, "Verse", 100 * nextVsNum, curBridItem!.textExtraVerse, 0, false, 0) != -1 {
-//				print("Chapter:createItemRecords Created Verse record for chap \(chNum) vs \(nextVsNum)")
-		} else {
-			print("ERROR: Book:createItemRecords: Creating Verse record failed for chap \(chNum) vs \(nextVsNum)")
+		if dao!.verseItemsInsertRec (chID, nextVsNum, "Verse", 100 * nextVsNum, curBridItem!.textExtraVerse, 0, false, 0) == -1 {
+			appDelegate.ReportError(DBC_VItDBrErr)
 		}
 		numIt = numIt + 1
 		// Copy text of the previous bridge head into the new bridge head
@@ -725,10 +696,8 @@ public class Chapter: NSObject {
 		dao!.bridgeDeleteRec(curBridItem!.BridgeID)
 		// Update the database Chapter record so that the bridge head VerseItem remains the current item
 		// and the number of items is updated
-		if dao!.chaptersUpdateRecPub (chID, numIt, BibItems[currItOfst].itID, vsNum) {
-//				print ("Chapter:unbridgeLastVerse updated \(bkInst!.bkName) \(chNum) Chapter record")
-		} else {
-			print ("Chapter:unbridgeLastVerse ERROR updating \(bkInst!.bkName) \(chNum) Chapter record")
+		if !dao!.chaptersUpdateRecPub (chID, numIt, BibItems[currItOfst].itID, currVN) {
+			appDelegate.ReportError(DBU_ChaPubErr)
 		}
 	}
 
@@ -736,8 +705,8 @@ public class Chapter: NSObject {
 	
 	// Create Introductory Matter Title
 	func createIntroTitle() {
-		let vsNum = 1
-		let newitemID = dao!.verseItemsInsertRec (chID, vsNum, "InTitle", 10, "", 0, false, 0)
+//		let vsNum = 1
+		let newitemID = dao!.verseItemsInsertRec (chID, currVN, "InTitle", 10, "", 0, false, 0)
 		if newitemID != -1 {
 			print ("InTitle for Book created")
 			// Note that the Book now has an InTitle
@@ -747,13 +716,11 @@ public class Chapter: NSObject {
 			// Make the new InTitle the current VerseItem
 			currIt = newitemID
 			// Update the database Chapter record so that the new Title item becomes the current item
-			if dao!.chaptersUpdateRecPub (chID, numIt, newitemID, vsNum) {
-//				print ("Chapter:createInTitle updated \(bkInst!.bkName) \(chNum) Chapter record")
-			} else {
-				print ("Chapter:createInTitle ERROR updating \(bkInst!.bkName) \(chNum) Chapter record")
+			if !dao!.chaptersUpdateRecPub (chID, numIt, newitemID, currVN) {
+				appDelegate.ReportError(DBU_ChaPubErr)
 			}
 		} else {
-			print ("Chapter:createInTitle ERROR inserting into database")
+			appDelegate.ReportError(DBC_VItITiErr)
 		}
 	}
 
@@ -769,33 +736,28 @@ public class Chapter: NSObject {
 			// Make the next VerseItem the current one
 			currIt = BibItems[currItOfst + 1].itID
 			// Update the database Chapter record so that the following item becomes the current item
-			if dao!.chaptersUpdateRecPub (chID, numIt, currIt, vsNum) {
-//				print ("Chapter:deleteInTitle updated \(bkInst!.bkName) \(chNum) Chapter record")
-			} else {
-				print ("Chapter:deleteInTitle ERROR updating \(bkInst!.bkName) \(chNum) Chapter record")
+			if !dao!.chaptersUpdateRecPub (chID, numIt, currIt, vsNum) {
+				appDelegate.ReportError(DBU_ChaPubErr)
 			}
 		}
 	}
 
 	// Create Introductory Matter Heading
 	func createIntroHeading() {
-		let vsNum = 1
-		let newitemID = dao!.verseItemsInsertRec (chID, vsNum, "InSubj", 10 + nextIntSeq, "", nextIntSeq, false, 0)
+//		let vsNum = 1
+		let newitemID = dao!.verseItemsInsertRec (chID, currVN, "InSubj", 10 + nextIntSeq, "", nextIntSeq, false, 0)
 		nextIntSeq = nextIntSeq + 1
 		if newitemID != -1 {
-			print ("InSubj for Book created")
 			// Increment number of items
 			numIt = numIt + 1
 			// Make the new InSubj the current VerseItem
 			currIt = newitemID
 			// Update the database Chapter record so that the new Title item becomes the current item
-			if dao!.chaptersUpdateRecPub (chID, numIt, newitemID, vsNum) {
-//				print ("Chapter:createIntroHeading updated \(bkInst!.bkName) \(chNum) Chapter record")
-			} else {
-				print ("Chapter:createIntroHeading ERROR updating \(bkInst!.bkName) \(chNum) Chapter record")
+			if !dao!.chaptersUpdateRecPub (chID, numIt, newitemID, currVN) {
+				appDelegate.ReportError(DBU_ChaPubErr)
 			}
 		} else {
-			print ("Chapter:createIntroHeading ERROR inserting into database")
+			appDelegate.ReportError(DBC_VItIHdErr)
 		}
 	}
 
@@ -803,39 +765,33 @@ public class Chapter: NSObject {
 	func deleteIntroHeading() {
 		let vsNum = 1
 		if dao!.itemsDeleteRec(currIt) {
-			print("InSubj deleted")
 			// Decrement number of items
 			numIt = numIt - 1
 			// Make the next VerseItem the current one
 			currIt = BibItems[currItOfst + 1].itID
 			// Update the database Chapter record so that the following item becomes the current item
-			if dao!.chaptersUpdateRecPub (chID, numIt, currIt, vsNum) {
-//				print ("Chapter:deleteIntroHeading updated \(bkInst!.bkName) \(chNum) Chapter record")
-			} else {
-				print ("Chapter:deleteIntroHeading ERROR updating \(bkInst!.bkName) \(chNum) Chapter record")
+			if !dao!.chaptersUpdateRecPub (chID, numIt, currIt, vsNum) {
+				appDelegate.ReportError(DBU_ChaPubErr)
 			}
 		}
 	}
 
 	// Create Introductory Matter Paragraph
 	func createIntroPara() {
-		let vsNum = 1
-		let newitemID = dao!.verseItemsInsertRec (chID, vsNum, "InPara", 10 + nextIntSeq, "", nextIntSeq, false, 0)
+//		let vsNum = 1
+		let newitemID = dao!.verseItemsInsertRec (chID, currVN, "InPara", 10 + nextIntSeq, "", nextIntSeq, false, 0)
 		nextIntSeq = nextIntSeq + 1
 		if newitemID != -1 {
-			print ("InPara for Book created")
 			// Increment number of items
 			numIt = numIt + 1
 			// Make the new InSubj the current VerseItem
 			currIt = newitemID
 			// Update the database Chapter record so that the new Title item becomes the current item
-			if dao!.chaptersUpdateRecPub (chID, numIt, newitemID, vsNum) {
-//				print ("Chapter:createIntroPara updated \(bkInst!.bkName) \(chNum) Chapter record")
-			} else {
-				print ("Chapter:createIntroPara ERROR updating \(bkInst!.bkName) \(chNum) Chapter record")
+			if !dao!.chaptersUpdateRecPub (chID, numIt, newitemID, currVN) {
+				appDelegate.ReportError(DBU_ChaPubErr)
 			}
 		} else {
-			print ("Chapter:createIntroPara ERROR inserting into database")
+			appDelegate.ReportError(DBC_VItIHdErr)
 		}
 	}
 
@@ -849,10 +805,8 @@ public class Chapter: NSObject {
 			// Make the next VerseItem the current one
 			currIt = BibItems[currItOfst + 1].itID
 			// Update the database Chapter record so that the following item becomes the current item
-			if dao!.chaptersUpdateRecPub (chID, numIt, currIt, vsNum) {
-//				print ("Chapter:deleteIntroPara updated \(bkInst!.bkName) \(chNum) Chapter record")
-			} else {
-				print ("Chapter:deleteIntroPara ERROR updating \(bkInst!.bkName) \(chNum) Chapter record")
+			if !dao!.chaptersUpdateRecPub (chID, numIt, currIt, vsNum) {
+				appDelegate.ReportError(DBU_ChaPubErr)
 			}
 		}
 	}
@@ -900,6 +854,11 @@ public class Chapter: NSObject {
 	}
 
 	func saveUSFMText (_ chID:Int, _ text:String) -> Bool {
-		return dao!.updateUSFMText (chID, text)
+		if !dao!.updateUSFMText (chID, text) {
+			appDelegate.ReportError(DBU_ChaUSFMErr)
+			return false
+		} else {
+			return true
+		}
 	}
 }
