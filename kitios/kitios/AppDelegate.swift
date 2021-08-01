@@ -85,5 +85,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	func ReportError (_ errNo:Int) {
 		// TODO: Write this function!
 		print ("Error number \(errNo) reported")
+//		performSegue (withIdentifier: "keyItNav", sender: self)
+
 	}
 }

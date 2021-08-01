@@ -499,7 +499,9 @@ public class Chapter: NSObject {
 		let prevItID = prevItem.itID
 		let vsNum = BibItems[currItOfst].vsNum
 		// Delete ParaCont record
-		dao!.itemsDeleteRec(currIt)
+		if !dao!.itemsDeleteRec(currIt) {
+			appDelegate.ReportError(DBD_VItPInErr)
+		}
 		numIt = numIt - 1
 		// Append continuation text to original Verse
 		let txtBef = prevItem.itTxt
@@ -508,7 +510,10 @@ public class Chapter: NSObject {
 			appDelegate.ReportError(DBU_VItTxtErr)
 		}
 		// Delete VerseCont record
-		dao!.itemsDeleteRec(nextItem.itID)
+		if !dao!.itemsDeleteRec(nextItem.itID) {
+			appDelegate.ReportError(DBD_VItVcoErr)
+		}
+
 		numIt = numIt - 1
 		// Update currIt and the database Chapter record so that the original VerseItem becomes the current item
 		currIt = prevItID
@@ -529,11 +534,16 @@ public class Chapter: NSObject {
 			appDelegate.ReportError(DBU_VItTxtErr)
 		}
 		// Delete VerseCont record
-		dao!.itemsDeleteRec(currIt)
+		if !dao!.itemsDeleteRec(currIt) {
+			appDelegate.ReportError(DBD_VItVcoErr)
+		}
 		numIt = numIt - 1
 		// Delete ParaCont record
 		let paraContItem = BibItems[currItOfst - 1]
-		dao!.itemsDeleteRec(paraContItem.itID)
+		if !dao!.itemsDeleteRec(paraContItem.itID) {
+			appDelegate.ReportError(DBD_VItPInErr)
+		}
+
 		numIt = numIt - 1
 		// Update currIt and the database Chapter record so that the original VerseItem becomes the current item
 		currIt = prevVersID
@@ -623,15 +633,21 @@ public class Chapter: NSObject {
 		let nexVsNum = BibItems[currItOfst + 1].vsNum
 		let nexVsTxt = BibItems[currItOfst + 1].itTxt
 		// Delete the verse record being added to the bridge
-		dao!.itemsDeleteRec(BibItems[currItOfst + 1].itID)
+		if !dao!.itemsDeleteRec(BibItems[currItOfst + 1].itID) {
+			appDelegate.ReportError(DBD_VItBItErr)
+		}
 		numIt = numIt - 1
 		// Create related BridgeItems record
 //		let curVsItID = BibItems[currItOfst].itID
 		let curVsTxt = BibItems[currItOfst].itTxt
-		_ = dao!.bridgeInsertRec(currIt, curVsTxt, nexVsTxt)
+		if dao!.bridgeInsertRec(currIt, curVsTxt, nexVsTxt) == -1 {
+			appDelegate.ReportError(DBC_BItErr)
+		}
 		// Copy text of next verse into the bridge head verse
 		let newBridHdTxt = curVsTxt + " " + nexVsTxt
-		dao!.itemsUpdateForBridge(currIt, newBridHdTxt, true, nexVsNum)
+		if !dao!.itemsUpdateForBridge(currIt, newBridHdTxt, true, nexVsNum) {
+			appDelegate.ReportError(DBU_VItBItErr)
+		}
 		// Update the database Chapter record so that the bridge head VerseItem remains the current item
 		// and the number of items is updated
 		if !dao!.chaptersUpdateRecPub (chID, numIt, currIt, currVN) {
@@ -667,13 +683,9 @@ public class Chapter: NSObject {
 	func unbridgeLastVerse() {
 //		let vsNum = BibItems[currItOfst].vsNum
 		// Get the most recent BridgeItems record for this verse
-		let result = dao!.bridgeGetRecs(BibItems[currItOfst].itID, self)
-		if result {
-			print("BridgeItems records for verse \(BibItems[currItOfst].vsNum) have been read from kdb.sqlite")
-		} else {
-			print("ERROR: BridgeItems records for verse \(BibItems[currItOfst].vsNum) have not been read from kdb.sqlite")
-		}
-		// The most recent bridge item will be the last in the list
+		// Any error will be reported from KITDAO.swift
+		dao!.bridgeGetRecs(BibItems[currItOfst].itID, self)
+		// The most recent BridgeItem will be the last in the list
 		let curBridItem = BridItems.last
 		// Create the verse record being removed from the bridge
 		let nextVsNum = BibItems[currItOfst].lvBrg
@@ -691,9 +703,13 @@ public class Chapter: NSObject {
 			// The head of the bridge will still be a bridge head
 			isBrid = true
 		}
-		dao!.itemsUpdateForBridge(BibItems[currItOfst].itID, curBridItem!.textCurrBridge, isBrid, lastVsBr)
+		if !dao!.itemsUpdateForBridge(BibItems[currItOfst].itID, curBridItem!.textCurrBridge, isBrid, lastVsBr) {
+			appDelegate.ReportError(DBU_VItBItErr)
+		}
 		// Delete this BridgeItems record
-		dao!.bridgeDeleteRec(curBridItem!.BridgeID)
+		if !dao!.bridgeDeleteRec(curBridItem!.BridgeID) {
+			appDelegate.ReportError(DBD_BItErr)
+		}
 		// Update the database Chapter record so that the bridge head VerseItem remains the current item
 		// and the number of items is updated
 		if !dao!.chaptersUpdateRecPub (chID, numIt, BibItems[currItOfst].itID, currVN) {
@@ -828,7 +844,9 @@ public class Chapter: NSObject {
 				}
 				s = "\n\\v " + vn + " " + tx
 			case "VerseCont":
-				s = "\n" + tx
+				// verse continuation can be on same line as the \p
+//				s = "\n" + tx
+				s = " " + tx
 			case "Para", "ParaCont":		// Paragraph before or within a verse
 				s = "\n\\p"
 			case "Heading":			// Heading/Subject Heading

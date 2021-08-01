@@ -32,7 +32,7 @@ class UIVerseItemCell: UITableViewCell, UITextViewDelegate {
 	var textChanged: ((String) -> Void)?
 	
 	var tableRow = 0	// As each instance of UIVerseItemCell is created its tableRow is set
-	var VTVCtrl: VersesTableViewController?	// Link to the ViewController that owns this cell
+	weak var VTVCtrl: VersesTableViewController?	// Link to the ViewController that owns this cell
 	var dirty = false
 
     override func awakeFromNib() {

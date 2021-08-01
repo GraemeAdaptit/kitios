@@ -61,11 +61,16 @@
 	let DBD_VItSHdErr = 139		// Error deleting VerseItem for SubjHead
 	let DBC_VItPRfErr = 140		// Error creating VerseItem for ParlRef
 	let DBD_VItPRfErr = 141		// Error deleting VerseItem for ParlRef
+	let DBU_VItBItErr = 142		// Error updating VerseItem for bridging/unbridging
+	let DBD_VItBItErr = 143		// Error deleting VerseItem for unbridging
 
-	let DBC_VItITiErr = 138		// Error creating VerseItem for IntroTitle
-	let DBD_VItITiErr = 139		// Error deleting VerseItem for IntroTitle
-	let DBC_VItIHdErr = 140		// Error creating VerseItem for IntroSubj
-	let DBD_VItIHdErr = 141		// Error deleting VerseItem for IntroSubj
-	let DBC_VItIPaErr = 142		// Error creating VerseItem for IntroPara
-	let DBD_VItIPaErr = 143		// Error deleting VerseItem for IntroPara
+	let DBC_VItITiErr = 144		// Error creating VerseItem for IntroTitle
+	let DBD_VItITiErr = 145		// Error deleting VerseItem for IntroTitle
+	let DBC_VItIHdErr = 146		// Error creating VerseItem for IntroSubj
+	let DBD_VItIHdErr = 147		// Error deleting VerseItem for IntroSubj
+	let DBC_VItIPaErr = 148		// Error creating VerseItem for IntroPara
+	let DBD_VItIPaErr = 149		// Error deleting VerseItem for IntroPara
 
+	let DBC_BItErr = 150		// Error creating BridgeItem record
+	let DBR_BItErr = 151		// Error reading BridgeItem record from database
+	let DBD_BItErr = 152		// Error deleting BridgeItem record

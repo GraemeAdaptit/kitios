@@ -10,6 +10,7 @@
 		C801D68025EE474F00C3DF2D /* UIPubItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C801D67F25EE474F00C3DF2D /* UIPubItemCell.swift */; };
 		C81DC9F2246D01A500553D89 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = C81DC9F1246D01A400553D89 /* README.md */; };
 		C857BCE72553B8A900476AB6 /* PubItemsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C857BCE62553B8A900476AB6 /* PubItemsViewController.swift */; };
+		C87F575A26B67E0700711F01 /* ErrorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C87F575926B67E0700711F01 /* ErrorViewController.swift */; };
 		C8AA65DF245FCE0E00B456AE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8AA65DE245FCE0E00B456AE /* AppDelegate.swift */; };
 		C8AA65E6245FCE0E00B456AE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C8AA65E4245FCE0E00B456AE /* Main.storyboard */; };
 		C8AA65E8245FCE2F00B456AE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C8AA65E7245FCE2F00B456AE /* Assets.xcassets */; };
@@ -38,6 +39,7 @@
 		C85A83B926AADE2400512C04 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		C85A83BA26AADF7E00512C04 /* en-AU */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-AU"; path = "en-AU.lproj/Main.strings"; sourceTree = "<group>"; };
 		C85A83BB26AADF7E00512C04 /* en-AU */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-AU"; path = "en-AU.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		C87F575926B67E0700711F01 /* ErrorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorViewController.swift; sourceTree = "<group>"; };
 		C8AA65DB245FCE0E00B456AE /* kitios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = kitios.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8AA65DE245FCE0E00B456AE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C8AA65E5245FCE0E00B456AE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -114,6 +116,7 @@
 				C857BCE62553B8A900476AB6 /* PubItemsViewController.swift */,
 				C8AA65DE245FCE0E00B456AE /* AppDelegate.swift */,
 				C8AA65E4245FCE0E00B456AE /* Main.storyboard */,
+				C87F575926B67E0700711F01 /* ErrorViewController.swift */,
 				C8AA65E7245FCE2F00B456AE /* Assets.xcassets */,
 				C8AA65E9245FCE2F00B456AE /* LaunchScreen.storyboard */,
 				C8AA65EC245FCE2F00B456AE /* Info.plist */,
@@ -241,6 +244,7 @@
 				C8AA6617245FEBAE00B456AE /* VersesTableViewController.swift in Sources */,
 				C8AA660B245FE7DE00B456AE /* KITDAO.swift in Sources */,
 				C8AA6615245FEBAE00B456AE /* ExportChapterViewController.swift in Sources */,
+				C87F575A26B67E0700711F01 /* ErrorViewController.swift in Sources */,
 				C8AA65DF245FCE0E00B456AE /* AppDelegate.swift in Sources */,
 				C8AA6607245FE78300B456AE /* Chapter.swift in Sources */,
 			);

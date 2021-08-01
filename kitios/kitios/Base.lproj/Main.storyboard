@@ -321,6 +321,41 @@
             </objects>
             <point key="canvasLocation" x="-695.6521739130435" y="-2956.4732142857142"/>
         </scene>
+        <!--Fatal Error-->
+        <scene sceneID="f04-rs-fBU">
+            <objects>
+                <viewController title="Fatal Error" id="WmQ-9p-mle" customClass="ErrorViewController" customModule="kitios" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="center" id="xvf-GQ-U1r">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Error No." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Bt-dZ-ljB" userLabel="err_no">
+                                <rect key="frame" x="57" y="69" width="300" height="75"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="300" id="S3A-D4-Gn0"/>
+                                    <constraint firstAttribute="height" constant="75" id="wHp-om-eUA"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="40"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="sw7-P8-T39"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="2Bt-dZ-ljB" firstAttribute="top" secondItem="sw7-P8-T39" secondAttribute="top" constant="25" id="jO6-ML-nZf"/>
+                            <constraint firstItem="2Bt-dZ-ljB" firstAttribute="centerX" secondItem="xvf-GQ-U1r" secondAttribute="centerX" id="lhc-Uo-L4O"/>
+                        </constraints>
+                    </view>
+                    <value key="contentSizeForViewInPopover" type="size" width="200" height="75"/>
+                    <connections>
+                        <outlet property="errorNum" destination="2Bt-dZ-ljB" id="8Dp-2p-vJn"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="lDx-bf-NLG" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-704.34782608695662" y="-2193.0803571428569"/>
+        </scene>
         <!--Export Chapter-->
         <scene sceneID="mc2-wj-nES">
             <objects>

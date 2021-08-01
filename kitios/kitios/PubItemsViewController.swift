@@ -18,7 +18,7 @@ import UIKit
 class PubItemsViewController: UITableViewController {
 
 	weak var chInst: Chapter?
-	var VTVCtrl: VersesTableViewController?
+	weak var VTVCtrl: VersesTableViewController?
 	var popMenu: VIMenu?
 
 	required init?(coder aDecoder: NSCoder) {
