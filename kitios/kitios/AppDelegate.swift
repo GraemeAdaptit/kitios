@@ -85,7 +85,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	func ReportError (_ errNo:Int) {
 		// TODO: Write this function!
 		print ("Error number \(errNo) reported")
-//		performSegue (withIdentifier: "keyItNav", sender: self)
 
+		var topWindow: UIWindow? = UIWindow(frame: UIScreen.main.bounds)
+		topWindow?.rootViewController = UIViewController()
+		topWindow?.windowLevel = UIWindow.Level.alert + 1
+
+		let alert = UIAlertController(title: "Fatal Error", message: "Please report Error No. \(errNo) to the developers", preferredStyle: .alert)
+		alert.addAction(UIAlertAction(title: "OK", style: .cancel) { _ in
+			// At present only fatal errors are considered; if non-fatal errors are handled
+			// additional code can be put in here so that KIT continues after the user has
+			// clicked OK to the warning
+			exit(0)
+
+			// Next two lines hide the window if KIT is to continue running
+			// and also keeps a reference to the window until the action is invoked.
+			topWindow?.isHidden = true	// Hide the window
+			topWindow = nil				// Delete the topwindow
+		 })
+		
+		topWindow?.makeKeyAndVisible()
+		topWindow?.rootViewController?.present(alert, animated: true, completion: nil)
 	}
 }
