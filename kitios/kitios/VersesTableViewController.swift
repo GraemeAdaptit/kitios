@@ -246,6 +246,7 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 
 	// Adjust the VerseItems TableView after popover menu changes to the data model
 	func refreshDisplayAfterPopoverMenuActions() {
+		// BUG40 seems to be in refreshing of the TableView
 		dismiss(animated: true, completion:nil)
 		tableView.reloadData()
 		// Get current VerseItem from Chapter instance

@@ -843,11 +843,9 @@ public class Chapter: NSObject {
 					vn = String(item.vsNum)
 				}
 				s = "\n\\v " + vn + " " + tx
-			case "VerseCont":
-				// verse continuation can be on same line as the \p
-//				s = "\n" + tx
-				s = " " + tx
-			case "Para", "ParaCont":		// Paragraph before or within a verse
+			case "VerseCont":		// Continuation of a verse that contains a paragraph break
+				s = "\n" + tx
+			case "Para", "ParaCont":	// Paragraph before or within a verse
 				s = "\n\\p"
 			case "Heading":			// Heading/Subject Heading
 				s = "\n\\s " + tx

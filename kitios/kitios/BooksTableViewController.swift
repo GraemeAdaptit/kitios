@@ -25,6 +25,13 @@
 
 import UIKit
 
+//extension NSLayoutConstraint {
+//	override open var description: String {
+//		let id = identifier ?? ""
+//		return "Constraint ID: \(id), constant: \(constant)"
+//	}
+//}
+
 class BooksTableViewController: UITableViewController {
 
 	// Get access to the AppDelegate

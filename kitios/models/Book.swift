@@ -207,7 +207,6 @@ var BibChaps: [BibChap] = []
 		
 		// delete any previous in-memory instance of Chapter
 		chapInst = nil
-		// TODO: Does this fix the memory leak?
 		appDelegate.chapInst = nil
 
 		// create a Chapter instance for the current Chapter of the current Book
@@ -237,7 +236,6 @@ var BibChaps: [BibChap] = []
 		// delete any previous in-memory instance of Chapter and create a new one
 		if diffChap {
 			chapInst = nil
-			// TODO: Does this fix the memory leak?
 			appDelegate.chapInst = nil
 
 			// create a Chapter instance for the current Chapter of the current Book
