@@ -7,6 +7,8 @@
 //	This is the UITableViewController for the Edit Chapter scene. This scene will be entered
 //	only when a current Book and current Chapter have been chosen.
 //
+//	NOTE: The VersesTableViewController in kitios matches the EditChapterActivity of kitand
+//
 //  Created by Graeme Costin on 8/1/20.
 // The author disclaims copyright to this source code.  In place of
 // a legal notice, here is a blessing:
@@ -38,6 +40,7 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 	}
 
 	deinit {
+		appDelegate.VTVCtrl = nil
 		print("VersesTableViewController is being de-initialised")
 	}
 
@@ -71,7 +74,13 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
 		if let cell = tableView.cellForRow(at: IndexPath(row: currItOfst, section: 0)) as! UIVerseItemCell? {
-			cell.itText.becomeFirstResponder()
+			// Select this VerseItem and scroll to make it visible
+			tableView.selectRow(at: IndexPath(row: currItOfst, section: 0), animated: true, scrollPosition: UITableView.ScrollPosition.middle)
+			// Activate it for text input
+			let bibItem = chInst!.getBibItem(at: currItOfst)
+			if bibItem.itTyp != "Para" {
+				cell.itText.becomeFirstResponder()
+			}
 		}
 	}
 	
@@ -125,8 +134,8 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 		cell.itText.text = vsItem.itTxt
 		// GDLC 19JAN21 BUG9 Simply setting the background colour of itText to white does not make the text edit
 		// cursor visible on iOS 11.0.1, so this bug will be documented as a feature that can be avoided by
-		// upgrading to iOS 12 or later.
-		//cell.itText.backgroundColor = .white
+		// upgrading to iOS 12 or later. ***NO GOOD! Same problem with iOS 12.2!!!
+		// cell.itText.backgroundColor = .white
 		cell.tableRow = indexPath.row
 		cell.VTVCtrl = self
 		cell.textChanged {[weak tableView] (_) in

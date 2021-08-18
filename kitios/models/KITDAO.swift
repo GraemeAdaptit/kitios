@@ -1,6 +1,7 @@
 //
 //  KITDAO.swift
 //
+//	GDLC 6AUG21 Started adding SQLite Swift error handling
 //	GDLC 26JUL21 Prep for release (print commands removed, etc.).
 //	GDLC 1JUL21 Added currVsNum to Chapters table
 //  GDLC 21SEP20	Simplified serveral true/false returns from
@@ -32,6 +33,17 @@
 //	returns to the foreground.
 
 import UIKit
+
+enum SQLiteError: Error {
+	case cannotCreateDatabase
+	case cannotOpenDatabase
+	case cannotCloseDatabase
+	case cannotCreateTable(tableName: String)
+	case cannotCreateRecord
+	case cannotReadRecord
+	case cannotUpdateRecord
+	case cannotDeleteRecord
+}
 
 public class KITDAO {
 
@@ -207,7 +219,7 @@ public class KITDAO {
 
 	// The bookRecsCreated flag starts as false and is changed to true during the first launch;
 	// it is never changed back to false, and so this function does not need any parameters.
-	func bibleUpdateRecsCreated () -> Bool {
+	func bibleUpdateRecsCreated () throws {
 		var sqlite3_stmt:OpaquePointer?=nil
 		let sql:String = "UPDATE Bibles SET bookRecsCreated = 1 WHERE bibleID = 1;"
 		let nByte:Int32 = Int32(sql.utf8.count)
@@ -215,7 +227,10 @@ public class KITDAO {
 		sqlite3_prepare_v2(db, sql, nByte, &sqlite3_stmt, nil)
 		sqlite3_step(sqlite3_stmt)
 		let result = sqlite3_finalize(sqlite3_stmt)
-		return (result == 0)
+		guard result == 0 else {
+			throw SQLiteError.cannotUpdateRecord
+		}
+//		return (result == 0)
 	}
 
 	// This function needs an Integer parameter for the current Book

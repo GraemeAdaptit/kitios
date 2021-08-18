@@ -132,7 +132,7 @@
                                     <subviews>
                                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" keyboardDismissMode="interactive" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Dn9-p9-aZb" userLabel="itText">
                                             <rect key="frame" x="4" y="-9" width="0.0" height="0.0"/>
-                                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" priority="250" constant="100" id="2l1-bN-uqR"/>
                                                 <constraint firstAttribute="width" priority="250" constant="300" id="Y61-PB-jIg"/>
@@ -154,6 +154,7 @@
                                             </connections>
                                         </button>
                                     </subviews>
+                                    <color key="backgroundColor" systemColor="tertiarySystemBackgroundColor"/>
                                     <constraints>
                                         <constraint firstItem="K9t-CU-7rM" firstAttribute="top" secondItem="zIz-Mj-2Kv" secondAttribute="top" constant="3" id="0kO-et-2X7"/>
                                         <constraint firstItem="K9t-CU-7rM" firstAttribute="leading" secondItem="zIz-Mj-2Kv" secondAttribute="leading" constant="3" id="4GA-pi-GUh"/>
@@ -401,6 +402,9 @@
         </systemColor>
         <systemColor name="systemRedColor">
             <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="tertiarySystemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
     </resources>
 </document>

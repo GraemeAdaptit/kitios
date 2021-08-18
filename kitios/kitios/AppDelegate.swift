@@ -24,17 +24,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	// so that all parts of the app can use it. The KITDAO instance is needed for
 	// the entire duration of the run of kitios. It is used in the instances of
 	// Bible, Book, and Chapter - only these modules interact with the SQLite database.
-	var dao: KITDAO?
+	var dao: KITDAO?				// This is a strong ref to keep the instance of KITDAO for the life of the run of the app
 		
 	var bibInst: Bible?				// During the launch of KIT an instance of the class Bible will be created
 									// This is the strong ref to bibInst which lasts for the entire run of the app
 	weak var bookInst: Book?		// Once launching is complete there will be an instance of the current Book
-									// Weak ref; the strong ref is in Bible instance
+									// Weak ref; the strong ref is in the Bible instance
 	weak var chapInst: Chapter?		// Once launching is complete there will be an instance of the current Chapter
 									// Weak ref; the strong ref is in Book instance
 	weak var VTVCtrl: VersesTableViewController?
-									// Once a Chapter of a Book is opened there will be a VersesTableViewController
-									// Weak ref; the strong ref is in ???
+			// Once a Chapter of a Book is opened there will be a VersesTableViewController
+			// Weak ref; the strong ref is just itself, and the various references to it are weak refs
 
 	// May be used by the function ReportError()
 	var errorNum: Int = 0		// Error number to report to the developers; see list in ErrorNumbers.swift

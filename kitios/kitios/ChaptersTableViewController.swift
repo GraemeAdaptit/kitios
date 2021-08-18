@@ -21,8 +21,8 @@ import UIKit
 class ChaptersTableViewController: UITableViewController {
 
 	let appDelegate = UIApplication.shared.delegate as! AppDelegate
-	var bInst: Bible?		// Current instance of Bible
-	weak var bkInst: Book?		// Current instance of Book
+	weak var bInst: Bible?		// Current instance of Bible
+	weak var bkInst: Book?	// Current instance of Book
 							// When ChaptersTableViewController is active the user will have selected a Book
 							// and it will be the current Book
 	var chapName: String?
@@ -49,7 +49,7 @@ class ChaptersTableViewController: UITableViewController {
 		super.viewDidLoad()
 		// Get access to the array Book.BibChaps
 		bInst = appDelegate.bibInst
-		bkInst = bInst!.bookInst	// Get access to the instance of the current Book
+		bkInst = appDelegate.bookInst	// Get access to the instance of the current Book
 		navigationItem.title = bInst!.bibName
 		chapName = bkInst!.chapName
 		if bkInst!.bkID == 19 {

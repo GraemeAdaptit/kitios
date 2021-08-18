@@ -36,7 +36,7 @@ class BooksTableViewController: UITableViewController {
 
 	// Get access to the AppDelegate
 	let appDelegate = UIApplication.shared.delegate as! AppDelegate
-	var bInst: Bible?
+	weak var bInst: Bible?		// The strong ref is on AppDelegate
 
 	// Boolean for detecting when Back button has been pressed
 	var goingForwards = false
@@ -137,8 +137,8 @@ class BooksTableViewController: UITableViewController {
 		let nChap = bInst!.BibBooks[indexPath.row].numCh
 		let curChapID = bInst!.BibBooks[indexPath.row].curChID
 		var curChNum = 0
-		if bInst!.bookInst != nil {
-			curChNum = bInst!.bookInst!.offsetToBibChap(withID: curChapID) + 1
+		if appDelegate.bookInst != nil {
+			curChNum = appDelegate.bookInst!.offsetToBibChap(withID: curChapID) + 1
 		}
 		var numChText = ""
 		if selectedBook.chapRCr {

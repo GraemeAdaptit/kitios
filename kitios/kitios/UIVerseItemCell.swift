@@ -54,10 +54,6 @@ class UIVerseItemCell: UITableViewCell, UITextViewDelegate {
 	func textViewDidBeginEditing(_ textView: UITextView) {
 		VTVCtrl!.userTappedInTextOfCell(tableRow)
 	}
-
-//	func cellWentOutOfVisibleRange() {
-//		VTVCtrl!.tableView(didEndDisplayingCell: self)
-//	}
 	
 	// Called by iOS when the UIKit wants to reuse a cell for a different table row
 	override func prepareForReuse() {

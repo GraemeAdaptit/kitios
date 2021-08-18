@@ -16,6 +16,15 @@
 //	that the user has selected for keyboarding. When the user switches to keyboarding
 //	a different Chapter the current instance of Chapter will be deleted and a new instance
 //	created for the newly selected Chapter.
+//
+// The Chapter records in the database store the ID of the current VerseItem for each Chapter
+// because there are over 31,000 VerseItems and so verse numbers are not enough, and updating
+// a VerseItem record in the database is more efficiently done if the record is identified by
+// just its ID rather than by a combination of Book, Chapter, and VerseItem.
+// On the other hand, the user interface needs only the VerseItems for the current Chapter and,
+// in addition, the user interface functions on both Android and iOS expect data to be supplied
+// from the array BibItems[] whose index matches the indexes to the cells of the
+// RecyclerView (on Android) or TableView (on iOS).
 
 import UIKit
 
@@ -61,8 +70,8 @@ public class Chapter: NSObject {
 	// Get access to the AppDelegate
 	let appDelegate = UIApplication.shared.delegate as! AppDelegate
 	
-	var dao: KITDAO?		// access to the KITDAO instance for using kdb.sqlite
-	var bibInst: Bible? 	// access to the instance of Bible for updating BibBooks[]
+	weak var dao: KITDAO?		// access to the KITDAO instance for using kdb.sqlite
+	weak var bibInst: Bible? 	// access to the instance of Bible for updating BibBooks[]
 	weak var bkInst: Book?		// access to the instance for the current Book
 
 // This struct and the BibItems array are used for letting the user select the
@@ -96,6 +105,7 @@ public class Chapter: NSObject {
 
 	// Properties of the Chapter instance related to popover menus
 	var curPoMenu: VIMenu?		// instance in memory of the current popover menu
+								// Strong ref; must be nulled in deinit()
 	var hasAscription = false	// true if the Psalm has an Ascription
 	var hasTitle = false		// true if Chapter 1 has a Book Title
 	var hasInTitle = false		// true if Chapter 1 has an introductory matter Title
@@ -108,7 +118,6 @@ public class Chapter: NSObject {
 	init(_ parent: Book, _ chID: Int, _ bibID: Int, _ bkID: Int, _ chNum: Int, _ itRCr: Bool, _ numVs:Int, _ numIt: Int, _ currIt: Int, _ currVN: Int) {
 		super.init()
 
-		print ("Chapter instance for chap \(chNum) of book \(bkID) is being initialised")
 		self.bkInst = parent	// access to current Book
 		self.chID = chID		// chapterID INTEGER PRIMARY KEY
 		self.bibID = bibID		// bibleID INTEGER
@@ -150,6 +159,7 @@ public class Chapter: NSObject {
 	}
 
 	deinit {
+		curPoMenu = nil			// Release memory in curPoMenu
 		print ("Chapter instance for chap \(self.chNum) of book \(self.bkID) is being de-initialised")
 	}
 
@@ -830,10 +840,9 @@ public class Chapter: NSObject {
 	// Generate USFM export string for this Chapter
 	func calcUSFMExportText() -> String {
 		var USFM = "\\id " + bkInst!.bkCode + " " + bibInst!.bibName + "\n\\c " + String(chNum)
-		for i in 0...(BibItems.count - 1) {
+			for item in BibItems {
 			var s: String
 			var vn: String
-			let item = BibItems[i]
 			let tx: String = item.itTxt
 			switch item.itTyp {
 			case "Verse":

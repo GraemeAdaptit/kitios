@@ -160,9 +160,14 @@ public class Bible:NSObject {
 		bkRCr = true
 		
 		// Update the kdb.sqlite Bible record to note that Books recs have been created
-		if !dao!.bibleUpdateRecsCreated() {
+		do {
+			try dao!.bibleUpdateRecsCreated()
+		} catch {
 			appDelegate.ReportError(DBU_BibRErr)
 		}
+//		if !dao!.bibleUpdateRecsCreated() {
+//			appDelegate.ReportError(DBU_BibRErr)
+//		}
 	}
 
 // dao.readBooksRecs() calls appendBibBookToArray() for each row it reads from the kdb.sqlite database
@@ -178,8 +183,11 @@ public class Bible:NSObject {
 // duration of the run of the app; thus deinit will not be used in v1.0 of KIT.
 	
 	deinit {
-		// Also delete the instance of the SQLite data access object
+		// Delete the instance of the SQLite data access object
 		dao = nil
+		// Delete the instance of the Book
+		bookInst = nil
+		appDelegate.bookInst = nil
 	}
 
 // Refresh display of the Bible Books table on return to foreground
@@ -194,13 +202,12 @@ public class Bible:NSObject {
 
 		// delete any previous in-memory instance of Book
 		bookInst = nil
-		// TODO: Does this fix the memory leak?
 		appDelegate.bookInst = nil
 
-		// create a Book instance for the currently selected book
+		// Create a Book instance for the currently selected book
+		// and copy the reference to the AppDelegate
 		bookInst = Book(self, book.bkID, book.bibID, book.bkCode, book.bkName, book.chapRCr, book.numCh, book.curChID, book.curChNum)
-		// Keep a reference in the AppDelegate
-		appDelegate.bookInst = self.bookInst
+		appDelegate.bookInst = bookInst
 	}
 	
 // When the user selects a book from the UITableView of books it needs to be recorded as the
@@ -215,14 +222,12 @@ public class Bible:NSObject {
 
 		// delete any previous in-memory instance of Book
 		bookInst = nil
-		// TODO: Does this fix the memory leak?
 		appDelegate.bookInst = nil
 
-		// create a Book instance for the currently selected book
+		// Create a Book instance for the currently selected book
+		// and copy the reference to the AppDelegate
 		bookInst = Book(self, book.bkID, book.bibID, book.bkCode, book.bkName, book.chapRCr, book.numCh, book.curChID, book.curChNum)
-		// Keep a reference in the AppDelegate
 		appDelegate.bookInst = bookInst
-
 	}
 
 // When the Chapter records have been created for the current Book, the entry for that Book in

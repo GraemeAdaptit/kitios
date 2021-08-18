@@ -26,7 +26,7 @@ import UIKit
 
 class KeyItSetupController: UIViewController, UITextFieldDelegate {
 
-	var dao: KITDAO?
+	weak var dao: KITDAO?
 //	var bInst: Bible?
 
 	// Get access to the AppDelegate
@@ -99,8 +99,6 @@ class KeyItSetupController: UIViewController, UITextFieldDelegate {
 		// and save a reference to it in the appDelegate so the rest of the app has access to it.
 		appDelegate.bibInst = Bible(bibID, bibName, bkRCr, currBook)
 // GDLC 30JUL21 No need for local var bInst
-//		// Ensure rest of app has access to the Bible instance
-//		appDelegate.bibInst = bInst
 	}
 
 	// Don't need a button for this; when the user taps "Go"

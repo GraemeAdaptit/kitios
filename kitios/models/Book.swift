@@ -79,7 +79,6 @@ var BibChaps: [BibChap] = []
 	init(_ bInst: Bible, _ bkID: Int, _ bibID: Int, _ bkCode: String, _ bkName: String, _ chapRCr: Bool, _ numChaps: Int, _ curChID: Int, _ curChNum:Int) {
 		super.init()
 		
-		print ("Book instance for \(bkName) is being initialised")
 		self.bibInst = bInst
 		self.bkID = bkID			// bookID INTEGER
 		self.bibID = bibID			// bibleID INTEGER
@@ -220,7 +219,7 @@ var BibChaps: [BibChap] = []
 // current Chapter and initialisation of data structures in a new Chapter instance must happen.
 	
 	func setupCurrentChapter(withOffset chapOfst: Int) {
-		let diffChap = (chapOfst != currChapOfst)
+		let newChap = (chapOfst != currChapOfst) || (curChNum == 0)
 		let chap = BibChaps[chapOfst]
 		curChNum = chap.chNum
 		curChID = chap.chID		// ChapterID
@@ -234,7 +233,7 @@ var BibChaps: [BibChap] = []
 
 		// If the user has changed to a different Chapter then
 		// delete any previous in-memory instance of Chapter and create a new one
-		if diffChap {
+		if newChap {
 			chapInst = nil
 			appDelegate.chapInst = nil
 
