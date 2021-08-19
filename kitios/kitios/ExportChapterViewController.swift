@@ -2,7 +2,7 @@
 //  ExportChapterViewController.swift
 //  kitios
 //
-//	GDLC 23JUL21 Cleaned out print commands (were used in early stages of development)
+//	GDLC 23JUL21 Cleaned out some print commands (were used in early stages of development)
 //
 //  Created by Graeme Costin on 2/5/20.
 // The author disclaims copyright to this source code.  In place of
@@ -53,6 +53,9 @@ class ExportChapterViewController: UIViewController {
 			// TODO: Make a better way of handling errors like this
 			print("ExportChapterViewController:viewDidLoad save to kdb.sqlite FAILED")
 		}
+		ExportUSFM.isEditable = false
+//	When a good method of sending USFM to AIM is implemented, this UITextView can be made non-selectable
+//		ExportUSFM.isSelectable = false
     }
     
 }

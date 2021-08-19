@@ -112,6 +112,8 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
             cell.pubBut.setTitle("Main Title", for: .normal)
 		case "Para", "ParaCont":
 			cell.pubBut.setTitle("Paragraph", for: .normal)
+			cell.itText.isEditable = false
+			cell.itText.isSelectable = false
 		case "ParlRef":
 			cell.pubBut.setTitle("Parallel Ref", for: .normal)
 		case "VerseCont":
@@ -185,6 +187,15 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 			currItOfst = newOfst
 			// Select this VerseItem and ensure that it is visible
 			tableView.selectRow(at: IndexPath(row: currItOfst, section: 0), animated: true, scrollPosition: UITableView.ScrollPosition.middle)
+			// Activate it for text input
+			let cell = tableView.cellForRow(at: IndexPath(row: currItOfst, section: 0)) as! UIVerseItemCell
+			let bibItem = chInst!.getBibItem(at: currItOfst)
+			if bibItem.itTyp == "Para" {
+				cell.itText.isSelectable = false
+				cell.itText.isEditable = false
+			} else {
+				cell.itText.becomeFirstResponder()
+			}
 		}
 	}
 	
@@ -255,7 +266,6 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 
 	// Adjust the VerseItems TableView after popover menu changes to the data model
 	func refreshDisplayAfterPopoverMenuActions() {
-		// BUG40 seems to be in refreshing of the TableView
 		dismiss(animated: true, completion:nil)
 		tableView.reloadData()
 		// Get current VerseItem from Chapter instance
@@ -265,7 +275,10 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 		// Activate it for text input
 		let cell = tableView.cellForRow(at: IndexPath(row: currItOfst, section: 0)) as! UIVerseItemCell
 		let bibItem = chInst!.getBibItem(at: currItOfst)
-		if bibItem.itTyp != "Para" {
+		if bibItem.itTyp == "Para" {
+			cell.itText.isSelectable = false
+			cell.itText.isEditable = false
+		} else {
 			cell.itText.becomeFirstResponder()
 		}
 	}
