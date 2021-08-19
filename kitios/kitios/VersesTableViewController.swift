@@ -275,7 +275,7 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 		performSegue(withIdentifier: "exportChapter", sender: nil)
 	}
 }
-	
+
 extension VersesTableViewController: UIPopoverPresentationControllerDelegate {
 	
 	func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
