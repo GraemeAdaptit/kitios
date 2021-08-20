@@ -110,8 +110,10 @@ class BooksTableViewController: UITableViewController {
 		cell.textLabel?.text = book.bkName
 		if book.chapRCr {
 			cell.textLabel!.textColor = UIColor.blue
+			cell.detailTextLabel!.textColor = UIColor.blue
 		} else {
 			cell.textLabel!.textColor = UIColor.black
+			cell.detailTextLabel!.textColor = UIColor.black
 		}
 		let numCh = book.numCh
 		let curChapID = bInst!.BibBooks[indexPath.row].curChID

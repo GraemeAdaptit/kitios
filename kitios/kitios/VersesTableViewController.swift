@@ -65,7 +65,7 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
-		// Get the offset and ID of the current VerseItem
+		// Get the offset of the current VerseItem
 		currItOfst = chInst!.goCurrentItem()
 		// Select this VerseItem and scroll to make it visible
 		tableView.selectRow(at: IndexPath(row: currItOfst, section: 0), animated: animated, scrollPosition: UITableView.ScrollPosition.middle)

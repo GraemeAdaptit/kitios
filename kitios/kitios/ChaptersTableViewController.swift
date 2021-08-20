@@ -127,8 +127,10 @@ class ChaptersTableViewController: UITableViewController {
 		cell.detailTextLabel?.text = numVsItText
 		if chapter.itRCr {
 			cell.textLabel!.textColor = UIColor.blue
+			cell.detailTextLabel!.textColor = UIColor.blue
 		} else {
 			cell.textLabel!.textColor = UIColor.black
+			cell.detailTextLabel!.textColor = UIColor.black
 		}
         return cell
     }
