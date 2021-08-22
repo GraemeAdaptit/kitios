@@ -67,8 +67,6 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 		super.viewWillAppear(animated)
 		// Get the offset of the current VerseItem
 		currItOfst = chInst!.goCurrentItem()
-		// Select this VerseItem and scroll to make it visible
-		tableView.selectRow(at: IndexPath(row: currItOfst, section: 0), animated: animated, scrollPosition: UITableView.ScrollPosition.middle)
 	}
 	
 	override func viewDidAppear(_ animated: Bool) {
@@ -78,8 +76,10 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 			tableView.selectRow(at: IndexPath(row: currItOfst, section: 0), animated: true, scrollPosition: UITableView.ScrollPosition.middle)
 			// Activate it for text input
 			let bibItem = chInst!.getBibItem(at: currItOfst)
-			if bibItem.itTyp != "Para" {
-				cell.itText.becomeFirstResponder()
+			if bibItem.itTyp == "Para" || bibItem.itTyp == "ParaCont" {
+				cell.setCellState(selectable: false, editable: false, active: false)
+			} else {
+				cell.setCellState(selectable: true, editable: true, active: true)
 			}
 		}
 	}
@@ -112,8 +112,6 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
             cell.pubBut.setTitle("Main Title", for: .normal)
 		case "Para", "ParaCont":
 			cell.pubBut.setTitle("Paragraph", for: .normal)
-			cell.itText.isEditable = false
-			cell.itText.isSelectable = false
 		case "ParlRef":
 			cell.pubBut.setTitle("Parallel Ref", for: .normal)
 		case "VerseCont":
@@ -146,6 +144,11 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 				tableView?.endUpdates()
 			}
 		}
+		if vsItem.itTyp == "Para" || vsItem.itTyp == "ParaCont" {
+			cell.setCellState(selectable: false, editable: false, active: false)
+		} else {
+			cell.setCellState(selectable: true, editable: true, active: false)
+		}
         return cell
     }
 
@@ -164,10 +167,6 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 	// Called by the custom verse item cell when the user taps inside the cell's editable text
 	func userTappedInTextOfCell(_ tableRow: Int) {
 		changeCurrentCell(tableRow)
-		let cell = tableView.cellForRow(at: IndexPath(row: tableRow, section: 0)) as! UIVerseItemCell
-		if chInst!.BibItems[tableRow].itTyp != "Para" {
-			cell.itText.becomeFirstResponder()
-		}
 	}
 
 	// Called by iOS when the user selects a table row
@@ -190,11 +189,10 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 			// Activate it for text input
 			let cell = tableView.cellForRow(at: IndexPath(row: currItOfst, section: 0)) as! UIVerseItemCell
 			let bibItem = chInst!.getBibItem(at: currItOfst)
-			if bibItem.itTyp == "Para" {
-				cell.itText.isSelectable = false
-				cell.itText.isEditable = false
+			if bibItem.itTyp == "Para" || bibItem.itTyp == "ParaCont" {
+				cell.setCellState(selectable: false, editable: false, active: false)
 			} else {
-				cell.itText.becomeFirstResponder()
+				cell.setCellState(selectable: true, editable: true, active: true)
 			}
 		}
 	}

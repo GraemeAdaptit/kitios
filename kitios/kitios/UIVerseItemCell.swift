@@ -1,6 +1,8 @@
 //
 //  UIVerseItemCell.swift
 //
+//	GDLC 22AUG21 Added setCellState() for better control of cell editability, selectability
+//	and response (or otherwise) to keyboard actions.
 //	GDLC 23JUL21 Cleaned out print commands (were used in early stages of development)
 //
 //	A custom class for UITableView cells presenting VerseItems for editing.
@@ -23,6 +25,7 @@ protocol UIVerseItemCellDelegate:AnyObject {
 
 class UIVerseItemCell: UITableViewCell, UITextViewDelegate {
 
+	@IBOutlet weak var viCell: UIView!
 	@IBOutlet weak var itText: UITextView!
 	@IBOutlet weak var pubBut: UIButton!
 
@@ -71,6 +74,18 @@ class UIVerseItemCell: UITableViewCell, UITextViewDelegate {
 		let showRect    = self.convert(buttonFrame, to: VTVCtrl!.tableView)
 		VTVCtrl!.pubItemsPopoverAction(button, tableRow, showRect)
 	}
+
+	// GDLC 22AUG21 Added to better handle making cells selected or not selected
+	func setCellState(selectable: Bool, editable: Bool, active: Bool) {
+		itText.isSelectable = selectable
+		itText.isEditable = editable
+		if active {
+			itText.becomeFirstResponder()
+		} else {
+			itText.resignFirstResponder()
+		}
+	}
+
 }
 
 extension UIVerseItemCell: UIPopoverPresentationControllerDelegate {
