@@ -78,10 +78,14 @@ class VIMenu : NSObject {
 			let viMI3 = VIMenuItem("Intro Title", "delInTit", "D")
 			VIMenuItems.append(viMI3)
 		case "InSubj":			// Subject heading within Book introductory matter
-			let viMI1 = VIMenuItem("Intro Paragraph", "crInPar", "C")
-			VIMenuItems.append(viMI1)
-			let viMI2 = VIMenuItem("Intro Subject", "delInSubj", "D")
+			if (bibItem.vsNum == 1) && (chNum == 1) && (!chInst!.hasInTitle) {
+				let viMI1 = VIMenuItem("Intro Title", "crInTit", "C")
+				VIMenuItems.append(viMI1)
+			}
+			let viMI2 = VIMenuItem("Intro Paragraph", "crInPar", "C")
 			VIMenuItems.append(viMI2)
+			let viMI3 = VIMenuItem("Intro Subject", "delInHed", "D")
+			VIMenuItems.append(viMI3)
 		case "InPara":			// Paragraph within Book introductory matter
 			let viMI1 = VIMenuItem("Intro Paragraph", "crInPar", "C")
 			VIMenuItems.append(viMI1)

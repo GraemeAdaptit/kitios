@@ -335,7 +335,7 @@ public class Chapter: NSObject {
 			deleteIntroTitle()
 		case "crInHed":
 			createIntroHeading()
-		case "delInSubj":
+		case "delInHed":
 			deleteIntroHeading()
 		case "crInPar":
 			createIntroPara()
