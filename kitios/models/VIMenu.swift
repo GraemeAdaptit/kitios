@@ -154,9 +154,11 @@ class VIMenu : NSObject {
 				brgPossible = (bibItem.vsNum < chInst!.numVs)
 			}
 			if brgPossible {
-				if (chInst!.BibItems[curItOfst + 1].itTyp == "Verse") {
-					let viMI8 = VIMenuItem("Bridge Next", "brid", "B")
-					VIMenuItems.append(viMI8)
+			// GDLC 24AUG21 Don't let a verse be bridged with a following bridge
+			let nextVI = chInst!.BibItems[curItOfst + 1]
+			if (nextVI.itTyp == "Verse" && !nextVI.isBrg) {
+				let viMI8 = VIMenuItem("Bridge Next", "brid", "B")
+				VIMenuItems.append(viMI8)
 				}
 			}
 			if bibItem.isBrg {

@@ -34,6 +34,10 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 	// Boolean for detecting when Back button has been pressed
 	var goingForwards = false
 
+	// Boolean for needing scroll of current VerseItem to centre of screen
+	// Used (and then reset) by viewDidLayoutSubviews()
+	var needsScrollToCentre = false
+	
 	required init?(coder aDecoder: NSCoder) {
 		super.init(coder: aDecoder)
 		print("VersesTableViewController is being initialised")
@@ -71,19 +75,26 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 	
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
-		if let cell = tableView.cellForRow(at: IndexPath(row: currItOfst, section: 0)) as! UIVerseItemCell? {
-			// Select this VerseItem and scroll to make it visible
-			tableView.selectRow(at: IndexPath(row: currItOfst, section: 0), animated: true, scrollPosition: UITableView.ScrollPosition.middle)
-			// Activate it for text input
-			let bibItem = chInst!.getBibItem(at: currItOfst)
-			if bibItem.itTyp == "Para" || bibItem.itTyp == "ParaCont" {
-				cell.setCellState(selectable: false, editable: false, active: false)
-			} else {
-				cell.setCellState(selectable: true, editable: true, active: true)
-			}
-		}
+		needsScrollToCentre = true
 	}
 	
+	override func viewDidLayoutSubviews() {
+		if needsScrollToCentre {
+			// Scroll to make current row visible
+			tableView.scrollToRow(at: IndexPath(row: currItOfst, section: 0), at: UITableView.ScrollPosition.middle, animated: false )
+			if let cell = tableView.cellForRow(at: IndexPath(row: currItOfst, section: 0)) as! UIVerseItemCell? {
+				// Activate it for text input
+				let bibItem = chInst!.getBibItem(at: currItOfst)
+				if bibItem.itTyp == "Para" || bibItem.itTyp == "ParaCont" {
+					cell.setCellState(selectable: false, editable: false, active: false)
+				} else {
+					cell.setCellState(selectable: true, editable: true, active: true)
+				}
+			}
+			needsScrollToCentre = false
+		}
+	}
+
 	override func viewWillDisappear(_ animated: Bool) {
 		super.viewWillDisappear(animated)
 		// Save the current verse if necessary
@@ -145,9 +156,18 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 			}
 		}
 		if vsItem.itTyp == "Para" || vsItem.itTyp == "ParaCont" {
-			cell.setCellState(selectable: false, editable: false, active: false)
+			cell.setCellState(
+				selectable: false,
+				editable: false,
+				active: false)
 		} else {
-			cell.setCellState(selectable: true, editable: true, active: false)
+			cell.setCellState(
+				selectable: true,
+				editable: true,
+				active: (indexPath.row == currItOfst)
+			)
+//			print("Setting cell at offset \(indexPath.row) backgroundColor to red")
+//			cell.backgroundColor = UIColor.systemRed
 		}
         return cell
     }
@@ -178,22 +198,18 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 		if newOfst != currItOfst {
 			// Save the text in the current BibItem before changing to the new one
 			saveCurrentItemText()
+			// Deselect current BibItem
+			if let oldCell = tableView.cellForRow(at: IndexPath(row: currItOfst, section: 0)) as? UIVerseItemCell {
+				oldCell.setCellDeselected()
+			}
 
 			// Go to the newly selected VerseItem
 
 			// Set up the selected Item as the current VerseItem
 			chInst!.setupCurrentItemFromTableRow(newOfst)
 			currItOfst = newOfst
-			// Select this VerseItem and ensure that it is visible
-			tableView.selectRow(at: IndexPath(row: currItOfst, section: 0), animated: true, scrollPosition: UITableView.ScrollPosition.middle)
-			// Activate it for text input
-			let cell = tableView.cellForRow(at: IndexPath(row: currItOfst, section: 0)) as! UIVerseItemCell
-			let bibItem = chInst!.getBibItem(at: currItOfst)
-			if bibItem.itTyp == "Para" || bibItem.itTyp == "ParaCont" {
-				cell.setCellState(selectable: false, editable: false, active: false)
-			} else {
-				cell.setCellState(selectable: true, editable: true, active: true)
-			}
+			needsScrollToCentre = true
+			viewDidLayoutSubviews()
 		}
 	}
 	
@@ -229,7 +245,8 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 	}
 	
 	override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-		let savCell = cell as! UIVerseItemCell
+ 		let savCell = cell as! UIVerseItemCell
+		savCell.setCellDeselected()
  		if savCell.dirty {
 			let textSrc = savCell.itText.text! as String
 			saveCellText(savCell.tableRow, textSrc)
@@ -268,17 +285,7 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 		tableView.reloadData()
 		// Get current VerseItem from Chapter instance
 		currItOfst = chInst!.goCurrentItem()
-		// Select this VerseItem and scroll to make it visible
-		tableView.selectRow(at: IndexPath(row: currItOfst, section: 0), animated: true, scrollPosition: UITableView.ScrollPosition.middle)
-		// Activate it for text input
-		let cell = tableView.cellForRow(at: IndexPath(row: currItOfst, section: 0)) as! UIVerseItemCell
-		let bibItem = chInst!.getBibItem(at: currItOfst)
-		if bibItem.itTyp == "Para" {
-			cell.itText.isSelectable = false
-			cell.itText.isEditable = false
-		} else {
-			cell.itText.becomeFirstResponder()
-		}
+		needsScrollToCentre = true
 	}
 	
 	@IBAction func exportThisChapter(_ sender: Any) {
