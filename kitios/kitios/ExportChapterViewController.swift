@@ -25,15 +25,6 @@ class ExportChapterViewController: UIViewController {
 
 	@IBOutlet weak var ExportUSFM: UITextView!
 
-	required init?(coder aDecoder: NSCoder) {
-		super.init(coder: aDecoder)
-		print("ExportChapterViewController is being initialised")
-	}
-
-	deinit {
-		print("ExportChapterViewController is being de-initialised")
-	}
-
     override func viewDidLoad() {
         super.viewDidLoad()
 

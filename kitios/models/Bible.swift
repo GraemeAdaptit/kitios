@@ -162,8 +162,12 @@ public class Bible:NSObject {
 		// Update the kdb.sqlite Bible record to note that Books recs have been created
 		do {
 			try dao!.bibleUpdateRecsCreated()
-		} catch {
+		} catch SQLiteError.cannotUpdateRecord {
+			// Cannot update records created flag in Bible record
 			appDelegate.ReportError(DBU_BibRErr)
+		} catch {
+			// Unexpected database error
+			appDelegate.ReportError(DB_UnexpErr)
 		}
 //		if !dao!.bibleUpdateRecsCreated() {
 //			appDelegate.ReportError(DBU_BibRErr)

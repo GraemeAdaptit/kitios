@@ -584,7 +584,6 @@ public class Chapter: NSObject {
 	func deleteSubjHeading () {
 		let vsNum = BibItems[currItOfst].vsNum
 		if dao!.itemsDeleteRec(currIt) {
-			print("Subj Heading deleted")
 			// Decrement number of items
 			numIt = numIt - 1
 			// Make the next VerseItem the current one
@@ -754,7 +753,6 @@ public class Chapter: NSObject {
 	func deleteIntroTitle() {
 		let vsNum = 1
 		if dao!.itemsDeleteRec(currIt) {
-			print("InTitle deleted")
 			// Note that the Book no longer has an InTitle
 			hasInTitle = false
 			// Decrement number of items
@@ -825,7 +823,6 @@ public class Chapter: NSObject {
 	func deleteIntroPara() {
 		let vsNum = 1
 		if dao!.itemsDeleteRec(currIt) {
-			print("InPara deleted")
 			// Decrement number of items
 			numIt = numIt - 1
 			// Make the next VerseItem the current one

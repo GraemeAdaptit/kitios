@@ -3,7 +3,12 @@
 //  kitios
 //
 //  Created by Graeme Costin on 1/8/21.
-//  Copyright © 2021 Costin Computing Services. All rights reserved.
+// The author disclaims copyright to this source code.  In place of
+// a legal notice, here is a blessing:
+//
+//    May you do good and not evil.
+//    May you find forgiveness for yourself and forgive others.
+//    May you share freely, never taking more than you give.
 //
 
 import UIKit
@@ -19,16 +24,5 @@ class ErrorViewController: UIViewController {
 		errorNum.text = "Error No. = ReportError param"
 		
     }
-    
-	
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

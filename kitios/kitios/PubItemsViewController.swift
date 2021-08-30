@@ -21,15 +21,6 @@ class PubItemsViewController: UITableViewController {
 	weak var VTVCtrl: VersesTableViewController?
 	var popMenu: VIMenu?
 
-	required init?(coder aDecoder: NSCoder) {
-		super.init(coder: aDecoder)
-		print("PubItemsViewController is being initialised")
-	}
-
-	deinit {
-		print("PubItemsViewController is being de-initialised")
-	}
-
     override func viewDidLoad() {
         super.viewDidLoad()
 		// Get access to the AppDelegate

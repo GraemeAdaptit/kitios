@@ -28,6 +28,18 @@
 //	database, keeps that connection in the instance property db and retains it until the app
 //	terminates. Only one instance of the class is used.
 //
+//	Error Handling: The SQLite errors that may be encountered by the functions in KITDAO are
+//	sufficiently serious that continued operation of the app if they occur doesn't make sense.
+//	They will also be extremely rare and would be either a result of a bug that the programmer
+//	had not caught before release(!!) or else running out of memory in the smartphone in which
+//	the app is running. In the case of memory errors, about all that can be done is for the user
+//	to restart the app; that is why the action taken with these errors is to simply show an
+//	error number and exit the app. Thus the first four errors in the enum SQLiteError are not
+//	used. If a later version of this app uses an SQL database on LAN or Internet there may be
+//	more reason to make more use errors in enum SQLiteError - for example, failure to open or
+//	create the database may be followed by a prompt to the user to check the SQL server and
+//	try again.
+//
 //	TODO: Check whether interruption of the app (such as by a phone call coming to the
 //	smartphone) needs the database connection to be closed and then reopened when the app
 //	returns to the foreground.

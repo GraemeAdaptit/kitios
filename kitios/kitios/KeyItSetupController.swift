@@ -44,15 +44,6 @@ class KeyItSetupController: UIViewController, UITextFieldDelegate {
 	@IBOutlet weak var bibleName: UITextField!
 	@IBOutlet weak var goButton: UIButton!
 
-	required init?(coder aDecoder: NSCoder) {
-		super.init(coder: aDecoder)
-		print("KeyItSetupController is being initialised")
-	}
-
-	deinit {
-		print("KeyItSetupController is being de-initialised")
-	}
-
     override func viewDidLoad() {
         super.viewDidLoad()
 

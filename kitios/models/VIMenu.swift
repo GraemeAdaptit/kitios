@@ -28,14 +28,9 @@ class VIMenuItem : NSObject {
 	var VIMenuIcon : String		// C = Create, D = Delete, B = Bridge, U = Unbridge
 	
 	init(_ label:String, _ action: String, _ highLight: String) {
-		print("VIMenuItem is being initialised")
 		self.VIMenuLabel = label
 		self.VIMenuAction = action
 		self.VIMenuIcon = highLight
-	}
-
-	deinit {
-		print("VIMenuItem is being de-initialised")
 	}
 }
 
@@ -52,7 +47,6 @@ class VIMenu : NSObject {
 	let appDelegate = UIApplication.shared.delegate as! AppDelegate
 
 	init(_ curItOfst: Int) {
-		print("VIMenu is being initialised")
 		let chInst = appDelegate.chapInst
 		let bibItem = chInst!.BibItems[curItOfst]
 		VIType = bibItem.itTyp
@@ -175,10 +169,6 @@ class VIMenu : NSObject {
 			let width = v.VIMenuLabel.size(OfFont: font).width
 			if width > menuLabelLength {menuLabelLength = width}
 		}
-	}
-
-	deinit {
-		print("VIMenu is being de-initialised")
 	}
 
 }

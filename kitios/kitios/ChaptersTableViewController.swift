@@ -36,15 +36,6 @@ class ChaptersTableViewController: UITableViewController {
 	// Chapter number of the selected Chapter
 	var chNum = 0	// safe value in case a Chapter has not yet been selected
 
-	required init?(coder aDecoder: NSCoder) {
-		super.init(coder: aDecoder)
-		print("ChaptersTableViewController is being initialised")
-	}
-
-	deinit {
-		print("ChaptersTableViewController is being de-initialised")
-	}
-
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		// Get access to the array Book.BibChaps

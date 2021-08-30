@@ -37,15 +37,9 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 	// Boolean for needing scroll of current VerseItem to centre of screen
 	// Used (and then reset) by viewDidLayoutSubviews()
 	var needsScrollToCentre = false
-	
-	required init?(coder aDecoder: NSCoder) {
-		super.init(coder: aDecoder)
-		print("VersesTableViewController is being initialised")
-	}
 
 	deinit {
 		appDelegate.VTVCtrl = nil
-		print("VersesTableViewController is being de-initialised")
 	}
 
 	// The only time that the VersesTableViewController will be loaded is
@@ -166,8 +160,6 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 				editable: true,
 				active: (indexPath.row == currItOfst)
 			)
-//			print("Setting cell at offset \(indexPath.row) backgroundColor to red")
-//			cell.backgroundColor = UIColor.systemRed
 		}
         return cell
     }

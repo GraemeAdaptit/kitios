@@ -74,3 +74,5 @@
 	let DBC_BItErr = 150		// Error creating BridgeItem record
 	let DBR_BItErr = 151		// Error reading BridgeItem record from database
 	let DBD_BItErr = 152		// Error deleting BridgeItem record
+
+	let DB_UnexpErr = 199		// Unexpected SQLite database error
