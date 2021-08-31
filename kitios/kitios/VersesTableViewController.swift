@@ -75,7 +75,7 @@ class VersesTableViewController: UITableViewController, UITextViewDelegate {
 	override func viewDidLayoutSubviews() {
 		if needsScrollToCentre {
 			// Scroll to make current row visible
-			tableView.scrollToRow(at: IndexPath(row: currItOfst, section: 0), at: UITableView.ScrollPosition.middle, animated: false )
+			tableView.scrollToRow(at: IndexPath(row: currItOfst, section: 0), at: UITableView.ScrollPosition.middle, animated: true )
 			if let cell = tableView.cellForRow(at: IndexPath(row: currItOfst, section: 0)) as! UIVerseItemCell? {
 				// Activate it for text input
 				let bibItem = chInst!.getBibItem(at: currItOfst)

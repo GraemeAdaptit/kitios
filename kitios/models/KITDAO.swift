@@ -158,7 +158,9 @@ public class KITDAO {
 		}
 
 		// Create the single record in the Bibles table
-		if !bibleInsertRec(1, "Bible", false, 0) {
+		do {
+			try bibleInsertRec(1, "Bible", false, 0)
+		} catch {
 			return DBC_BibErr
 		}
 		return 0
@@ -171,7 +173,7 @@ public class KITDAO {
 	// A future extension of KIT may allow more than one Bible, so this function
 	// may be called more than once.
 
-	func bibleInsertRec (_ bibID:Int, _ bibName:String, _ bkRCr:Bool, _ currBook:Int) -> Bool {
+	func bibleInsertRec (_ bibID:Int, _ bibName:String, _ bkRCr:Bool, _ currBook:Int) throws {
 		var sqlite3_stmt:OpaquePointer?=nil
 		let sql:String = "INSERT INTO Bibles(bibleID, name, bookRecsCreated, currBook) VALUES(?, ?, ?, ?);"
 		let nByte:Int32 = Int32(sql.utf8.count)
@@ -183,22 +185,26 @@ public class KITDAO {
 		sqlite3_bind_int(sqlite3_stmt, 4, Int32(currBook))
 		sqlite3_step(sqlite3_stmt)
 		let result = sqlite3_finalize(sqlite3_stmt)
-		return (result == 0 ? true : false)
+		guard result == 0 else {
+			throw SQLiteError.cannotCreateRecord
+		}
 	}
 	
 	// The single record in the Bibles table needs to be read when the app launches to find out
 	//	* whether the Books records need to be created (on first launch) or
 	//	* what is the current Book (on subsequent launches)
 
-	func bibleGetRec () -> (bibID:Int, bibName:String, bkRCr:Bool, currBk:Int) {
+	func bibleGetRec () throws -> (bibID:Int, bibName:String, bkRCr:Bool, currBk:Int) {
 		var sqlite3_stmt:OpaquePointer?=nil
 		let sql:String = "SELECT bibleID, name, bookRecsCreated, currBook FROM Bibles;"
 		let nByte:Int32 = Int32(sql.utf8.count)
 
 		sqlite3_prepare_v2(db, sql, nByte, &sqlite3_stmt, nil)
 		let result = sqlite3_step(sqlite3_stmt)
-		if result != SQLITE_ROW { return (0, "", false, 0) }	// on failure return zero bibID
-		// otherwise unpack the data
+		guard result == SQLITE_ROW else {
+			throw SQLiteError.cannotReadRecord
+		}
+		// Unpack the data
 		let bID = Int(sqlite3_column_int(sqlite3_stmt, 0))
 		let bNamep: UnsafePointer<UInt8>? = sqlite3_column_text(sqlite3_stmt, 1)
 		let bNamen = Int(sqlite3_column_bytes(sqlite3_stmt,1))
@@ -217,7 +223,7 @@ public class KITDAO {
 	//	* to change the current Book whenever the user selects a different Book to work on
 
 	// This function needs a String parameter for the possibly edited Bible name
-	func bibleUpdateName (_ bibName:String) -> Bool {
+	func bibleUpdateName (_ bibName:String) throws {
 		var sqlite3_stmt:OpaquePointer?=nil
 		let sql:String = "UPDATE Bibles SET name = ?1 WHERE bibleID = 1;"
 		let nByte:Int32 = Int32(sql.utf8.count)
@@ -226,7 +232,9 @@ public class KITDAO {
 		sqlite3_bind_text(sqlite3_stmt, 1, bibName.cString(using:String.Encoding.utf8)!, -1, SQLITE_TRANSIENT)
 		sqlite3_step(sqlite3_stmt)
 		let result = sqlite3_finalize(sqlite3_stmt)
-		return (result == 0)
+		guard result == 0 else {
+			throw SQLiteError.cannotUpdateRecord
+		}
 	}
 
 	// The bookRecsCreated flag starts as false and is changed to true during the first launch;
@@ -242,11 +250,10 @@ public class KITDAO {
 		guard result == 0 else {
 			throw SQLiteError.cannotUpdateRecord
 		}
-//		return (result == 0)
 	}
 
 	// This function needs an Integer parameter for the current Book
-	func bibleUpdateCurrBook (_ bookID: Int) -> Bool {
+	func bibleUpdateCurrBook (_ bookID: Int) throws {
 		var sqlite3_stmt:OpaquePointer?=nil
 		let sql:String = "UPDATE Bibles SET currBook = ?1 WHERE bibleID = 1;"
 		let nByte:Int32 = Int32(sql.utf8.count)
@@ -255,7 +262,9 @@ public class KITDAO {
 		sqlite3_bind_int(sqlite3_stmt, 1, Int32(bookID))
 		sqlite3_step(sqlite3_stmt)
 		let result = sqlite3_finalize(sqlite3_stmt)
-		return (result == 0)
+		guard result == 0 else {
+			throw SQLiteError.cannotUpdateRecord
+		}
 	}
 
 	//--------------------------------------------------------------------------------------------
@@ -264,7 +273,7 @@ public class KITDAO {
 	// The 66 records for the Books table need to be created and populated on the initial launch of the app
 	// This function will be called 66 times by the KIT software
 	
-	func booksInsertRec (_ bkID:Int,_ bibID:Int, _ bkCode:String, _ bkName:String, _ chRCr:Bool, _ numCh:Int, _ curChID:Int, _ curChNum:Int) -> Bool {
+	func booksInsertRec (_ bkID:Int,_ bibID:Int, _ bkCode:String, _ bkName:String, _ chRCr:Bool, _ numCh:Int, _ curChID:Int, _ curChNum:Int) throws {
 		var sqlite3_stmt:OpaquePointer?=nil
 		let sql:String = "INSERT INTO Books(bookID, bibleID, bookCode, bookName, chapRecsCreated, numChaps, currChID, currChNum) VALUES(?, ?, ?, ?, ?, ?, ?, ?);"
 		let nByte:Int32 = Int32(sql.utf8.count)
@@ -280,13 +289,15 @@ public class KITDAO {
 		sqlite3_bind_int(sqlite3_stmt, 8, Int32(curChNum))
 		sqlite3_step(sqlite3_stmt)
 		let result = sqlite3_finalize(sqlite3_stmt)
-		return (result == 0)
+		guard result == 0 else {
+			throw SQLiteError.cannotCreateRecord
+		}
 	}
 
 	// The Books records need to be read to populate the array of books for the Bible bib
 	// that the user can choose from. They need to be sorted in ascending order of the UBS
 	// assigned bookID.
-	func readBooksRecs (bibInst: Bible) {
+	func readBooksRecs (bibInst: Bible) throws {
 		var sqlite3_stmt:OpaquePointer?=nil
 		let sql:String = "SELECT bookID, bibleID, bookCode, bookName, chapRecsCreated, numChaps, currChID, currChNum FROM Books ORDER BY bookID;"
 		let nByte:Int32 = Int32(sql.utf8.count)
@@ -295,7 +306,9 @@ public class KITDAO {
 		var result:Int32 = 0
 		repeat {
 			result = sqlite3_step(sqlite3_stmt)
-			if result == SQLITE_ERROR { appDelegate.ReportError(DBR_BooErr) }
+			guard result != SQLITE_ERROR else {
+				throw SQLiteError.cannotReadRecord
+			}
 			if result == SQLITE_ROW {
 				// convert fields as needed
 				let bkID = Int(sqlite3_column_int(sqlite3_stmt, 0))
@@ -325,7 +338,7 @@ public class KITDAO {
 	//	* to set the number of Chapters in the Book (on first edit of that Book)
 	//	* to change the current Chapter when the user selects a different Chapter to work on
 
-	func booksUpdateRec (_ bibID:Int, _ bkID:Int, _ chRCr:Bool, _ numCh:Int, _ curChID:Int, _ curChNum:Int) -> Bool {
+	func booksUpdateRec (_ bibID:Int, _ bkID:Int, _ chRCr:Bool, _ numCh:Int, _ curChID:Int, _ curChNum:Int) throws {
 		var sqlite3_stmt:OpaquePointer?=nil
 		let sql:String = "UPDATE Books SET chapRecsCreated = ?3, numChaps = ?4, currChID = ?5, currChNum = ?6 WHERE bibleID = ?1 AND bookID = ?2;"
 		let nByte:Int32 = Int32(sql.utf8.count)
@@ -339,7 +352,9 @@ public class KITDAO {
 		sqlite3_bind_int(sqlite3_stmt, 6, Int32(curChNum))
 		sqlite3_step(sqlite3_stmt)
 		let result = sqlite3_finalize(sqlite3_stmt)
-		return (result == 0)
+		guard result == 0 else {
+			throw SQLiteError.cannotUpdateRecord
+		}
 	}
 
 	//--------------------------------------------------------------------------------------------
@@ -353,7 +368,7 @@ public class KITDAO {
 	// The field for USFM is left empty until the user taps the "Export" button after
 	// keyboarding enough to export.
 
-	func chaptersInsertRec (_ bibID:Int, _ bkID:Int, _ chNum:Int, _ itRCr:Bool, _ numVs:Int, _ numIt:Int, _ currIt:Int, _ currVsNum:Int ) -> Bool {
+	func chaptersInsertRec (_ bibID:Int, _ bkID:Int, _ chNum:Int, _ itRCr:Bool, _ numVs:Int, _ numIt:Int, _ currIt:Int, _ currVsNum:Int ) throws {
 		var sqlite3_stmt:OpaquePointer?=nil
 		let sql:String = "INSERT INTO Chapters(bibleID, bookID, chapterNumber, itemRecsCreated, numVerses, numItems, currItem, currVsNum) VALUES(?, ?, ?, ?, ?, ?, ?, ?);"
 		let nByte:Int32 = Int32(sql.utf8.count)
@@ -370,13 +385,15 @@ public class KITDAO {
 
 		sqlite3_step(sqlite3_stmt)
 		let result = sqlite3_finalize(sqlite3_stmt)
-		return (result == 0)
+		guard result == 0 else {
+			throw SQLiteError.cannotCreateRecord
+		}
 	}
 
 	// The Chapters records for the currently selected Book need to be read to populate the array
 	// of Chapters for the Book bkInst that the user can choose from. The records need to be sorted
 	// in ascending order of chapterNumber
-	func readChaptersRecs (_ bibID:Int,_ bkInst:Book) {
+	func readChaptersRecs (_ bibID:Int,_ bkInst:Book) throws {
 		var sqlite3_stmt:OpaquePointer?=nil
 		let sql:String = "SELECT chapterID, bibleID, bookID, chapterNumber, itemRecsCreated, numVerses, numItems, currItem, currVsNum FROM Chapters WHERE bibleID = ?1 AND bookID = ?2 ORDER BY chapterNumber;"
 		let nByte:Int32 = Int32(sql.utf8.count)
@@ -387,7 +404,9 @@ public class KITDAO {
 		var result:Int32 = 0
 		repeat {
 			result = sqlite3_step(sqlite3_stmt)
-			if result == SQLITE_ERROR { appDelegate.ReportError(DBR_BooErr) }
+			guard result != SQLITE_ERROR else {
+				throw SQLiteError.cannotReadRecord
+			}
 			if result == SQLITE_ROW {
 				// convert fields as needed
 				let chapID = Int(sqlite3_column_int(sqlite3_stmt, 0))
@@ -411,7 +430,7 @@ public class KITDAO {
 	//	* to set the flag that indicates that the VerseItem records have been created (on first edit of that Chapter)
 	//	* to change the current VerseItem when the user selects a different VerseItem to work on
 
-	func chaptersUpdateRec (_ chID:Int, _ itRCr:Bool, _ currIt:Int, _ currVN:Int) -> Bool {
+	func chaptersUpdateRec (_ chID:Int, _ itRCr:Bool, _ currIt:Int, _ currVN:Int) throws {
 		var sqlite3_stmt:OpaquePointer?=nil
 		let sql:String = "UPDATE Chapters SET itemRecsCreated = ?2, currItem = ?3, currVsNum = ?4 WHERE chapterID = ?1;"
 		let nByte:Int32 = Int32(sql.utf8.count)
@@ -423,14 +442,16 @@ public class KITDAO {
 		sqlite3_bind_int(sqlite3_stmt, 4, Int32(currVN))
 		sqlite3_step(sqlite3_stmt)
 		let result = sqlite3_finalize(sqlite3_stmt)
-		return (result == 0)
+		guard result == 0 else {
+			throw SQLiteError.cannotUpdateRecord
+		}
 	}
 
 	// The Chapters record for the current Chapter needs to be updated after changes to the publication items:
 	//	* to change the number of VerseItems
 	//	* to change the current VerseItem after one has been deleted or inserted.
 
-	func chaptersUpdateRecPub (_ chID:Int, _ numIt:Int, _ currIt:Int, _ currVN:Int) -> Bool {
+	func chaptersUpdateRecPub (_ chID:Int, _ numIt:Int, _ currIt:Int, _ currVN:Int) throws {
 		var sqlite3_stmt:OpaquePointer?=nil
 		let sql:String = "UPDATE Chapters SET numItems = ?2, currItem = ?3, currVsNum = ?4 WHERE chapterID = ?1;"
 		let nByte:Int32 = Int32(sql.utf8.count)
@@ -442,11 +463,13 @@ public class KITDAO {
 		sqlite3_bind_int(sqlite3_stmt, 4, Int32(currVN))
 		sqlite3_step(sqlite3_stmt)
 		let result = sqlite3_finalize(sqlite3_stmt)
-		return (result == 0)
+		guard result == 0 else {
+			throw SQLiteError.cannotUpdateRecord
+		}
 	}
 
 	// Set the value of the field USFMText when the Export scene is used
-	func updateUSFMText (_ chID:Int, _ text:String) -> Bool {
+	func updateUSFMText (_ chID:Int, _ text:String) throws {
 		var sqlite3_stmt:OpaquePointer?=nil
 		let sql:String = "UPDATE Chapters SET USFMText = ?2 WHERE chapterID = ?1;"
 		let nByte:Int32 = Int32(sql.utf8.count)
@@ -456,10 +479,12 @@ public class KITDAO {
 		sqlite3_bind_text(sqlite3_stmt, 2, text.cString(using:String.Encoding.utf8)!, -1, SQLITE_TRANSIENT)
 		sqlite3_step(sqlite3_stmt)
 		let result = sqlite3_finalize(sqlite3_stmt)
-		return (result == 0 ? true : false)
+		guard result == 0 else {
+			throw SQLiteError.cannotUpdateRecord
+		}
 	}
 
-	// TODO: Implement a function to retrieve the value of the USFMText field when needed
+	// TODO: Implement a function to retrieve the value of the USFMText field when needed???
 
 	//--------------------------------------------------------------------------------------------
 	//	VerseItems data table
@@ -469,9 +494,11 @@ public class KITDAO {
 	// It will also be called
 	//	* when the user chooses to insert a publication VerseItem
 	//	* when the user chooses to undo a verse bridge
-	// This function returns the rowID of the newly inserted record or -1 if the insert fails
+	// This function returns the rowID of the newly inserted record or
+	// throws SQLiteError.cannotCreateRecord if the insert fails.
 
-	func verseItemsInsertRec (_ chID:Int, _ vsNum:Int, _ itTyp:String, _ itOrd:Int, _ itText:String, _ intSeq:Int, _ isBrid:Bool, _ lastVsBridge:Int) -> Int {
+	func verseItemsInsertRec (_ chID:Int, _ vsNum:Int, _ itTyp:String, _ itOrd:Int, _ itText:String,
+							  _ intSeq:Int, _ isBrid:Bool, _ lastVsBridge:Int) throws -> Int {
 			var sqlite3_stmt:OpaquePointer?=nil
 			let sql:String = "INSERT INTO VerseItems(chapterID, verseNumber, itemType, itemOrder, itemText, intSeq, isBridge, lastVsBridge) VALUES(?, ?, ?, ?, ?, ?, ?, ?);"
 			let nByte:Int32 = Int32(sql.utf8.count)
@@ -487,17 +514,16 @@ public class KITDAO {
 			sqlite3_bind_int(sqlite3_stmt, 8, Int32(lastVsBridge))
 			sqlite3_step(sqlite3_stmt)
 			let result = sqlite3_finalize(sqlite3_stmt)
-			if result == 0 {
-				return Int(sqlite3_last_insert_rowid(db))
-			} else {
-				return -1
+			guard result == 0 else {
+				throw SQLiteError.cannotCreateRecord
 			}
+			return Int(sqlite3_last_insert_rowid(db))
 		}
 
 	// The VerseItems records for the current Chapter needs to be read in order to set up the scrolling display of
 	// VerseItem records that the user interacts with. These records need to be sorted in ascending order of itemOrder.
 
-	func readVerseItemsRecs (_ chInst:Chapter) {
+	func readVerseItemsRecs (_ chInst:Chapter) throws {
 		var sqlite3_stmt:OpaquePointer?=nil
 		let sql:String = "SELECT itemID, chapterID, verseNumber, itemType, itemOrder, itemText, intSeq, isBridge, lastVsBridge FROM VerseItems WHERE chapterID = ?1 ORDER BY itemOrder;"
 		let nByte:Int32 = Int32(sql.utf8.count)
@@ -507,7 +533,9 @@ public class KITDAO {
 		var result:Int32 = 0
 		repeat {
 			result = sqlite3_step(sqlite3_stmt)
-			if result == SQLITE_ERROR { appDelegate.ReportError(DBR_BooErr) }
+			guard result != SQLITE_ERROR else {
+				throw SQLiteError.cannotReadRecord
+			}
 			if result == SQLITE_ROW {
 				// convert fields as needed
 				let itID = Int(sqlite3_column_int(sqlite3_stmt, 0))
@@ -539,7 +567,7 @@ public class KITDAO {
 	//	* when various life cycle stages of the View or App are reached
 	// returns true if successful
 
-	func itemsUpdateRecText (_ itID:Int, _ itTxt:String) -> Bool {
+	func itemsUpdateRecText (_ itID:Int, _ itTxt:String) throws {
 		var sqlite3_stmt:OpaquePointer?=nil
 		let sql:String = "UPDATE VerseItems SET itemText = ?2 WHERE itemID = ?1;"
 		let nByte:Int32 = Int32(sql.utf8.count)
@@ -549,12 +577,14 @@ public class KITDAO {
 		sqlite3_bind_text(sqlite3_stmt, 2, itTxt.cString(using:String.Encoding.utf8)!, -1, SQLITE_TRANSIENT)
 		sqlite3_step(sqlite3_stmt)
 		let result = sqlite3_finalize(sqlite3_stmt)
-		return (result == 0)
+		guard result == 0 else {
+			throw SQLiteError.cannotUpdateRecord
+		}
 	}
 
 	// When a verse is added to form (or extend) a bridge, the VerseItem record that is the head
 	// of the bridge needs to be updated.
-	func itemsUpdateForBridge(_ itID:Int, _ itTxt:String, _ isBridge:Bool, _ LastVsBr:Int) -> Bool {
+	func itemsUpdateForBridge(_ itID:Int, _ itTxt:String, _ isBridge:Bool, _ LastVsBr:Int) throws {
 		var sqlite3_stmt:OpaquePointer?=nil
 		let sql:String = "UPDATE VerseItems SET itemText = ?2, isBridge = ?3, lastVsBridge = ?4 WHERE itemID = ?1;"
 		let nByte:Int32 = Int32(sql.utf8.count)
@@ -566,7 +596,9 @@ public class KITDAO {
 		sqlite3_bind_int(sqlite3_stmt, 4, Int32(LastVsBr))
 		sqlite3_step(sqlite3_stmt)
 		let result = sqlite3_finalize(sqlite3_stmt)
-		return (result == 0)
+		guard result == 0 else {
+			throw SQLiteError.cannotUpdateRecord
+		}
 
 	}
 
@@ -581,7 +613,7 @@ public class KITDAO {
 	//	the translation being keyboarded does not include Ascriptions.
 	// returns true if successful
 
-	func itemsDeleteRec (_ itID:Int) -> Bool {
+	func itemsDeleteRec (_ itID:Int) throws {
 		var sqlite3_stmt:OpaquePointer?=nil
 		let sql:String = "DELETE FROM VerseItems WHERE itemID = ?1;"
 		let nByte:Int32 = Int32(sql.utf8.count)
@@ -590,7 +622,9 @@ public class KITDAO {
 		sqlite3_bind_int(sqlite3_stmt, 1, Int32(itID))
 		sqlite3_step(sqlite3_stmt)
 		let result = sqlite3_finalize(sqlite3_stmt)
-		return (result == 0)
+		guard result == 0 else {
+			throw SQLiteError.cannotDeleteRecord
+		}
 	}
 
 	//--------------------------------------------------------------------------------------------
@@ -601,7 +635,7 @@ public class KITDAO {
 	// restored; otherwise the BridgeItem record just sits there out of the way of normal operations.
 	// This function returns the rowID of the newly inserted record or -1 if insert fails
 
-	func bridgeInsertRec(_ itemID: Int, _ txtCurr: String, _ txtExtra: String) -> Int {
+	func bridgeInsertRec(_ itemID: Int, _ txtCurr: String, _ txtExtra: String) throws -> Int {
 		var sqlite3_stmt:OpaquePointer?=nil
 		let sql:String = "INSERT INTO BridgeItems(itemID, textCurrBridge, textExtraVerse) VALUES(?, ?, ?);"
 		let nByte:Int32 = Int32(sql.utf8.count)
@@ -612,18 +646,17 @@ public class KITDAO {
 		sqlite3_bind_text(sqlite3_stmt, 3, txtExtra.cString(using:String.Encoding.utf8)!, -1, SQLITE_TRANSIENT)
 		sqlite3_step(sqlite3_stmt)
 		let result = sqlite3_finalize(sqlite3_stmt)
-		if result == 0 {
-			return Int(sqlite3_last_insert_rowid(db))
-		} else {
-			return -1
+		guard result == 0 else {
+			throw SQLiteError.cannotCreateRecord
 		}
+		return Int(sqlite3_last_insert_rowid(db))
 	}
 
 	// When a bridge is being undone it is necessary to retrieve the record containing the original
 	// following verse that is about to be restored. There may be more than one BridgeItems record
 	// for the current VerseItem; the one that will be used during the unbridging is the most recent one.
 
-	func bridgeGetRecs(_ itemID:Int, _ chInst:Chapter) {
+	func bridgeGetRecs(_ itemID:Int, _ chInst:Chapter) throws {
 		var sqlite3_stmt:OpaquePointer?=nil
 		let sql:String = "SELECT bridgeID, textCurrBridge, textExtraVerse FROM BridgeItems WHERE itemID = ?1 ORDER BY bridgeID;"
 		let nByte:Int32 = Int32(sql.utf8.count)
@@ -633,7 +666,10 @@ public class KITDAO {
 		var result:Int32 = 0
 		repeat {
 			result = sqlite3_step(sqlite3_stmt)
-			if result == SQLITE_ERROR { appDelegate.ReportError(DBR_BItErr) }
+			guard result != SQLITE_ERROR else
+			{
+				throw SQLiteError.cannotReadRecord
+			}
 			if result == SQLITE_ROW {
 				let bridgeID = Int(sqlite3_column_int(sqlite3_stmt, 0))
 				let bBridp: UnsafePointer<UInt8>? = sqlite3_column_text(sqlite3_stmt, 1)
@@ -652,7 +688,7 @@ public class KITDAO {
 
 	// When a bridge has been undone the BridgeItem record involved needs to be deleted
 
-	func bridgeDeleteRec(_ bridgeID:Int) -> Bool {
+	func bridgeDeleteRec(_ bridgeID:Int) throws {
 		var sqlite3_stmt:OpaquePointer?=nil
 		let sql:String = "DELETE FROM BridgeItems WHERE bridgeID = ?1;"
 		let nByte:Int32 = Int32(sql.utf8.count)
@@ -661,7 +697,9 @@ public class KITDAO {
 		sqlite3_bind_int(sqlite3_stmt, 1, Int32(bridgeID))
 		sqlite3_step(sqlite3_stmt)
 		let result = sqlite3_finalize(sqlite3_stmt)
-		return (result == 0)
+		guard result == 0 else {
+			throw SQLiteError.cannotDeleteRecord
+		}
 	}
 
 }

@@ -81,11 +81,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		bibInst = nil
 	}
 
-	// Function for reporting error conditions to the user
+	// Function for reporting error conditions to the user and exiting the app
 	func ReportError (_ errNo:Int) {
-		// TODO: Write this function!
-		print ("Error number \(errNo) reported")
-
 		var topWindow: UIWindow? = UIWindow(frame: UIScreen.main.bounds)
 		topWindow?.rootViewController = UIViewController()
 		topWindow?.windowLevel = UIWindow.Level.alert + 1
@@ -96,6 +93,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			// additional code can be put in here so that KIT continues after the user has
 			// clicked OK to the warning
 			exit(0)
+
+			// Next two lines hide the window if KIT is to continue running
+			// and also keeps a reference to the window until the action is invoked.
+			topWindow?.isHidden = true	// Hide the window
+			topWindow = nil				// Delete the topwindow
+		 })
+		
+		topWindow?.makeKeyAndVisible()
+		topWindow?.rootViewController?.present(alert, animated: true, completion: nil)
+	}
+
+	// Function for reporting and error warning to the user and allowing app to proceed
+	func ReportWarning (_ errNo:Int) {
+		var topWindow: UIWindow? = UIWindow(frame: UIScreen.main.bounds)
+		topWindow?.rootViewController = UIViewController()
+		topWindow?.windowLevel = UIWindow.Level.alert + 1
+
+		let alert = UIAlertController(title: "Warning", message: "Error No. \(errNo) occurred", preferredStyle: .alert)
+		alert.addAction(UIAlertAction(title: "OK", style: .cancel) { _ in
+			// At present only fatal errors are considered; if non-fatal errors are handled
+			// additional code can be put in here so that KIT continues after the user has
+			// clicked OK to the warning
 
 			// Next two lines hide the window if KIT is to continue running
 			// and also keeps a reference to the window until the action is invoked.

@@ -113,13 +113,13 @@ var BibChaps: [BibChap] = []
 		// a different Chapter to edit.
 		// Its life will end when the user chooses a different Book to edit.
 		
-		dao!.readChaptersRecs (bibID, self)
+		do {
+			try dao!.readChaptersRecs (bibID, self)
+		} catch {
+			appDelegate.ReportError(DBR_ChaErr)
+		}
 		// calls readChaptersRecs() in KITDAO.swift to read the kdb.sqlite database Books table
 		// readChaptersRecs() calls appendChapterToArray() in this file for each ROW read from kdb.sqlite
-	}
-
-	deinit {
-		print ("Book instance for \(self.bkName) is being de-initialised")
 	}
 
 	func createChapterRecords (_ book:Int, _ bib:Int, _ code:String) {
@@ -158,7 +158,9 @@ var BibChaps: [BibChap] = []
 			}
 			let numVs = Int(elemTr)!
 			numIt = numIt + numVs	// for some Psalms numIt will include the ascription VerseItem
-			if !dao!.chaptersInsertRec (bib, book, chNum, false, numVs, numIt, currIt, currVN) {
+			do {
+				try dao!.chaptersInsertRec (bib, book, chNum, false, numVs, numIt, currIt, currVN)
+			} catch {
 				appDelegate.ReportError(DBC_ChaErr)
 			}
 			chNum = chNum + 1
@@ -168,7 +170,9 @@ var BibChaps: [BibChap] = []
 		
 		// Update kdb.sqlite Books record of current Book to indicate that its Chapter records have been
 		// created, the number of Chapters has been found, but there is not yet a current Chapter
-		if !dao!.booksUpdateRec (bibID, bkID, chapRCr, numChap, 0, 0) {
+		do {
+			try dao!.booksUpdateRec (bibID, bkID, chapRCr, numChap, 0, 0)
+		} catch {
 			appDelegate.ReportError(DBU_BooErr)
 		}
 	
@@ -225,7 +229,9 @@ var BibChaps: [BibChap] = []
 		curChID = chap.chID		// ChapterID
 		currChapOfst = chapOfst		// Chapter offset (1 less than Chapter Number seen by users)
 		// update Book record in kdb.sqlite to show this current Chapter
-		if !dao!.booksUpdateRec(bibID, bkID, chapRCr, numChap, curChID, curChNum) {
+		do {
+			try dao!.booksUpdateRec(bibID, bkID, chapRCr, numChap, curChID, curChNum)
+		} catch {
 			appDelegate.ReportError(DBU_BooErr)
 		}
 		// Update the curChID and curChNum for this book in BibBooks[] in bInst

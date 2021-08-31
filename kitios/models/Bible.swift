@@ -94,7 +94,11 @@ public class Bible:NSObject {
 		// whenever the user is allowed to select a book; it will also be updated
 		// when Chapters records for a book are created, and when the user chooses
 		// a different Book to edit.
-		dao!.readBooksRecs (bibInst: self)
+		do {
+			try dao!.readBooksRecs (bibInst: self)
+		} catch {
+			appDelegate.ReportError(DBR_BooErr)
+		}
 		// calls readBooksRecs() in KITDAO.swift to read the kdb.sqlite database Books table
 		// readBooksRecs() calls appendBibBookToArray() in this file for each ROW read from kdb.sqlite
 	}
@@ -150,7 +154,9 @@ public class Bible:NSObject {
 				let curChID = 0
 				let curChNum = 0
 				// Write Books record to kdb.sqlite
-				if !dao!.booksInsertRec (bkID, bibID, bkCode, bkName, chRCr, numCh, curChID, curChNum) {
+				do {
+					try dao!.booksInsertRec (bkID, bibID, bkCode, bkName, chRCr, numCh, curChID, curChNum)
+				} catch {
 					appDelegate.ReportError(DBC_BooErr)
 				}
 			}
@@ -169,9 +175,6 @@ public class Bible:NSObject {
 			// Unexpected database error
 			appDelegate.ReportError(DB_UnexpErr)
 		}
-//		if !dao!.bibleUpdateRecsCreated() {
-//			appDelegate.ReportError(DBU_BibRErr)
-//		}
 	}
 
 // dao.readBooksRecs() calls appendBibBookToArray() for each row it reads from the kdb.sqlite database
@@ -220,15 +223,17 @@ public class Bible:NSObject {
 		currBook = book.bkID
 		currBookOfst = (currBook > 39 ? currBook - 2 : currBook - 1 )
 		// update Bible record in kdb.sqlite to show this current book
-		if !dao!.bibleUpdateCurrBook(currBook) {
+		do {
+			try dao!.bibleUpdateCurrBook(currBook)
+		} catch {
 			appDelegate.ReportError(DBU_BibCErr)
 		}
 
 		// delete any previous in-memory instance of Book
-		bookInst = nil
+		bookInst = nil		// strong ref
 		appDelegate.bookInst = nil
 
-		// Create a Book instance for the currently selected book
+		// Create a Book instance for the currently selected book (strong ref)
 		// and copy the reference to the AppDelegate
 		bookInst = Book(self, book.bkID, book.bibID, book.bkCode, book.bkName, book.chapRCr, book.numCh, book.curChID, book.curChNum)
 		appDelegate.bookInst = bookInst

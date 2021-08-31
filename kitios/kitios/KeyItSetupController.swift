@@ -49,17 +49,20 @@ class KeyItSetupController: UIViewController, UITextFieldDelegate {
 
 		// Get field values from the one and only Bible record
 		dao = appDelegate.dao
-		let bibRec = dao!.bibleGetRec()
-		bibID = bibRec.bibID
-		if bibID == 0 { appDelegate.ReportError(DBR_BibErr) }	// Bible record could not be read
-		bibName = bibRec.bibName
-		bkRCr = bibRec.bkRCr
-		currBook = bibRec.currBk
+		do {
+			let bibRec = try dao!.bibleGetRec()
+			bibID = bibRec.bibID
+			bibName = bibRec.bibName
+			bkRCr = bibRec.bkRCr
+			currBook = bibRec.currBk
+		} catch {
+			appDelegate.ReportError(DBR_BibErr)		// Bible record could not be read
+		}
 	}
 
+	//	Once the user has dealt with the Setup scene, subsequent launches skip the Setup scene.
+	//	Any future editing of the name of the Bible will be done in a separate scene.
 	override func viewDidAppear(_ animated: Bool) {
-//	Once the user has dealt with the Setup scene, subsequent launches skip this step.
-//	Any future editing of the name of the Bible will be done in a separate scene.
 		if bkRCr {
 			createBibleInstance()
 			performSegue (withIdentifier: "keyItNav", sender: self)
@@ -88,8 +91,8 @@ class KeyItSetupController: UIViewController, UITextFieldDelegate {
 		// of Bible books and start building the partial in-memory data structures for
 		//		Bible -> curr Book -> curr Chapter -> curr VerseItem
 		// and save a reference to it in the appDelegate so the rest of the app has access to it.
+		// GDLC 30JUL21 No need for local var bInst; the strong ref is appDelegate.bibInst
 		appDelegate.bibInst = Bible(bibID, bibName, bkRCr, currBook)
-// GDLC 30JUL21 No need for local var bInst
 	}
 
 	// Don't need a button for this; when the user taps "Go"
@@ -98,7 +101,9 @@ class KeyItSetupController: UIViewController, UITextFieldDelegate {
 		// Remove the insertion point from the Name of Bible text field
 		self.view.endEditing(true)
 		bibName = bibleName.text!
-		if !dao!.bibleUpdateName (bibName) {
+		do {
+			try dao!.bibleUpdateName (bibName)
+		} catch {
 			appDelegate.ReportError(DBU_BibNErr)
 		}
 	}
