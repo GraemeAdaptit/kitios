@@ -107,6 +107,4 @@ class KeyItSetupController: UIViewController, UITextFieldDelegate {
 			appDelegate.ReportError(DBU_BibNErr)
 		}
 	}
-
 }
-

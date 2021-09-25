@@ -1,15 +1,15 @@
 //
 //  UIVerseItemCell.swift
 //
-//	GDLC 22AUG21 Added setCellState() for better control of cell editability, selectability
-//	and response (or otherwise) to keyboard actions.
-//	GDLC 23JUL21 Cleaned out print commands (were used in early stages of development)
-//
 //	A custom class for UITableView cells presenting VerseItems for editing.
 //
-//  Created by Graeme Costin on 26/2/20.
-// The author disclaims copyright to this source code.  In place of
-// a legal notice, here is a blessing:
+//	GDLC 22AUG21 Added setCellState() for better control of cell editability, selectability
+//		and response (or otherwise) to keyboard actions.
+//	GDLC 23JUL21 Cleaned out print commands (were used in early stages of development)
+//
+//  Created by Graeme Costin on 26FEB20.
+
+// In place of a legal notice, here is a blessing:
 //
 //    May you do good and not evil.
 //    May you find forgiveness for yourself and forgive others.

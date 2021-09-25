@@ -4,9 +4,9 @@
 //
 //	GDLC 23JUL21 Cleaned out some print commands (were used in early stages of development)
 //
-//  Created by Graeme Costin on 2/5/20.
-// The author disclaims copyright to this source code.  In place of
-// a legal notice, here is a blessing:
+//  Created by Graeme Costin on 2MAY20.
+
+// In place of a legal notice, here is a blessing:
 //
 //    May you do good and not evil.
 //    May you find forgiveness for yourself and forgive others.
@@ -40,13 +40,13 @@ class ExportChapterViewController: UIViewController {
 		// Display it to the user
 		ExportUSFM.text = USFMexp
 		// Save it into the current Chapter record of kdb.sqlite
-		if !chInst!.saveUSFMText (chInst!.chID, USFMexp) {
-			// TODO: Make a better way of handling errors like this
-			print("ExportChapterViewController:viewDidLoad save to kdb.sqlite FAILED")
+		do {
+			try chInst!.saveUSFMText (chInst!.chID, USFMexp)
+			ExportUSFM.isEditable = false
+			// When a good method of sending USFM to AIM is implemented, this UITextView can be made non-selectable
+			// ExportUSFM.isSelectable = false
+		} catch {
+			appDelegate.ReportWarning(DBU_ChaUSFMErr)
 		}
-		ExportUSFM.isEditable = false
-//	When a good method of sending USFM to AIM is implemented, this UITextView can be made non-selectable
-//		ExportUSFM.isSelectable = false
     }
-    
 }

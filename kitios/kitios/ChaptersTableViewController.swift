@@ -141,4 +141,3 @@ class ChaptersTableViewController: UITableViewController {
 		performSegue(withIdentifier: "editChapter", sender: self)
 	}
 }
-

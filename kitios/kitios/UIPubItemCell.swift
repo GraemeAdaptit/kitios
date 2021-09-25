@@ -3,9 +3,8 @@
 //
 //	A custom class for UITableView cells presenting popover menu items.
 //
-//  Created by Graeme Costin on 2/3/21.
-// The author disclaims copyright to this source code.  In place of
-// a legal notice, here is a blessing:
+//  Created by Graeme Costin on 2MAR21.
+// In place of a legal notice, here is a blessing:
 //
 //    May you do good and not evil.
 //    May you find forgiveness for yourself and forgive others.

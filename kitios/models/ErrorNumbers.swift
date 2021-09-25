@@ -75,6 +75,11 @@
 	let DBR_BItErr = 152		// Error reading BridgeItem record from database
 	let DBD_BItErr = 153		// Error deleting BridgeItem record
 
-	let DB_UnexpErr = 199		// Unexpected SQLite database error
+	let DBU_ChaUSFMErr = 154	// Error updating USFM text in Chapter record
 
-	let DBU_ChaUSFMErr = 200	// Error updating USFM text in Chapter record
+	let DBC_PopErr = 155		// Error creating a record during popover menu actions
+	let DBR_PopErr = 156		// Error reading a record during popover menu actions
+	let DBU_PopErr = 157		// Error updating a record during popover menu actions
+	let DBD_PopErr = 158		// Error deleting a record during popover menu actions
+
+	let DB_UnexpErr = 199		// Unexpected SQLite database error

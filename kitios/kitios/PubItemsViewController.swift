@@ -1,13 +1,13 @@
 //
 //  PubItemsViewController.swift
 //
-//	GDLC 23JUL21 Cleaned out print commands (were used in early stages of development)
-//
 //	This is the TableViewController for the publication items popover menu
 //
-//  Created by Graeme Costin on 5/11/20.
-// The author disclaims copyright to this source code.  In place of
-// a legal notice, here is a blessing:
+//	GDLC 23JUL21 Cleaned out print commands (were used in early stages of development)
+//
+//  Created by Graeme Costin on 5NOV20.
+//
+// In place of a legal notice, here is a blessing:
 //
 //    May you do good and not evil.
 //    May you find forgiveness for yourself and forgive others.
@@ -82,5 +82,4 @@ class PubItemsViewController: UITableViewController {
 		// Dismiss the popover menu and rework the TableView of VerseItems
 		VTVCtrl!.refreshDisplayAfterPopoverMenuActions()
 	}
-
 }

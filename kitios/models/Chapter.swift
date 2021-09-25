@@ -1,20 +1,9 @@
 //
 //  Chapter.swift
 //
-//	GDLC 23JUL21 Cleaned out some print commands (were used in early stages of development)
-//	GDLC 1JUL21 Added currVN for verse number associated with the currIt
-//
-//  Created by Graeme Costin on 8/1/20.
-// The author disclaims copyright to this source code.  In place of
-// a legal notice, here is a blessing:
-//
-//    May you do good and not evil.
-//    May you find forgiveness for yourself and forgive others.
-//    May you share freely, never taking more than you give.
-//
 //	There will be one instance of the class Chapter and it will be for the current Chapter
 //	that the user has selected for keyboarding. When the user switches to keyboarding
-//	a different Chapter the current instance of Chapter will be deleted and a new instance
+//	a different Chapter, the current instance of Chapter will be deleted and a new instance
 //	created for the newly selected Chapter.
 //
 // The Chapter records in the database store the ID of the current VerseItem for each Chapter
@@ -24,7 +13,17 @@
 // On the other hand, the user interface needs only the VerseItems for the current Chapter and,
 // in addition, the user interface functions on both Android and iOS expect data to be supplied
 // from the array BibItems[] whose index matches the indexes to the cells of the
-// RecyclerView (on Android) or TableView (on iOS).
+// RecyclerView (on Android) or rows of the TableView (on iOS).
+//
+//	GDLC 23JUL21 Cleaned out some print commands (were used in early stages of development)
+//	GDLC 1JUL21 Added currVN for verse number associated with the currIt
+//
+//  Created by Graeme Costin on 8/1/20.
+// In place of a legal notice, here is a blessing:
+//
+//    May you do good and not evil.
+//    May you find forgiveness for yourself and forgive others.
+//    May you share freely, never taking more than you give.
 
 import UIKit
 
@@ -975,13 +974,11 @@ public class Chapter: NSObject {
 		return USFM
 	}
 
-	func saveUSFMText (_ chID:Int, _ text:String) -> Bool {
+	func saveUSFMText (_ chID:Int, _ text:String) throws {
 		do {
 			try dao!.updateUSFMText (chID, text)
-			return true
 		} catch {
-			appDelegate.ReportWarning(DBU_ChaUSFMErr)
-			return false
+			throw SQLiteError.cannotUpdateRecord
 		}
 	}
 }
