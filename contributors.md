@@ -7,12 +7,13 @@
     bruce_waters@sil.org
 
 * Graeme Costin
+
     Programmer
 
     graeme_costin@wycliffe.org.au   
 
 * Erik Brommers
 
-    Programmer - Interactiob with AIM
+    Programmer - Interaction with AIM
 
     erik_brommers@wycliffe.org
