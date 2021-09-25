@@ -1,7 +1,9 @@
 ### Contributors ###
 
 * Bruce Waters
-    # Manager#
+
+    ##Manager##
+    
     bruce_waters@sil.org
 
 * Graeme Costin
