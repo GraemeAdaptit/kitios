@@ -3,7 +3,7 @@
 * Bruce Waters
 
     Manager
-    
+
     bruce_waters@sil.org
 
 * Graeme Costin
