@@ -21,7 +21,9 @@
 * Comments about the software design are contained in comments in the source code.
 
 * There are two design documents that describe and give some details of the app design:
+
 	KIT Design Document.odt
+	
 	KIT Design Document Popovers.ods
 
 ### Whom do I talk to? ###
