@@ -700,5 +700,4 @@ public class KITDAO {
 			throw SQLiteError.cannotDeleteRecord
 		}
 	}
-
 }
