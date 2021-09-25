@@ -2,15 +2,14 @@
 //  ChaptersTableViewController.swift
 //  kitios
 //
-//	GDLC 23JUL21 Cleaned out print commands (were used in early stages of development)
-//
 //	This is the UITableViewController for the Select Chapter scene. This scene will be entered
 //	after the current Book is selected and set up, and so it will have available the array of
 //	Chapters for the current Book.
 //
+//	GDLC 23JUL21 Cleaned out print commands (were used in early stages of development)
+//
 //  Created by Graeme Costin on 13/11/19.
-// The author disclaims copyright to this source code.  In place of
-// a legal notice, here is a blessing:
+// In place of a legal notice, here is a blessing:
 //
 //    May you do good and not evil.
 //    May you find forgiveness for yourself and forgive others.
@@ -141,8 +140,4 @@ class ChaptersTableViewController: UITableViewController {
 		letUserChooseChapter = true
 		performSegue(withIdentifier: "editChapter", sender: self)
 	}
-
-	@IBAction func unwindToEditChapter(_ segue: UIStoryboardSegue) {
-	}
-
 }

@@ -8,8 +8,8 @@
 //		return (result == 0 ? true : false) to return (result == 0)
 //
 //  Created by Graeme Costin on 16SEP19.
-// The author disclaims copyright to this source code.  In place of
-// a legal notice, here is a blessing:
+//
+// In place of a legal notice, here is a blessing:
 //
 //    May you do good and not evil.
 //    May you find forgiveness for yourself and forgive others.
@@ -36,9 +36,8 @@
 //	to restart the app; that is why the action taken with these errors is to simply show an
 //	error number and exit the app. Thus the first four errors in the enum SQLiteError are not
 //	used. If a later version of this app uses an SQL database on LAN or Internet there may be
-//	more reason to make more use errors in enum SQLiteError - for example, failure to open or
-//	create the database may be followed by a prompt to the user to check the SQL server and
-//	try again.
+//	more reason to make more use of errors - for example, failure to open or create the database
+//	may be followed by a prompt to the user to check the SQL server and try again.
 //
 //	TODO: Check whether interruption of the app (such as by a phone call coming to the
 //	smartphone) needs the database connection to be closed and then reopened when the app

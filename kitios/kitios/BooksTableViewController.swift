@@ -2,9 +2,6 @@
 //  BooksTableViewController.swift
 //  kitios
 //
-//	GDLC 23JUL21 Cleaned out print commands (were used in early stages of development)
-//	GDLC 12MAR20 Updated for KIT05
-//
 //	This is the UITableViewController for the Select Book scene. This scene will be entered
 //	after the Bible instance is created and so it will always have available the array of
 //	Bible Books. But it will not always have a current Book:
@@ -12,25 +9,19 @@
 //		current Book can be set, and then control passed to the Select Chapter scene.
 //	*	During app use the user may want to change to a different Book and so control
 //		will be passed back to this Select Book scene to allow this to happen.
-//	The member variable hasCurrBook will be initialised to false and subsequently set to true
-//	or false as the above actions happen.
 //
-//  Created by Graeme Costin on 26/10/19.
-// The author disclaims copyright to this source code.  In place of
-// a legal notice, here is a blessing:
+//	GDLC 23JUL21 Cleaned out print commands (were used in early stages of development)
+//	GDLC 12MAR20 Updated for KIT05
+//
+//  Created by Graeme Costin on 26OCT19.
+//
+// In place of a legal notice, here is a blessing:
 //
 //    May you do good and not evil.
 //    May you find forgiveness for yourself and forgive others.
 //    May you share freely, never taking more than you give.
 
 import UIKit
-
-//extension NSLayoutConstraint {
-//	override open var description: String {
-//		let id = identifier ?? ""
-//		return "Constraint ID: \(id), constant: \(constant)"
-//	}
-//}
 
 class BooksTableViewController: UITableViewController {
 
@@ -149,5 +140,4 @@ class BooksTableViewController: UITableViewController {
 		letUserChooseBook = true
 		performSegue(withIdentifier: "selectChapter", sender: self)
 	}
-
 }

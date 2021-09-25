@@ -4,9 +4,9 @@
 //	GDLC 27JUL21 Started adding ReportError()
 //	GDLC 23JUL21 Cleaned out print commands (were used in early stages of development)
 //
-//  Created by Graeme Costin on 4/5/20.
-// The author disclaims copyright to this source code.  In place of
-// a legal notice, here is a blessing:
+//  Created by Graeme Costin on 4MAY20.
+//
+// In place of a legal notice, here is a blessing:
 //
 //    May you do good and not evil.
 //    May you find forgiveness for yourself and forgive others.

@@ -2,11 +2,6 @@
 //  KeyItSetupController.swift
 //	kitios
 //
-//	GDLC 30JUL21 No need for local var bInst
-//	GDLC 27JUL21 Added better error reporting
-//	GDLC 23JUL21 Cleaned out print commands (were used in early stages of development)
-//	GDLC 21SEP20 Removed redundant @IBOutlet for saveBibleName
-//
 //	The KeyItSetupController allows the user to edit the name of the Bible and then
 //	starts the creation of the Bible -> curr Book -> curr Chapter -> curr VerseItem
 //	in-memory data structures.
@@ -14,9 +9,14 @@
 //	Once the name of the Bible has been set and its Books records have been created
 //	this scene is bypassed on subsequent launches.
 //
-//  Created by Graeme Costin on 3/3/20.
-// The author disclaims copyright to this source code.  In place of
-// a legal notice, here is a blessing:
+//	GDLC 30JUL21 No need for local var bInst
+//	GDLC 27JUL21 Added better error reporting
+//	GDLC 23JUL21 Cleaned out print commands (were used in early stages of development)
+//	GDLC 21SEP20 Removed redundant @IBOutlet for saveBibleName
+//
+//  Created by Graeme Costin on 3MAR20.
+//
+// In place of a legal notice, here is a blessing:
 //
 //    May you do good and not evil.
 //    May you find forgiveness for yourself and forgive others.

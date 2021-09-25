@@ -2,16 +2,16 @@
 //  VersesTableViewController.swift
 //	kitios
 //
-//	GDLC 23JUL21 Cleaned out print commands (were used in early stages of development)
-//
 //	This is the UITableViewController for the Edit Chapter scene. This scene will be entered
 //	only when a current Book and current Chapter have been chosen.
 //
 //	NOTE: The VersesTableViewController in kitios matches the EditChapterActivity of kitand
 //
-//  Created by Graeme Costin on 8/1/20.
-// The author disclaims copyright to this source code.  In place of
-// a legal notice, here is a blessing:
+//	GDLC 23JUL21 Cleaned out print commands (were used in early stages of development)
+//
+//  Created by Graeme Costin on 8JAN20.
+//
+// In place of a legal notice, here is a blessing:
 //
 //    May you do good and not evil.
 //    May you find forgiveness for yourself and forgive others.
