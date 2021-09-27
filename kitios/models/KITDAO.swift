@@ -1,20 +1,6 @@
 //
 //  KITDAO.swift
 //
-//	GDLC 6AUG21 Started adding SQLite Swift error handling
-//	GDLC 26JUL21 Prep for release (print commands removed, etc.).
-//	GDLC 1JUL21 Added currVsNum to Chapters table
-//  GDLC 21SEP20	Simplified serveral true/false returns from
-//		return (result == 0 ? true : false) to return (result == 0)
-//
-//  Created by Graeme Costin on 16SEP19.
-//
-// In place of a legal notice, here is a blessing:
-//
-//    May you do good and not evil.
-//    May you find forgiveness for yourself and forgive others.
-//    May you share freely, never taking more than you give.
-//
 //	All interaction between the running app and the SQLite database is handled by this class.
 //	The rest of the app can treat the SQLite database as a software object with interaction
 //	directed through the member functions of the KITDAO class which is named from the phrase
@@ -42,6 +28,20 @@
 //	TODO: Check whether interruption of the app (such as by a phone call coming to the
 //	smartphone) needs the database connection to be closed and then reopened when the app
 //	returns to the foreground.
+//
+//	GDLC 6AUG21 Started adding SQLite Swift error handling
+//	GDLC 26JUL21 Prep for release (print commands removed, etc.).
+//	GDLC 1JUL21 Added currVsNum to Chapters table
+//  GDLC 21SEP20	Simplified serveral true/false returns from
+//		return (result == 0 ? true : false) to return (result == 0)
+//
+//  Created by Graeme Costin on 16SEP19.
+//
+// In place of a legal notice, here is a blessing:
+//
+//    May you do good and not evil.
+//    May you find forgiveness for yourself and forgive others.
+//    May you share freely, never taking more than you give.
 
 import UIKit
 
@@ -519,8 +519,9 @@ public class KITDAO {
 			return Int(sqlite3_last_insert_rowid(db))
 		}
 
-	// The VerseItems records for the current Chapter needs to be read in order to set up the scrolling display of
-	// VerseItem records that the user interacts with. These records need to be sorted in ascending order of itemOrder.
+	// The VerseItems records for the current Chapter needs to be read in order to set up the scrolling
+	// display of VerseItem records that the user interacts with. These records need to be sorted in
+	// ascending order of itemOrder.
 
 	func readVerseItemsRecs (_ chInst:Chapter) throws {
 		var sqlite3_stmt:OpaquePointer?=nil

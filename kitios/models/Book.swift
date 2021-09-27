@@ -1,21 +1,25 @@
 //
 //  Book.swift
 //
+// There will be one instance of this class for the currently selected Book.
+// This instance will have a lifetime of the current book selection; its life
+// will be terminated when the user selects a different Book to keyboard, at
+// which time a new Book instance will be created for the newly selected Book.
+// Data changes made by the user are always saved directly to the database as
+// well as held in this instance for further use while the user continues to
+// work on this Book.
+
 //	GDLC 23JUL21 Cleaned out print commands (were used in early stages of development)
 //	GDLC 1JUL21 Added currVsNum to Chapter records
 //
 //  Created by Graeme Costin on 25/10/19.
-// The author disclaims copyright to this source code.  In place of
-// a legal notice, here is a blessing:
+//
+// In place of a legal notice, here is a blessing:
 //
 //    May you do good and not evil.
 //    May you find forgiveness for yourself and forgive others.
 //    May you share freely, never taking more than you give.
 
-// There will be one instance of this class for the currently selected Book.
-// This instance will have a lifetime of the current book selection; its life
-// will be terminated when the user selects a different Book to keyboard, at
-// which time a new Book instance will be created for the newly selected Book.
 
 import UIKit
 

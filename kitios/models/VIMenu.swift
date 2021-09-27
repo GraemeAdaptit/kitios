@@ -1,18 +1,28 @@
 //
 //  VIMenu.swift
 //
-// The author disclaims copyright to this source code.  In place of
-// a legal notice, here is a blessing:
+//	VIMenu gathers the data necessary for populating a popover TableView when the user
+//	taps the VerseItem label. The action of tapping a VerseItem label makes that VerseItem
+//	the current one even if it were not before the user tapped its label.
+//
+//	The UI design of KIT aims to show only valid possibilities to users. This requires a
+//	fair bit of logic in the init() of VIMenu. The rules for this logic are listed in the
+//	spreadsheet KIT Design Document Popovers.ods.
+//
+//	The init() of VIMenu also calculates the width in points needed for the popover menu.
+//
+//	As of 27SEP21, a VIMenu is created every time there is a new current VerseItem. This means
+//	that many VIMenu instances are created but never used. To reduce the amount of memory
+//	allocation and deallocation, this will later be changed so that a VIMenu is created
+//	only when it is needed, i.e. only when the user taps the popover button in a VerseItem.
+//
+//  Created by Graeme Costin on 23NOV20.
+//
+// In place of a legal notice, here is a blessing:
 //
 //    May you do good and not evil.
 //    May you find forgiveness for yourself and forgive others.
 //    May you share freely, never taking more than you give.
-//
-//  Created by Graeme Costin on 23NOV20.
-//
-//	VIMenu gathers the data necessary for populating a popover TableView when the user
-//	taps the VerseItem label. The action of tapping a VerseItem label makes that VerseItem
-//	the current one even if it were not before the user tapped its label.
 
 import UIKit
 
@@ -170,5 +180,4 @@ class VIMenu : NSObject {
 			if width > menuLabelLength {menuLabelLength = width}
 		}
 	}
-
 }

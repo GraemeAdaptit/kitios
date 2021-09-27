@@ -1,25 +1,26 @@
 //
 //  Bible.swift
 //
+// This source file deals with the class Bible of which one instance will be created.
+// The initialisation of this single instance will
+// 1. On first launch create the Books records in the kdb.sqlite database
+// 2. On every launch read the Books records from kdb.sqlite and set up the array bibBooks
+//    whose life is for the duration of this run of KIT
+// 3. Prepare for building of the partial in-memory data for the
+//    Bible -> curr Book -> curr Chapter -> curr VerseItem data structures.
+// Data changes made by the user are always saved directly to the database as well as
+// held in this instance for further use during the current launch of KIT.
+//
 //	GDLC 23JUL21 Cleaned out print commands (were used in early stages of development)
 //	GDLC 12MAR20 Updated for KIT05
 //
 //  Created by Graeme Costin on 9OCT19.
-// The author disclaims copyright to this source code.  In place of
-// a legal notice, here is a blessing:
+//
+// In place of a legal notice, here is a blessing:
 //
 //    May you do good and not evil.
 //    May you find forgiveness for yourself and forgive others.
 //    May you share freely, never taking more than you give.
-//
-// This source file deals with the class Bible of which one instance will be created.
-// The initialisation of this single instance will
-// 1. Open the kdb.sqlite database
-// 2. On first launch create the Books records in the kdb.sqlite database
-// 3. On every launch read the Books records from kdb.sqlite and set up the array bibBooks
-//    whose life is for the duration of this run of KIT
-// 4. Do the other initialisations needed to build the partial in-memory data for the
-//    Bible -> curr Book -> curr Chapter -> curr VerseItem data structures.
 
 import UIKit
 
@@ -260,5 +261,4 @@ public class Bible:NSObject {
 		BibBooks[currBookOfst].curChID = curChID
 		BibBooks[currBookOfst].curChNum = curChNum
 	 }
-
 }

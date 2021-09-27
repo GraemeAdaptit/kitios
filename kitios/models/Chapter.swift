@@ -19,6 +19,7 @@
 //	GDLC 1JUL21 Added currVN for verse number associated with the currIt
 //
 //  Created by Graeme Costin on 8/1/20.
+//
 // In place of a legal notice, here is a blessing:
 //
 //    May you do good and not evil.
@@ -60,9 +61,6 @@ public class Chapter: NSObject {
 				curPoMenu = VIMenu(ofst)
 			}
 			field = ofst
-//			currIt = BibItems[ofst].itID
-//			// GDLC 30JUL21
-//			currVN = BibItems[ofst].vsNum
 		}
 	}
 	
