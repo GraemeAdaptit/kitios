@@ -16,6 +16,8 @@
 //	allocation and deallocation, this will later be changed so that a VIMenu is created
 //	only when it is needed, i.e. only when the user taps the popover button in a VerseItem.
 //
+//
+//	GDLC 28SEP21 Added isLastItem and nextItTyp to prevent two ParaCont ina verse (BUG47)
 //  Created by Graeme Costin on 23NOV20.
 //
 // In place of a legal notice, here is a blessing:
@@ -59,6 +61,9 @@ class VIMenu : NSObject {
 	init(_ curItOfst: Int) {
 		let chInst = appDelegate.chapInst
 		let bibItem = chInst!.BibItems[curItOfst]
+		// Get type of next VerseItem (used in deciding whether to allow ParaCont)
+		let isLastItem = (curItOfst + 1) == chInst!.numIt
+		let nextItTyp = (isLastItem ? "" : chInst!.BibItems[curItOfst + 1].itTyp)
 		VIType = bibItem.itTyp
 		let chNum = chInst!.chNum
 		switch VIType {
@@ -145,7 +150,7 @@ class VIMenu : NSObject {
 			VIMenuItems.append(viMI4)
 			let viMI5 = VIMenuItem("Paragraph Before", "crParaBef", "C")
 			VIMenuItems.append(viMI5)
-			if !bibItem.isBrg {
+			if !bibItem.isBrg && nextItTyp != "ParaCont" {
 				let viMI6 = VIMenuItem("Paragraph In", "crParaCont", "C")
 				VIMenuItems.append(viMI6)
 			}
