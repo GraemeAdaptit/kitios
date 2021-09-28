@@ -110,14 +110,14 @@
 		C8AA65DD245FCE0E00B456AE /* kitios */ = {
 			isa = PBXGroup;
 			children = (
+				C8AA660E245FEBAD00B456AE /* KeyItSetupController.swift */,
 				C8AA6613245FEBAE00B456AE /* BooksTableViewController.swift */,
 				C8AA6610245FEBAD00B456AE /* ChaptersTableViewController.swift */,
-				C8AA660F245FEBAD00B456AE /* ExportChapterViewController.swift */,
-				C8AA660E245FEBAD00B456AE /* KeyItSetupController.swift */,
-				C8AA6612245FEBAD00B456AE /* UIVerseItemCell.swift */,
-				C801D67F25EE474F00C3DF2D /* UIPubItemCell.swift */,
 				C8AA6611245FEBAD00B456AE /* VersesTableViewController.swift */,
+				C8AA6612245FEBAD00B456AE /* UIVerseItemCell.swift */,
 				C857BCE62553B8A900476AB6 /* PubItemsViewController.swift */,
+				C801D67F25EE474F00C3DF2D /* UIPubItemCell.swift */,
+				C8AA660F245FEBAD00B456AE /* ExportChapterViewController.swift */,
 				C8AA65DE245FCE0E00B456AE /* AppDelegate.swift */,
 				C8AA65E4245FCE0E00B456AE /* Main.storyboard */,
 				C8AA65E7245FCE2F00B456AE /* Assets.xcassets */,

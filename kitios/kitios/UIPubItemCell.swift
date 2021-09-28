@@ -4,6 +4,7 @@
 //	A custom class for UITableView cells presenting popover menu items.
 //
 //  Created by Graeme Costin on 2MAR21.
+//
 // In place of a legal notice, here is a blessing:
 //
 //    May you do good and not evil.
@@ -27,5 +28,4 @@ class UIPubItemCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
-
 }

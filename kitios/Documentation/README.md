@@ -18,13 +18,17 @@
 
 No guidelines yet, apart from the overall comments that
 
-(1) the design of KIT is documented in the LibreOffice file KIT Design Document.odt;
+* There are two design documents that describe and give some details of the app design:
 
-(2) all interaction with SQLite is kept inside the file KITDAO.swift - the rest of the code is straight Swift code; and
+	KIT Design Document.odt
+	
+	KIT Design Document Popovers.ods
 
-(3) comments about the software design are contained in comments in the source code.
+* all interaction with SQLite is kept inside the file KITDAO.swift - the rest of the code is straight Swift code; and
 
-### Whom do I talk to? ###
+* comments about the software design are contained in comments in the source code.
+
+### To whom do I talk? ###
 
 Owner of the BitBucket repo is Graeme Costin; when this app reaches releasable stage
 it will most likely be an open source freeware app provided by Wycliffe Bible Translators.

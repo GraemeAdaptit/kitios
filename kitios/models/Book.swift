@@ -260,5 +260,4 @@ var BibChaps: [BibChap] = []
 		BibChaps[currChapOfst].curIt = curIt
 		BibChaps[currChapOfst].curVN = curVN
 	}
-
 }

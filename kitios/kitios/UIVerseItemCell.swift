@@ -93,7 +93,6 @@ class UIVerseItemCell: UITableViewCell, UITextViewDelegate {
 		// Don't change isSelectable or isEditable, just reset background colour
 		itText.backgroundColor = UIColor.init(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
 	}
-
 }
 
 extension UIVerseItemCell: UIPopoverPresentationControllerDelegate {

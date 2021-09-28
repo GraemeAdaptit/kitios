@@ -20,7 +20,7 @@ import UIKit
 class ChaptersTableViewController: UITableViewController {
 
 	let appDelegate = UIApplication.shared.delegate as! AppDelegate
-	weak var bInst: Bible?		// Current instance of Bible
+	weak var bInst: Bible?	// Current instance of Bible
 	weak var bkInst: Book?	// Current instance of Book
 							// When ChaptersTableViewController is active the user will have selected a Book
 							// and it will be the current Book

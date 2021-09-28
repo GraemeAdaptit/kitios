@@ -126,4 +126,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		topWindow?.rootViewController?.present(alert, animated: true, completion: nil)
 	}
 }
-

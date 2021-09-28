@@ -291,5 +291,4 @@ extension VersesTableViewController: UIPopoverPresentationControllerDelegate {
 	func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
 		return .none
 	}
-	
 }

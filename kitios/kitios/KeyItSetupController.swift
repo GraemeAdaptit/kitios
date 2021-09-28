@@ -27,6 +27,7 @@ import UIKit
 class KeyItSetupController: UIViewController, UITextFieldDelegate {
 
 	weak var dao: KITDAO?
+// GDLC 30JUL21 No need for local var bInst; the strong ref is appDelegate.bibInst
 //	var bInst: Bible?
 
 	// Get access to the AppDelegate
@@ -91,7 +92,6 @@ class KeyItSetupController: UIViewController, UITextFieldDelegate {
 		// of Bible books and start building the partial in-memory data structures for
 		//		Bible -> curr Book -> curr Chapter -> curr VerseItem
 		// and save a reference to it in the appDelegate so the rest of the app has access to it.
-		// GDLC 30JUL21 No need for local var bInst; the strong ref is appDelegate.bibInst
 		appDelegate.bibInst = Bible(bibID, bibName, bkRCr, currBook)
 	}
 
