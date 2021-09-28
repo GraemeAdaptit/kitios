@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		C801D68025EE474F00C3DF2D /* UIPubItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C801D67F25EE474F00C3DF2D /* UIPubItemCell.swift */; };
+		C81D380B2702C46600080D8A /* LICENCE in Resources */ = {isa = PBXBuildFile; fileRef = C81D38092702C46600080D8A /* LICENCE */; };
+		C81D380C2702C46600080D8A /* contributors.md in Resources */ = {isa = PBXBuildFile; fileRef = C81D380A2702C46600080D8A /* contributors.md */; };
 		C81DC9F2246D01A500553D89 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = C81DC9F1246D01A400553D89 /* README.md */; };
 		C857BCE72553B8A900476AB6 /* PubItemsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C857BCE62553B8A900476AB6 /* PubItemsViewController.swift */; };
 		C8AA65DF245FCE0E00B456AE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8AA65DE245FCE0E00B456AE /* AppDelegate.swift */; };
@@ -32,6 +34,8 @@
 
 /* Begin PBXFileReference section */
 		C801D67F25EE474F00C3DF2D /* UIPubItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIPubItemCell.swift; sourceTree = "<group>"; };
+		C81D38092702C46600080D8A /* LICENCE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = LICENCE; path = ../../LICENCE; sourceTree = "<group>"; };
+		C81D380A2702C46600080D8A /* contributors.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = contributors.md; path = ../../contributors.md; sourceTree = "<group>"; };
 		C81DC9F1246D01A400553D89 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		C857BCE62553B8A900476AB6 /* PubItemsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PubItemsViewController.swift; sourceTree = "<group>"; };
 		C85A83B826AADE2300512C04 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Main.strings; sourceTree = "<group>"; };
@@ -77,6 +81,8 @@
 			isa = PBXGroup;
 			children = (
 				C81DC9F1246D01A400553D89 /* README.md */,
+				C81D38092702C46600080D8A /* LICENCE */,
+				C81D380A2702C46600080D8A /* contributors.md */,
 			);
 			path = Documentation;
 			sourceTree = "<group>";
@@ -213,9 +219,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				C8AA660D245FE7DE00B456AE /* KIT_BooksSpec.txt in Resources */,
+				C81D380B2702C46600080D8A /* LICENCE in Resources */,
 				C8AA65EB245FCE2F00B456AE /* LaunchScreen.storyboard in Resources */,
 				C8AA660C245FE7DE00B456AE /* KIT_BooksNames.txt in Resources */,
 				C8AA65E8245FCE2F00B456AE /* Assets.xcassets in Resources */,
+				C81D380C2702C46600080D8A /* contributors.md in Resources */,
 				C8AA65E6245FCE0E00B456AE /* Main.storyboard in Resources */,
 				C81DC9F2246D01A500553D89 /* README.md in Resources */,
 			);
