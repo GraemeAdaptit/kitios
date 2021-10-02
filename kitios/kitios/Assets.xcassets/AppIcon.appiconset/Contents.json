@@ -1,37 +1,43 @@
 {
   "images" : [
     {
+      "filename" : "KIT icon 40x40.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "20x20"
     },
     {
+      "filename" : "KIT icon 60x60.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "20x20"
     },
     {
+      "filename" : "KIT icon 58x58.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "29x29"
     },
     {
+      "filename" : "KIT icon 87x87.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "29x29"
     },
     {
+      "filename" : "KIT icon 80x80.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "40x40"
     },
     {
+      "filename" : "KIT icon 120x120-2.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "40x40"
     },
     {
-      "filename" : "KIT icon 120x120.png",
+      "filename" : "KIT icon 120x120-1.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "60x60"
