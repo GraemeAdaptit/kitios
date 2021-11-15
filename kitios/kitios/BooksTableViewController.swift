@@ -43,6 +43,12 @@ class BooksTableViewController: UITableViewController {
 		bInst = appDelegate.bibInst
 		navigationItem.title = bInst!.bibName
 		navigationItem.prompt = "Choose book"
+//		//	GDLC 5NOV21 added to get light background despite choice of Dark Mode
+//		if #available(iOS 13.0, *) {
+//			let appearance = UINavigationBarAppearance()
+//			appearance.backgroundColor = UIColor.systemBackground
+//			UINavigationBar.appearance().standardAppearance = appearance
+//		}
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
@@ -91,11 +97,17 @@ class BooksTableViewController: UITableViewController {
 		let book = bInst!.BibBooks[indexPath.row]
 		cell.textLabel?.text = book.bkName
 		if book.chapRCr {
-			cell.textLabel!.textColor = UIColor.blue
-			cell.detailTextLabel!.textColor = UIColor.blue
+			cell.textLabel!.textColor = UIColor.systemBlue
+			cell.detailTextLabel!.textColor = UIColor.systemBlue
 		} else {
-			cell.textLabel!.textColor = UIColor.black
-			cell.detailTextLabel!.textColor = UIColor.black
+			if #available(iOS 13.0, *) {
+				cell.textLabel!.textColor = UIColor.label
+				cell.detailTextLabel!.textColor = UIColor.label
+			} else {
+				cell.textLabel!.textColor = UIColor.black
+				cell.detailTextLabel!.textColor = UIColor.black
+				
+			}
 		}
 		let numCh = book.numCh
 		let curChapID = bInst!.BibBooks[indexPath.row].curChID
@@ -132,7 +144,8 @@ class BooksTableViewController: UITableViewController {
 			numChText += "(" + String(nChap) + " chs)"
 		}
 		cell!.detailTextLabel?.text = numChText
-		cell!.textLabel!.textColor = UIColor.blue
+		cell!.textLabel!.textColor = UIColor.systemBlue
+		cell!.detailTextLabel!.textColor = UIColor.systemBlue
 		// Current Book is selected so segue to Select Chapter scene
 		// The user is going forwards to the next scene
 		goingForwards = true

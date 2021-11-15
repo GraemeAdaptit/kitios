@@ -47,7 +47,12 @@ class ChaptersTableViewController: UITableViewController {
 		} else {
 			navigationItem.prompt = "Choose \(chapName?.capitalized ?? "Chapter") of " + bkInst!.bkName
 		}
-
+//		//	GDLC 5NOV21 added to get light background despite choice of Dark Mode -- didn't work!
+//		if #available(iOS 13.0, *) {
+//			let appearance = UINavigationBarAppearance()
+//			appearance.backgroundColor = UIColor.systemBackground
+//			UINavigationBar.appearance().standardAppearance = appearance
+//		}
     }
 	
 	override func viewWillAppear(_ animated: Bool) {
